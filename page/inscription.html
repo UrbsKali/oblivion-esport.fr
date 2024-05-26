@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../assets/style/inter.css">
     <link rel="stylesheet" href="../assets/style/theme.css">
     <title>Oblivion | Inscription</title>
-    <link rel="stylesheet" href="https://s.pageclip.co/v1/pageclip.css" media="screen">
     <link rel="shortcut icon" href="../assets/img/oblivion.png" type="image/x-icon">
 
 
@@ -57,7 +56,7 @@
                     autorisé à participer. </p>
             </div>
             <div class="form">
-                <form action="https://send.pageclip.co/GdKTEV24xyS2rbBAW6TqiTN1dLS9qniO/Inscription" method="post">
+                <form action="https://oblivion-esport.fr/inscription.php" method="post" enctype="multipart/form-data">
                     <section class="top">
                         <input type="text" name="nom_equipe" placeholder="NOM D'EQUIPE">
                         <input type="text" name="tag_equipe" placeholder="TAG ... (EX : KC -> KarmineCorp)">
@@ -87,15 +86,10 @@
                         <input type="text" name="support_discord" placeholder="DISCORD IGN">
                         <input type="email" name="support_email" placeholder="EMAIL">
                     </section>
-                    <section> <div class="img_spacer"></div>
-                        <input type="text" name="support_name" placeholder="SUMMONER NAME">
-                        <input type="text" name="support_discord" placeholder="DISCORD IGN">
-                        <input type="email" name="support_email" placeholder="EMAIL">
-                    </section>
-                    <section >
+                    <section>
                         <div class="flex">
                             <label for="logo">Avez-vous un Logo :</label>
-                            <input type="checkbox" name="logo">
+                            <input type="checkbox" name="have_logo">
                         </div>
                         <div class="flex">
                             <label for="is_new">Un de vos membres à déjà participé à une TWC :</label>
@@ -103,7 +97,8 @@
                         </div>
                         <div class="flex" id="old">
                             <label for="nb_old_player" id="number_old_label">Nombre d'ancien joueurs :</label>
-                            <input type="number" name="nb_old_player" id="number_old" max="5" min="0" placeholder="1", step="1">
+                            <input type="number" name="nb_old_player" id="number_old" max="5" min="0" placeholder="1" ,
+                                step="1">
                         </div>
                     </section>
                     <section class="bottom"><input type="submit" value="ENTRER SUR LA FAILLE"></section>
@@ -116,7 +111,7 @@
     </div>
     <script>
         let burger = document.querySelector('.burger');
-        let header= document.querySelector('.header');
+        let header = document.querySelector('.header');
         burger.addEventListener('click', function () {
             header.classList.toggle('active');
         })
@@ -133,7 +128,18 @@
             }
         })
     </script>
-    <script src="https://s.pageclip.co/v1/pageclip.js" charset="utf-8"></script>
+    <script>
+        setTimeout(() => {
+            let url = new URL(window.location.href);
+            let message = url.searchParams.get('message');
+            if (message) {
+                alert(message);
+                // remove the message from the url
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        }, 50);
+
+    </script>
 
 </body>
 
