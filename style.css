@@ -1,0 +1,38 @@
+body {
+    background-image: url(./assets/img/bg.png);
+    background-size: cover;
+}
+
+.body {
+    background-color: rgba(21, 28, 33, 0.65);
+    backdrop-filter: blur(2px);
+    width: 100%;
+    position: absolute;
+    top: 0;
+    min-height: 100vh;
+}
+
+.section {
+    background-color: #5B5B5B33;
+    font-family: 'Inter';
+    padding: 10px;
+    font-weight: 800;
+    text-align: center;
+    border: white 1px solid;
+    border-radius: 5px;
+    color: white;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    padding: 10px;
+    margin: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }    
+}

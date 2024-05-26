@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="inscription.css">
+    <link rel="stylesheet" href="../assets/style/inter.css">
+    <link rel="stylesheet" href="../assets/style/theme.css">
+    <title>Oblivion | Inscription</title>
+    <link rel="stylesheet" href="https://s.pageclip.co/v1/pageclip.css" media="screen">
+    <link rel="shortcut icon" href="../assets/img/oblivion.png" type="image/x-icon">
+
+
+</head>
+
+<body>
+    <div class="body">
+        <div class="header ">
+            <a href="../index.html">
+                <img src="../assets/img/oblivion.png" class="logo" alt="logo">
+            </a>
+            <div class="menu">
+                <ul>
+                    <li class="active"><a href="./inscription.html">Inscription</a></li>
+                    <li><a href="./wip.html">Events</a></li>
+                    <li><a href="">Historique</a></li>
+                    <li><a href="./wip.html">Hall of Fame</a></li>
+                    <li><a href="./wip.html">Oblivion ESPORT</a></li>
+                    <li><a href="./wip.html">Staff</a></li>
+                    <li><a href="./wip.html">Nous contacter</a></li>
+                </ul>
+            </div>
+            <div class="user">
+                <img src="../assets/img/user.png" alt="user">
+            </div>
+            <div class="burger">
+                <img src="../assets/img/burger-bar.png" alt="">
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="top">
+                <h1>Inscription</h1>
+                <p>La TRANKIL INVITATIONAL™ est une competition de milieu de saison.
+                    Il s’agit donc d’un tournoi d’une durée d’une semaine, elle se déroulera du 26 février 2024 au 3
+                    mars 2024.
+                    Le format est disponible dans l’onglet “events”. <br> <br>
+
+                    Les matchs se déroulerons donc tous les jours à partir de 19/20 heures selon les disponibilités des
+                    joueurs.
+                    La structure choisira elle même les équipes parmis les inscrits, nous assumons et prévenons que
+                    l’objectif est de réunir un maximum de personne ayant déjà
+                    participer aux éditions précédentes. Mais cette condition n’est pas rhédibitoire. <br> <br>
+
+                    Au niveau de la limite d’élo, tout joueurs ayant dépassé le Master 40 LP le split passé ne sera pas
+                    autorisé à participer. </p>
+            </div>
+            <div class="form">
+                <form action="https://send.pageclip.co/GdKTEV24xyS2rbBAW6TqiTN1dLS9qniO/Inscription" method="post">
+                    <section class="top">
+                        <input type="text" name="nom_equipe" placeholder="NOM D'EQUIPE">
+                        <input type="text" name="tag_equipe" placeholder="TAG ... (EX : KC -> KarmineCorp)">
+                    </section>
+                    <section> <img src="../assets/img/top_lane.png" alt="">
+                        <input type="text" name="top_name" placeholder="SUMMONER NAME">
+                        <input type="text" name="top_discord" placeholder="DISCORD IGN">
+                        <input type="email" name="top_email" placeholder="EMAIL">
+                    </section>
+                    <section> <img src="../assets/img/jungle.png" alt="">
+                        <input type="text" name="jungle_name" placeholder="SUMMONER NAME">
+                        <input type="text" name="jungle_discord" placeholder="DISCORD IGN">
+                        <input type="email" name="jungle_email" placeholder="EMAIL">
+                    </section>
+                    <section> <img src="../assets/img/middle_lane.png" alt="">
+                        <input type="text" name="middle_name" placeholder="SUMMONER NAME">
+                        <input type="text" name="middle_discord" placeholder="DISCORD IGN">
+                        <input type="email" name="middle_email" placeholder="EMAIL">
+                    </section>
+                    <section> <img src="../assets/img/bot_lane.png" alt="">
+                        <input type="text" name="bot_name" placeholder="SUMMONER NAME">
+                        <input type="text" name="bot_discord" placeholder="DISCORD IGN">
+                        <input type="email" name="bot_email" placeholder="EMAIL">
+                    </section>
+                    <section> <img src="../assets/img/support.png" alt="">
+                        <input type="text" name="support_name" placeholder="SUMMONER NAME">
+                        <input type="text" name="support_discord" placeholder="DISCORD IGN">
+                        <input type="email" name="support_email" placeholder="EMAIL">
+                    </section>
+                    <section> <div class="img_spacer"></div>
+                        <input type="text" name="support_name" placeholder="SUMMONER NAME">
+                        <input type="text" name="support_discord" placeholder="DISCORD IGN">
+                        <input type="email" name="support_email" placeholder="EMAIL">
+                    </section>
+                    <section >
+                        <div class="flex">
+                            <label for="logo">Avez-vous un Logo :</label>
+                            <input type="checkbox" name="logo">
+                        </div>
+                        <div class="flex">
+                            <label for="is_new">Un de vos membres à déjà participé à une TWC :</label>
+                            <input type="checkbox" name="is_new" id="check_new">
+                        </div>
+                        <div class="flex" id="old">
+                            <label for="nb_old_player" id="number_old_label">Nombre d'ancien joueurs :</label>
+                            <input type="number" name="nb_old_player" id="number_old" max="5" min="0" placeholder="1", step="1">
+                        </div>
+                    </section>
+                    <section class="bottom"><input type="submit" value="ENTRER SUR LA FAILLE"></section>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>© 2024 OBLIVION</p>
+    </div>
+    <script>
+        let burger = document.querySelector('.burger');
+        let header= document.querySelector('.header');
+        burger.addEventListener('click', function () {
+            header.classList.toggle('active');
+        })
+    </script>
+    <script>
+        let check_new = document.querySelector('#check_new');
+        let number_old = document.querySelector('#number_old');
+        let old = document.querySelector('#old');
+        check_new.addEventListener('click', function () {
+            if (check_new.checked) {
+                old.style.display = 'block';
+            } else {
+                old.style.display = 'none';
+            }
+        })
+    </script>
+    <script src="https://s.pageclip.co/v1/pageclip.js" charset="utf-8"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./assets/style/inter.css">
+    <link rel="stylesheet" href="./assets/style/theme.css">
+    <link rel="shortcut icon" href="./assets/img/oblivion.png" type="image/x-icon">
+    <title>Oblivion</title>
+</head>
+
+<body>
+    <div class="body">
+        <div class="header">
+            <img src="assets/img/oblivion.png" class="logo" alt="logo">
+            <div class="menu">
+                <ul>
+                    <li><a href="./page/inscription.html">Inscription</a></li>
+                    <li><a href="./page/wip.html">Events</a></li>
+                    <li><a href="./page/wip.html">Historique</a></li>
+                    <li><a href="./page/wip.html">Hall of Fame</a></li>
+                    <li><a href="./page/wip.html">Oblivion ESPORT</a></li>
+                    <li><a href="./page/wip.html">Staff</a></li>
+                    <li><a href="./page/wip.html">Nous contacter</a></li>
+                </ul>
+            </div>
+            <div class="user">
+                <img src="assets/img/user.png" alt="user">
+            </div>
+            <div class="burger">
+                <img src="./assets/img/burger-bar.png" alt="">
+            </div>
+
+        </div>
+        <div class="main">
+            <div class="hero">
+                <div class="oblivion_title">
+                    <h1>OBLIVI</h1>
+                    <img src="assets/img/oblivion.png" alt="hero">
+                    <h1>N</h1>
+                </div>
+            </div>
+            <div class="grid" style="display: none;">
+                <div>
+                    <h2 class="section_title">Actualités</h2>
+                    <div class="news section">
+                        <div class="article">Le Nouveau Tournoi d'Oblivion ouvre ses portes !</div>
+                        <hr>
+                        <div class="article">Lorem ipsum dolor sit amet consectetur adipisicing elit. </div>
+                        <hr>
+                        <div class="article">J'écris ce que je veux car le site est pas en prod</div>
+                    </div>
+                </div>
+
+                <div></div>
+                <div></div>
+                <div>
+                    <h2 class="section_title">Qui sommes nous ?</h2>
+                    <div class="us section">
+                        <p>
+                            OBLIVION est une STRUCTURE ESPORT présente depuis 2021 principalement sur League of Legends
+                            ayant pour objectif de s’étendre sur d’autres jeux.
+                        </p>
+                    </div>
+                </div>
+
+                <div></div>
+                <div></div>
+                <div>
+                    <h2 class="section_title">Nos Valeurs</h2>
+                    <div class="values section">
+                        Oblivion est né avec une idée simple : celle de pouvoir offrir une experience unique à n’importe
+                        quel JOUEUR amateur. Nous voulons permettre au gens de participer à des tournois immersifS afin
+                        qu’ils puissent ressentir les même émotions que les professionnelS
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll_hint">
+            <p>▼</p>
+        </div>
+        <div class="footer">
+            <p>© 2024 OBLIVION</p>
+        </div>
+    </div>
+
+    <script>
+        let scroll_hint = document.querySelector('.scroll_hint');
+        window.addEventListener('scroll', function () {
+            let scroll = window.scrollY;
+            if (scroll > 0) {
+                scroll_hint.style.opacity = '0';
+            } else {
+                scroll_hint.style.opacity = '1';
+            }
+        })
+    </script>
+    <script>
+        let burger = document.querySelector('.burger');
+        let header= document.querySelector('.header');
+        burger.addEventListener('click', function () {
+            header.classList.toggle('active');
+        })
+    </script>
+</body>
+
+</html>
