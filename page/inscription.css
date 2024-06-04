@@ -1,7 +1,7 @@
 body {
     background: #151C21;
     font-family: 'Inter';
-    background-image: url(../assets/img/bg_inscription.png);
+    background-image: url(../assets/img/bg_inscription.png) !important;
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;;
