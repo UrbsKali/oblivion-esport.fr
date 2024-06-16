@@ -1,7 +1,7 @@
 body {
     background: #151C21;
     font-family: 'Inter';
-    background-image: url(../assets/img/bg_inscription.png) !important;
+    background-image: url(../assets/img/TWC5.png) !important;
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;;
@@ -20,14 +20,48 @@ body {
     text-transform: uppercase;
 }
 
-.top p {
+.top>div {
     font-size: 1rem;
     font-weight: 600;
-    text-align: center;
     margin: 50px 20px 20px 20px;
+    text-align: center;
     background: #D9D9D926;
     border-radius: .625rem;
     padding: 20px;
+}
+.top div ul {
+    padding: 0;
+    text-align: left;
+    width: fit-content;
+    margin: 0 auto;
+}
+.top div ul li {
+    margin: 10px 0;
+}
+
+.expand {
+    margin: 20px;
+    background: #D9D9D926;
+    border-radius: .625rem;
+    padding: 20px;
+    cursor: pointer;
+}
+.expand>div {
+    display: none;
+    padding: 0 10%;
+}
+.expand.active>div {
+    display: block;
+}
+.expand>h3::after {
+    content: "+";
+    float: right;
+    margin-top: -5px;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+.expand.active>h3::after {
+    content: "-";
 }
 
 .form form {
@@ -97,12 +131,26 @@ section.bottom{
     width: 180px;
     margin: 10px;
 }
-#old{
+#logo{
     display: none;
 }
 #number_old{
     width: 10%;
 }
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: .625rem;
+    border: none;
+    background: #D9D9D91A;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 10px;
+    border: #ffffff80 1px solid;
+}
+
 label {
     font-size: 1rem;
     font-weight: 600;
