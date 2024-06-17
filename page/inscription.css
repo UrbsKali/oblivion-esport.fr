@@ -12,6 +12,26 @@ body {
     padding-bottom: 100px;
 }
 
+.main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 80%;
+}
+
+@media screen and (min-width: 1500px) {
+    .main {
+        width: 100%;
+        flex-direction: row;
+    }
+    .form{
+        min-width: 50%;
+    }
+    
+}
+
 .top h1 {
     font-size: 2.5rem;
     font-weight: 800;
@@ -62,6 +82,10 @@ body {
 }
 .expand.active>h3::after {
     content: "-";
+}
+
+.form{
+    min-width: 100%;
 }
 
 .form form {
