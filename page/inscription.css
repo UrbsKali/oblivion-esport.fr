@@ -27,7 +27,7 @@ body {
         flex-direction: row;
     }
     .form{
-        min-width: 50%;
+        min-width: 50% !important;
     }
     
 }

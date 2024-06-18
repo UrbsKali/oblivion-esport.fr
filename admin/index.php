@@ -13,7 +13,6 @@
 </head>
 
 <body>
-    <!-- Material UI admin panel with sidebar -->
     <div class="admin-sidebar">
         <div class="admin-logo">
             <img src="../assets/img/oblivion.png" alt="">
@@ -21,7 +20,7 @@
         </div>
         <div class="admin-menu">
             <ul>
-                <li><a href="./admin.html">Inscriptions</a></li>
+                <li><a href="/admin">Inscriptions</a></li>
             </ul>
         </div>
     </div>
@@ -46,41 +45,45 @@
                     while ($row = $query->fetch_assoc()) {
                         $data[] = $row;
                     }
+                    function filter_field($str)
+                    {
+                        return str_replace(' ', '&puncsp;', $str);
+                    }
 
                     function formatTeams($array)
                     {
-                        $logo_url  = $array['logo_url'];
+                        $logo_url  = str_replace(' ', '%20',$array['logo_url']);
                         if ($logo_url == null || $logo_url == '' || $logo_url == 'uploads/') {
                             $logo_url = '../assets/img/oblivion.png';
                         }
                         $teams = array(
-                            'logo' => '../'.$array['logo_url'],
-                            'name' => $array['nom_equipe'],
+                            'logo' => '../'.$logo_url,
+                            'name' => filter_field($array['nom_equipe']),
                             'tag' => $array['tag_equipe'],
-                            'motivation' => str_replace(' ', '&puncsp;', $array['motivation_text']),
+                            'motivation' => filter_field($array['motivation_text']),
                             'players' => array(
                                 array(
-                                    'name' => $array['top_name'],
+                                    'name' => filter_field($array['top_name']),
                                     'discord' => $array['top_discord'],
                                     'email' => $array['top_email']
                                 ),
                                 array(
-                                    'name' => $array['jungle_name'],
+                                    'name' => filter_field($array['jungle_name']),
                                     'discord' => $array['jungle_discord'],
                                     'email' => $array['jungle_email']
                                 ),
                                 array(
-                                    'name' => $array['middle_name'],
+                                    'name' => filter_field($array['middle_name']),
                                     'discord' => $array['middle_discord'],
                                     'email' => $array['middle_email']
                                 ),
                                 array(
-                                    'name' => $array['bot_name'],
+                                    'name' => filter_field($array['bot_name']),
                                     'discord' => $array['bot_discord'],
                                     'email' => $array['bot_email']
                                 ),
                                 array(
-                                    'name' => $array['support_name'],
+                                    'name' => filter_field($array['support_name']),
                                     'discord' => $array['support_discord'],
                                     'email' => $array['support_email']
                                 )
