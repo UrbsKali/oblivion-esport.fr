@@ -135,6 +135,9 @@ body {
         justify-content: center;
         align-items: center;
     }
+    .header .user {
+        display: none;
+    }
 }
 
 .flex {

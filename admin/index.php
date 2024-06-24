@@ -13,6 +13,9 @@
 </head>
 
 <body>
+    <div class="mobile-burger">
+        <div class="burger"></div>
+    </div>
     <div class="admin-sidebar">
         <div class="admin-logo">
             <img src="../assets/img/oblivion.png" alt="">
@@ -27,6 +30,9 @@
     <div class="admin-content">
         <div class="admin-header">
             <h1>Inscriptions</h1>
+        </div>
+        <div class="admin-actions">
+            <a href="to_csv.php" class="btn">Exporter en CSV</a>
         </div>
         <div class="admin-table">
             <table>
@@ -59,7 +65,7 @@
                         $teams = array(
                             'logo' => '../'.$logo_url,
                             'name' => filter_field($array['nom_equipe']),
-                            'tag' => $array['tag_equipe'],
+                            'tag' => filter_field($array['tag_equipe']),
                             'motivation' => filter_field($array['motivation_text']),
                             'players' => array(
                                 array(
@@ -182,6 +188,17 @@
                     players[i].children[2].innerText = data.players[i].email;
                 }
             }
+        </script>
+        <script>
+            let burger = document.querySelector('.mobile-burger');
+            let sidebar = document.querySelector('.admin-sidebar');
+            let content = document.querySelector('.admin-content');
+            content.classList.add('active');
+            burger.addEventListener('click', function () {
+                sidebar.classList.toggle('active');
+                content.classList.toggle('active');
+                burger.classList.toggle('active');
+            });
         </script>
 </body>
 

@@ -59,6 +59,13 @@
             <script src='https://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js'></script>
             <script src='https://cdnjs.cloudflare.com/ajax/libs/stats.js/r11/Stats.js'></script>
             <script src="./wip.js"></script>
+            <script>
+                let burger = document.querySelector('.burger');
+                let header = document.querySelector('.header');
+                burger.addEventListener('click', function () {
+                    header.classList.toggle('active');
+                })
+            </script>
 
 
         </div>

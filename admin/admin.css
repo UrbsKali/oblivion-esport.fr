@@ -12,6 +12,71 @@ body {
     background-color: #111;
     overflow-x: hidden;
     padding-top: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.mobile-burger {
+    display: none;
+    transition: transform 0.3s ease-in-out;
+}
+.mobile-burger .burger {
+    width: 25px;
+    height: 25px;
+    background-image: url('../assets/img/burger-bar.png');
+    background-size: cover;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* code for the burger active*/
+.mobile-burger.active {
+    transform: translateX(250px);
+}
+
+@media screen and (max-width: 450px) {
+    .mobile-burger {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 0;
+        border-top-right-radius: .625rem;
+        border-bottom-right-radius: .625rem;
+        z-index: 1;
+        background-color: rgba(17, 17, 17, 0.404);
+
+    }
+    .admin-sidebar, .admin-content {
+        transform: translateX(-250px);
+    }
+    .admin-sidebar.active{
+        transform: translateX(0px) !important;
+        height: 100vh !important;
+    }
+    .admin-content:not(.active) {
+        filter: blur(2px);
+    }
+
+    .admin-sidebar a {
+        font-size: 180px;
+    }
+
+    .admin-logo h3 {
+        font-size: 1.5rem;
+    }
+
+    .admin-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .admin-content th,
+    td {
+        padding: 5px;
+    }
+    .popup-content {
+        width: 85vw !important;
+        margin: auto !important;
+
+    }
 }
 
 .admin-sidebar a {
@@ -81,7 +146,7 @@ table td img {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     overflow-y: scroll;
-
+    z-index: 1;
 }
 
 .popup-content {
@@ -97,6 +162,7 @@ table td img {
     justify-content: normal;
     align-items: center;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
 .popup-header * {
@@ -125,7 +191,7 @@ table td img {
     flex-wrap: wrap;
 }
 .player {
-    width: 200px;
+    width: 250px;
     margin: 10px;
     padding: 10px;
     border: 1px solid #ddd;
@@ -134,13 +200,18 @@ table td img {
     flex-direction: column;
     justify-content: space-between;
 }
+
+.player p:first-child {
+    width: 200px;
+}
+
 .player::before{
     content: "";
     background-color: white;
     background-size: cover;
     width: 50px;
     height: 50px;
-    margin-left: 150px;
+    margin-left: 200px;
     position: absolute;
 }
 .player:nth-child(1)::before {
