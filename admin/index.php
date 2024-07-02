@@ -70,27 +70,27 @@
                             'players' => array(
                                 array(
                                     'name' => filter_field($array['top_name']),
-                                    'discord' => $array['top_discord'],
+                                    'discord' => filter_field($array['top_discord']),
                                     'email' => $array['top_email']
                                 ),
                                 array(
                                     'name' => filter_field($array['jungle_name']),
-                                    'discord' => $array['jungle_discord'],
+                                    'discord' => filter_field($array['jungle_discord']),
                                     'email' => $array['jungle_email']
                                 ),
                                 array(
                                     'name' => filter_field($array['middle_name']),
-                                    'discord' => $array['middle_discord'],
+                                    'discord' => filter_field($array['middle_discord']),
                                     'email' => $array['middle_email']
                                 ),
                                 array(
                                     'name' => filter_field($array['bot_name']),
-                                    'discord' => $array['bot_discord'],
+                                    'discord' => filter_field($array['bot_discord']),
                                     'email' => $array['bot_email']
                                 ),
                                 array(
                                     'name' => filter_field($array['support_name']),
-                                    'discord' => $array['support_discord'],
+                                    'discord' => filter_field($array['support_discord']),
                                     'email' => $array['support_email']
                                 )
                             )
