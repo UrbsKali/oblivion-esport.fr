@@ -1,4 +1,0 @@
-AuthName "admin"
-AuthType Basic
-AuthUserFile "/home/oblivig/www/admin/.htpasswd"
-Require valid-user
