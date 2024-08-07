@@ -46,7 +46,7 @@
 			data: { user }
 		} = await supabase.auth.getUser();
 		if (!user) {
-			window.location.pathname = '/login?redirect=' + window.location.pathname;
+			window.location.href = `${window.location.origin}/login?redirect=${window.location.pathname}`;
 		}
 	});
 </script>

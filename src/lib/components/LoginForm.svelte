@@ -43,7 +43,7 @@
 		const redirect = urlParams.get('redirect');
 		if (redirect) {
 			return redirect;
-		} else if (redirect_uri) {
+		} else if (redirect_uri == '/') {
 			return window.location.origin;
 		} else {
 			return redirect_uri;

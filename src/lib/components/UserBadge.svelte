@@ -25,9 +25,8 @@
 	});
 
 	const LogOut = () => {
-		const path = window.location.pathname;
 		supabase.auth.signOut().then(() => {
-			window.location.href = '/login?redirect=' + path;
+			window.location.href = `${window.location.origin}/login?redirect=${window.location.pathname}`;
 		});
 	};
 </script>
