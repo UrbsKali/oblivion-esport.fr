@@ -1,4 +1,5 @@
 <script>
+	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
 
 	export let user = {
@@ -7,10 +8,24 @@
 		avatar: 'https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gough.png'
 	};
 
-	const LogOut = () => {
-		localStorage.removeItem('user');
-		const path = window.location.pathname;
+	onMount(async () => {
+		const {
+			data: { session },
+			error
+		} = await supabase.auth.getSession();
+		if (error) {
+			console.error(error);
+			return;
+		}
+		if (session) {
+			user.email = session.user.email || user.email;
+			user.name = session.user.user_metadata.full_name || user.email.split('@')[0];
+			user.avatar = session.user.user_metadata.avatar_url || user.avatar;
+		}
+	});
 
+	const LogOut = () => {
+		const path = window.location.pathname;
 		supabase.auth.signOut().then(() => {
 			window.location.href = '/login?redirect=' + path;
 		});

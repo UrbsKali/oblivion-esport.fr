@@ -2,7 +2,7 @@
 </script>
 
 <section>
-	<h1>hheee</h1>
+	<h1>Voir la page /admin</h1>
 </section>
 
 <style>
