@@ -1,9 +1,22 @@
 <script lang="ts">
-	import { supabase } from './supabaseClient';
+	import { onMount } from 'svelte';
+	import { supabase } from '$lib/supabaseClient';
+
+	export let redirect_uri = '/';
 
 	let loading = false;
 	let email = '';
 	let password = '';
+
+	onMount(async () => {
+		redirect_uri = parseRedirectURI(redirect_uri);
+		const {
+			data: { user }
+		} = await supabase.auth.getUser();
+		if (user) {
+			window.location.href = redirect_uri;
+		}
+	});
 
 	const handleLogin = async () => {
 		try {
@@ -13,6 +26,9 @@
 				password: password
 			});
 			if (error) throw error;
+			if (data) {
+				window.location.href = redirect_uri;
+			}
 		} catch (error) {
 			if (error instanceof Error) {
 				alert(error.message);
@@ -21,6 +37,18 @@
 			loading = false;
 		}
 	};
+
+	function parseRedirectURI(redirect_uri: string) {
+		const urlParams = new URLSearchParams(window.location.search);
+		const redirect = urlParams.get('redirect');
+		if (redirect) {
+			return redirect;
+		} else if (redirect_uri) {
+			return window.location.origin;
+		} else {
+			return redirect_uri;
+		}
+	}
 </script>
 
 <section class=" bg-black bg-opacity-70">

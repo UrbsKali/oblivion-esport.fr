@@ -1,9 +1,7 @@
 <script>
 </script>
 
-<section>
-	<h1>hheee</h1>
-</section>
+<section></section>
 
 <style>
 </style>
