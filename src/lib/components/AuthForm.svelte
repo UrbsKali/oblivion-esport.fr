@@ -36,6 +36,10 @@
 		if (user && auth_type === AuthType.login) {
 			window.location.href = redirect_uri;
 		}
+		if (error && auth_type === AuthType.reset) {
+			console.error(error);
+			window.location.href = '/login';
+		}
 		email = user?.email || '';
 	});
 
