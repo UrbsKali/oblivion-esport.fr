@@ -3,8 +3,7 @@
 </script>
 
 <section class="min-h-screen bg-slate-800">
-	<AuthForm />
+	<AuthForm auth_type="reset" redirect_uri="/admin" />
 </section>
 
-<style>
-</style>
+<style></style>

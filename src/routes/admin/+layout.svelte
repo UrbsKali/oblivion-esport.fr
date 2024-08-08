@@ -43,9 +43,12 @@
 
 	onMount(async () => {
 		const {
-			data: { user }
+			data: { user },
+			error
 		} = await supabase.auth.getUser();
-		if (!user) {
+		if (error) {
+			console.error(error);
+			console.log(user);
 			window.location.href = `${window.location.origin}/login?redirect=${window.location.pathname}`;
 		}
 	});
