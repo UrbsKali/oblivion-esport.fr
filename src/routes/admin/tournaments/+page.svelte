@@ -47,7 +47,7 @@
 		if (error) {
 			console.error(error);
 		} else {
-			let el = [payload.title, `${payload.start} - ${payload.end}`];
+			let el = [{ value: payload.title }, { value: `${payload.start} - ${payload.end}` }];
 			items = [...items, el];
 			const modal = FlowbiteInstances.getInstance('Modal', 'CrudModal');
 			modal.hide();
@@ -75,10 +75,9 @@
 	onMount(async () => {
 		const { data, error } = await supabase.from('Tournaments').select();
 		data?.forEach((element) => {
-			let el = [element.title, `${element.start} - ${element.end}`];
+			let el = [{ value: element.title }, { value: `${element.start} - ${element.end}` }];
 			items = [...items, el];
 		});
-		initFlowbite();
 	});
 </script>
 

@@ -181,19 +181,21 @@
 						{#each items as item}
 							<tr class="border-b dark:border-gray-700">
 								{#each item as key}
-									{#if key === item[0] && headers[0] === 'Nom'}
+									{#if key.value === item[0].value && headers[0] === 'Nom'}
 										<th
 											scope="row"
 											class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-											>{key}</th
+											data-utils={key.data || ''}>{key.value}</th
 										>
-									{:else if key === item[item.length - 1] && headers[headers.length - 1] === 'Actions' && item.length > 2}
+									{:else if key.value === item[item.length - 1].value && headers[headers.length - 1] === 'Actions' && item.length > 2}
 										<td class="px-4 py-3 flex items-center justify-end">
 											<button
-												id="{item[0].toLowerCase().replaceAll(' ', '')}-{item[1]
+												id="{item[0].value.toLowerCase().replaceAll(' ', '')}-{item[1].value
 													.toLowerCase()
 													.replaceAll(' ', '')}-dropdown-button"
-												data-dropdown-toggle="{item[0].toLowerCase().replaceAll(' ', '')}-{item[1]
+												data-dropdown-toggle="{item[0].value
+													.toLowerCase()
+													.replaceAll(' ', '')}-{item[1].value
 													.toLowerCase()
 													.replaceAll(' ', '')}-dropdown"
 												class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
@@ -212,14 +214,16 @@
 												</svg>
 											</button>
 											<div
-												id="{item[0].toLowerCase().replaceAll(' ', '')}-{item[1]
+												id="{item[0].value.toLowerCase().replaceAll(' ', '')}-{item[1].value
 													.toLowerCase()
 													.replaceAll(' ', '')}-dropdown"
 												class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
 											>
 												<ul
 													class="py-1 text-sm text-gray-700 dark:text-gray-200"
-													aria-labelledby="{item[0].toLowerCase().replaceAll(' ', '')}-{item[1]
+													aria-labelledby="{item[0].value
+														.toLowerCase()
+														.replaceAll(' ', '')}-{item[1].value
 														.toLowerCase()
 														.replaceAll(' ', '')}-dropdown-button"
 												>
@@ -248,7 +252,7 @@
 											</div>
 										</td>
 									{:else}
-										<td class="px-4 py-3">{key}</td>
+										<td class="px-4 py-3" data-utils={key.data || ''}>{key.value}</td>
 									{/if}
 								{/each}
 							</tr>

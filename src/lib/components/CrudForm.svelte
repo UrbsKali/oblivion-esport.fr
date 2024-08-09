@@ -2,47 +2,9 @@
 	// @ts-nocheck
 
 	export let type = 'Utilisateur';
-	export let fields = [
-		{
-			name: 'Nom',
-			type: 'text',
-			required: true,
-			placeholder: 'Mascode',
-			wide: true
-		},
-		{
-			name: 'Prénom',
-			type: 'text',
-			required: true
-		},
-		{
-			name: 'Email',
-			type: 'email',
-			required: true
-		},
-		{
-			name: 'Mot de passe',
-			type: 'password',
-			required: true
-		},
-		{
-			name: 'Rôle',
-			type: 'select',
-			options: ['Utilisateur', 'Administrateur'],
-			required: true
-		}
-	];
+	export let fields = [];
 
-	export let handleSubmit = async (e) => {
-		e.preventDefault();
-		const form = e.target.closest('form');
-		const data = new FormData(form);
-		const payload = {};
-		for (const [key, value] of data.entries()) {
-			payload[key] = value;
-		}
-		console.log(payload);
-	};
+	export let handleSubmit = async (e) => {};
 </script>
 
 <div
@@ -97,7 +59,7 @@
 								>
 									<option selected="">----------</option>
 									{#each field.options as option}
-										<option value={option}>{option}</option>
+										<option value={option.value}>{option.name}</option>
 									{/each}
 								</select>
 							{:else}
