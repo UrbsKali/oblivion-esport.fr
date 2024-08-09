@@ -1,4 +1,5 @@
-<script lang="ts">
+<script>
+	// @ts-nocheck
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import UserBadge from '$lib/components/UserBadge.svelte';
@@ -11,33 +12,27 @@
 			icon: 'pie-chart'
 		},
 		{
-			title: 'Inscriptions',
-			icon: 'document-attach',
+			title: 'Gestion des données',
+			icon: 'cube-outline',
 			sub: [
 				{
-					title: "Page d'inscription",
-					uri: '/admin/wip'
+					title: 'Tournois',
+					uri: '/admin/tournaments'
 				},
 				{
-					title: 'TWC 5',
-					uri: '/admin/wip'
+					title: 'Teams',
+					uri: '/admin/teams'
+				},
+				{
+					title: 'Matchs',
+					uri: '/admin/matches'
 				}
 			]
 		},
 		{
 			title: 'Prédictions',
-			icon: 'analytics',
-			sub: [
-				{
-					title: 'TWC 5',
-					uri: '/admin/wip'
-				}
-			]
-		},
-		{
-			title: 'Utilisateurs',
-			uri: '/admin/users',
-			icon: 'people-circle'
+			uri: '/admin/predictions',
+			icon: 'analytics'
 		}
 	];
 
