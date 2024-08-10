@@ -3,7 +3,6 @@
 
 	import Table from '$lib/components/Table.svelte';
 	import { supabase } from '$lib/supabaseClient';
-	import { initFlowbite } from 'flowbite';
 	import { onMount } from 'svelte';
 
 	const headers = ['Nom', 'Période', 'Actions'];

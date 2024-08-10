@@ -3,7 +3,6 @@
 
 	import Table from '$lib/components/Table.svelte';
 	import { supabase } from '$lib/supabaseClient';
-	import { initFlowbite } from 'flowbite';
 	import { onMount } from 'svelte';
 
 	const headers = ['Nom', 'Tournois', 'Actions'];
@@ -81,8 +80,6 @@
 				];
 				items = [...items, el];
 			});
-			console.log(items);
-			console.log(data);
 		}
 	});
 </script>

@@ -15,6 +15,7 @@
 	// CrudForm props and methods
 	export let fields = [];
 	export let handleSubmit = () => {};
+	export let handleSelectUpdate = () => {};
 
 	$: if (headers[headers.length - 1] == 'Actions') {
 		items.forEach((item) => {
@@ -353,7 +354,7 @@
 			</nav>
 		</div>
 	</div>
-	<CrudForm {type} {fields} {handleSubmit} />
+	<CrudForm {type} {fields} {handleSubmit} {handleSelectUpdate} />
 </section>
 
 <style></style>
