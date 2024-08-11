@@ -3,19 +3,68 @@
 	import { onMount, afterUpdate } from 'svelte';
 	import { initFlowbite } from 'flowbite';
 	import CrudForm from './CrudForm.svelte';
+	import { supabase } from '$lib/supabaseClient';
+	import { Select } from 'flowbite-svelte';
 
 	export let headers = ['Nom', 'Email', 'Rôle', 'Actions'];
-	export let items = [['urbain', 'urbain.jeu@gmail.com', 'Sudo']];
+	export let items = [['urbain', 'eeeee@gmail.com', 'Sudo']];
 	export let actions = ['delete'];
 	export let type = 'utilisateur';
 
-	export let handleDelete = () => {};
-	export let handleEdit = () => {};
+	export let handleDelete = (e) => {};
+	export let handleEdit = async (e) => {};
 
 	// CrudForm props and methods
 	export let fields = [];
-	export let handleSubmit = () => {};
-	export let handleSelectUpdate = () => {};
+	export let handleSubmit = (e) => {};
+	export let handleSelectUpdate = (e) => {};
+
+	let __handleSubmit = async (e) => {
+		await handleSubmit(e);
+	};
+	let __handleEdit = async (e) => {
+		__handleSubmit = handleEdit;
+		let tr = e.target.closest('tr');
+		let id = tr.children[0].dataset.utils;
+		const response = await supabase
+			.from('Matchs')
+			.select(
+				'id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score'
+			)
+			.eq('id', id);
+		if (response.error) {
+			console.error(response.error);
+		} else {
+			let data = response.data[0];
+			fields[0].value = data.tournament_id.id;
+			fields[0].data = data.id;
+			await handleSelectUpdate({ target: { id: 'tournament_id', value: data.tournament_id.id } });
+			fields[1].value = data.team_one.id;
+			fields[2].value = data.team_two.id;
+			await handleSelectUpdate({
+				target: {
+					id: 'team_one',
+					value: data.team_one.id,
+					selectedOptions: [{ innerText: data.team_one.name }]
+				}
+			});
+			await handleSelectUpdate({
+				target: {
+					id: 'team_two',
+					value: data.team_two.id,
+					selectedOptions: [{ innerText: data.team_two.name }]
+				}
+			});
+
+			fields[3].value = data.date.split('T')[0];
+			fields[4].value = data.date.split('T')[1].split('+')[0];
+			fields[5].value = data.winner?.id;
+			fields[6].value = data.score;
+
+			const modal = FlowbiteInstances.getInstance('Modal', 'CrudModal');
+			modal.show();
+		}
+	};
 
 	$: if (headers[headers.length - 1] == 'Actions') {
 		items.forEach((item) => {
@@ -179,7 +228,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each items as item}
+						{#each items as item, i}
 							<tr class="border-b dark:border-gray-700">
 								{#each item as key}
 									{#if key.value === item[0].value && headers[0] === 'Nom'}
@@ -191,14 +240,8 @@
 									{:else if key.value === item[item.length - 1].value && headers[headers.length - 1] === 'Actions' && item.length > 2}
 										<td class="px-4 py-3 flex items-center justify-end">
 											<button
-												id="{item[0].value.toLowerCase().replaceAll(' ', '')}-{item[1].value
-													.toLowerCase()
-													.replaceAll(' ', '')}-dropdown-button"
-												data-dropdown-toggle="{item[0].value
-													.toLowerCase()
-													.replaceAll(' ', '')}-{item[1].value
-													.toLowerCase()
-													.replaceAll(' ', '')}-dropdown"
+												id="{i}-dropdown-button"
+												data-dropdown-toggle="{i}-dropdown"
 												class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
 												type="button"
 											>
@@ -215,18 +258,12 @@
 												</svg>
 											</button>
 											<div
-												id="{item[0].value.toLowerCase().replaceAll(' ', '')}-{item[1].value
-													.toLowerCase()
-													.replaceAll(' ', '')}-dropdown"
+												id="{i}-dropdown"
 												class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
 											>
 												<ul
 													class="py-1 text-sm text-gray-700 dark:text-gray-200"
-													aria-labelledby="{item[0].value
-														.toLowerCase()
-														.replaceAll(' ', '')}-{item[1].value
-														.toLowerCase()
-														.replaceAll(' ', '')}-dropdown-button"
+													aria-labelledby="{i}-dropdown-button"
 												>
 													{#each actions as item}
 														{#if item === 'delete'}
@@ -242,7 +279,7 @@
 															<li>
 																<a
 																	href="#"
-																	on:click={handleEdit}
+																	on:click={__handleEdit}
 																	class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
 																	>{item.charAt(0).toUpperCase() + item.slice(1)}</a
 																>
@@ -354,7 +391,7 @@
 			</nav>
 		</div>
 	</div>
-	<CrudForm {type} {fields} {handleSubmit} {handleSelectUpdate} />
+	<CrudForm {type} {fields} handleSubmit={__handleSubmit} {handleSelectUpdate} />
 </section>
 
 <style></style>

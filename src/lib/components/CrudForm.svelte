@@ -5,6 +5,18 @@
 	export let fields = [];
 	export let handleSelectUpdate = async (e) => {};
 	export let handleSubmit = async (e) => {};
+
+	$: for (let field of fields) {
+		if (field.type === 'select' && field.value) {
+			field.options = field.options.map((option) => {
+				if (option.value === field.value) field.autoselect = true;
+				return {
+					...option,
+					selected: option.value === field.value
+				};
+			});
+		}
+	}
 </script>
 
 <div
@@ -49,7 +61,7 @@
 							<label
 								for="brand"
 								class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-								>{field.name}</label
+								data-utils={field.data || ''}>{field.name}</label
 							>
 							{#if field.type === 'select'}
 								<select
@@ -58,10 +70,12 @@
 									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 									on:change={handleSelectUpdate}
 								>
-									<option selected="" value="NULL">----------</option>
+									<option selected={!field.autoselect} value="NULL">----------</option>
 									{#each field.options as option}
-										<option value={option.value} data-utils={option.data || ''}
-											>{option.name}</option
+										<option
+											value={option.value}
+											data-utils={option.data || ''}
+											selected={option.selected}>{option.name}</option
 										>
 									{/each}
 								</select>
@@ -73,6 +87,7 @@
 									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 									placeholder={field.placeholder || field.name.toLowerCase()}
 									required={field.required}
+									value={field.value || ''}
 								/>
 							{/if}
 						</div>
@@ -94,7 +109,7 @@
 							clip-rule="evenodd"
 						></path></svg
 					>
-					Add new product
+					Ajouter un {type}
 				</button>
 			</form>
 		</div>

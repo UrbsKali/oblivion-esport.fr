@@ -7,6 +7,7 @@
 
 	const headers = ['Nom', 'Tournois', 'Gagnant', 'Score', 'Actions'];
 	let items = [];
+	let actions = ['update', 'delete'];
 
 	let teams_options = [];
 	let t_id = 0;
@@ -37,13 +38,6 @@
 			options: [...teams_options]
 		},
 		{
-			name: 'Gagnant',
-			id: 'winner',
-			type: 'select',
-			required: false,
-			options: []
-		},
-		{
 			name: 'Date',
 			id: 'date',
 			type: 'date',
@@ -54,6 +48,13 @@
 			id: 'time',
 			type: 'time',
 			required: true
+		},
+		{
+			name: 'Gagnant',
+			id: 'winner',
+			type: 'select',
+			required: false,
+			options: []
 		},
 		{
 			name: 'Score',
@@ -102,6 +103,46 @@
 		}
 	};
 
+	let handleEdit = async (e) => {
+		e.preventDefault();
+		const form = e.target.closest('form');
+		console.log(form);
+		let id = form.firstChild.firstChild.firstChild.dataset.utils;
+		const data = new FormData(form);
+		const payload = {};
+		for (const [key, value] of data.entries()) {
+			if (key == 'winner' && value == 'NULL') continue;
+			payload[key] = value;
+		}
+		payload.date += ` ${payload.time}+00`;
+		delete payload.time;
+		console.log(payload);
+		const { ret, error } = await supabase.from('Matchs').update([payload]).eq('id', id);
+		if (error) {
+			console.error(error);
+		} else {
+			let el = [
+				{
+					value: `${document.querySelector('select#team_one').selectedOptions[0].innerText} vs ${document.querySelector('select#team_two').selectedOptions[0].innerText}`,
+					data: id
+				},
+				{
+					value: document.querySelector('select#tournament_id').selectedOptions[0].innerText,
+					data: payload.tournament_id
+				},
+				{
+					value: document.querySelector('select#winner').selectedOptions[0]?.innerText || '-',
+					data: payload.winner || ''
+				},
+				{ value: payload.score || '-' }
+			];
+			items = [...items.filter((el) => el[0].data != id), el];
+
+			const modal = FlowbiteInstances.getInstance('Modal', 'CrudModal');
+			modal.hide();
+		}
+	};
+
 	let handleDelete = async (e) => {
 		e.preventDefault();
 		let tr = e.target.closest('tr');
@@ -122,12 +163,12 @@
 			fields[2].options = teams_options.filter((el) => el.data == t_id);
 		}
 		if (e.target.id == 'team_one') {
-			fields[3].options[0] = { name: e.target.selectedOptions[0].innerText, value: e.target.value };
+			fields[5].options[0] = { name: e.target.selectedOptions[0].innerText, value: e.target.value };
 			fields[2].options = teams_options.filter((el) => el.data == t_id);
 			fields[2].options = fields[2].options.filter((el) => el.value != e.target.value);
 		}
 		if (e.target.id == 'team_two') {
-			fields[3].options[1] = { name: e.target.selectedOptions[0].innerText, value: e.target.value };
+			fields[5].options[1] = { name: e.target.selectedOptions[0].innerText, value: e.target.value };
 		}
 	};
 
@@ -173,7 +214,17 @@
 
 <section>
 	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">Matchs</h1>
-	<Table {headers} {items} {type} {fields} {handleSubmit} {handleDelete} {handleSelectUpdate} />
+	<Table
+		{headers}
+		{items}
+		{type}
+		{fields}
+		{actions}
+		{handleSubmit}
+		{handleDelete}
+		{handleEdit}
+		{handleSelectUpdate}
+	/>
 </section>
 
 <style></style>
