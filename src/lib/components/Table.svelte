@@ -10,6 +10,7 @@
 	export let items = [['urbain', 'eeeee@gmail.com', 'Sudo']];
 	export let actions = ['delete'];
 	export let type = 'utilisateur';
+	export let type_accord = 'un';
 
 	export let handleDelete = (e) => {};
 	export let handleEdit = async (e) => {};
@@ -138,7 +139,8 @@
 								d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
 							/>
 						</svg>
-						Ajouter un {type}
+						Ajouter {type_accord}
+						{type}
 					</button>
 					<div class="flex items-center space-x-3 w-full md:w-auto">
 						<button
@@ -391,7 +393,7 @@
 			</nav>
 		</div>
 	</div>
-	<CrudForm {type} {fields} handleSubmit={__handleSubmit} {handleSelectUpdate} />
+	<CrudForm {type} {fields} handleSubmit={__handleSubmit} {handleSelectUpdate} {type_accord} />
 </section>
 
 <style></style>

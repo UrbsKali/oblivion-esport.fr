@@ -5,9 +5,10 @@
 	import { supabase } from '$lib/supabaseClient';
 	import { onMount } from 'svelte';
 
-	const headers = ['Nom', 'Tournois', 'Actions'];
+	const headers = ['Nom', 'Tournoi', 'Actions'];
 	let items = [];
 	const type = 'Teams';
+	const type_accord = 'une';
 	let fields = [
 		{
 			name: 'Nom',
@@ -86,7 +87,7 @@
 
 <section>
 	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">Teams</h1>
-	<Table {headers} {items} {type} {fields} {handleSubmit} {handleDelete} />
+	<Table {headers} {items} {type} {type_accord} {fields} {handleSubmit} {handleDelete} />
 </section>
 
 <style></style>

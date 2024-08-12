@@ -5,7 +5,7 @@
 	import { supabase } from '$lib/supabaseClient';
 	import { onMount } from 'svelte';
 
-	const headers = ['Nom', 'Tournois', 'Gagnant', 'Score', 'Actions'];
+	const headers = ['Nom', 'Tournoi', 'Gagnant', 'Score', 'Actions'];
 	let items = [];
 	let actions = ['update', 'delete'];
 

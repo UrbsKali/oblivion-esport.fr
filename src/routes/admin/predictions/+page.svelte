@@ -5,7 +5,7 @@
 	import { supabase } from '$lib/supabaseClient';
 	import { onMount } from 'svelte';
 
-	const headers = ['Match', 'Tournois', 'Prédiction', 'Score final', 'Actions'];
+	const headers = ['Match', 'Tournoi', 'Prédiction', 'Score final', 'Actions'];
 	let items = [];
 
 	let teams_options = [];
@@ -13,6 +13,8 @@
 	let selected_team = [];
 
 	const type = 'Prédiction';
+	const type_accord = 'une';
+
 	let fields = [
 		{
 			name: 'Match',
@@ -142,7 +144,16 @@
 
 <section>
 	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">Prédictions</h1>
-	<Table {headers} {items} {type} {fields} {handleSubmit} {handleDelete} {handleSelectUpdate} />
+	<Table
+		{headers}
+		{items}
+		{type}
+		{type_accord}
+		{fields}
+		{handleSubmit}
+		{handleDelete}
+		{handleSelectUpdate}
+	/>
 </section>
 
 <style></style>
