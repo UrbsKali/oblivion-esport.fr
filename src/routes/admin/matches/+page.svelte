@@ -74,7 +74,7 @@
 			if (key == 'winner' && value == 'NULL') continue;
 			payload[key] = value;
 		}
-		payload.date += ` ${payload.time}+00`;
+		payload.date += ` ${payload.time}+02`;
 		delete payload.time;
 		const { ret, error } = await supabase.from('Matchs').insert([payload]);
 		if (error) {

@@ -46,6 +46,7 @@
 		for (const [key, value] of data.entries()) {
 			payload[key] = value;
 		}
+		payload.made_by = (await supabase.auth.getUser())?.data?.user?.id;
 		const { ret, error } = await supabase.from('Predictions').insert([payload]);
 		if (error) {
 			console.error(error);
