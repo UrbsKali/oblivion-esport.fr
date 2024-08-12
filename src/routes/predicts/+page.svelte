@@ -34,7 +34,7 @@
 		{
 			const { data, error } = await supabase
 				.from('Predictions')
-				.select(`id, match, team(name), score, made_by(username)`)
+				.select(`id, match, team(name), score, made_by(username, predict_accuracy)`)
 				.in(
 					'match',
 					matchs.map((el) => el.id)
@@ -42,7 +42,14 @@
 			predictions = data;
 		}
 		// get each unique value of made_by
-		casteur = [...new Set(predictions.map((el) => el.made_by.username))];
+		predictions.forEach((element) => {
+			if (casteur.map((el) => el.username).includes(element.made_by.username)) return;
+			casteur = [
+				...casteur,
+				{ username: element.made_by.username, predict_accuracy: element.made_by.predict_accuracy }
+			];
+		});
+
 		// update url to current date, without reloading the page
 		pushState(`${window.location.origin}${window.location.pathname}?date=${dateStr}`);
 	}
@@ -69,7 +76,7 @@
 		<tr>
 			<th>Matchs</th>
 			{#each casteur as cast}
-				<th>{cast}</th>
+				<th>{cast.username} - {Math.round(cast.predict_accuracy * 100)}%</th>
 			{/each}
 		</tr>
 	</thead>
@@ -96,10 +103,13 @@
 				</td>
 				{#each casteur as cast}
 					<td>
-						{#if predictions.find((el) => el.made_by.username == cast && el.match == match.id)}
-							{predictions.find((el) => el.made_by.username == cast && el.match == match.id).team
-								.name} :
-							{predictions.find((el) => el.made_by.username == cast && el.match == match.id).score}
+						{#if predictions.find((el) => el.made_by.username == cast.username && el.match == match.id)}
+							{predictions.find(
+								(el) => el.made_by.username == cast.username && el.match == match.id
+							).team.name} :
+							{predictions.find(
+								(el) => el.made_by.username == cast.username && el.match == match.id
+							).score}
 						{:else}
 							-
 						{/if}
