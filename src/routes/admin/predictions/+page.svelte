@@ -12,6 +12,9 @@
 	let m_id = 0;
 	let selected_team = [];
 
+	let current_user = {};
+	let current_role = '';
+
 	const type = 'Prédiction';
 	const type_accord = 'une';
 
@@ -53,11 +56,21 @@
 		if (error) {
 			console.error(error);
 		} else {
-			const { data, error } = await supabase
-				.from('Predictions')
-				.select(
-					`id, match(id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score), made_by, team(name, id), score`
-				);
+			let data, error;
+			if (['superadmin', 'admin'].includes(current_role)) {
+				({ data, error } = await supabase
+					.from('Predictions')
+					.select(
+						`id, match(id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score), made_by, team(name, id), score`
+					));
+			} else {
+				({ data, error } = await supabase
+					.from('Predictions')
+					.select(
+						`id, match(id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score), made_by, team(name, id), score`
+					)
+					.eq('made_by', current_user.id));
+			}
 			items = [];
 			data?.forEach((element) => {
 				let el = [
@@ -104,6 +117,25 @@
 
 	onMount(async () => {
 		{
+			const { data, error } = await supabase.auth.getSession();
+			if (error) {
+				console.error(error);
+				window.location.href = `${window.location.origin}/login?redirect=${window.location.pathname}`;
+			}
+			current_user = data.session.user;
+		}
+		{
+			const { data, error } = await supabase
+				.from('profiles')
+				.select('role')
+				.eq('id', current_user.id);
+			if (error) {
+				console.error(error);
+				window.location.href = `${window.location.origin}/`;
+			}
+			current_role = data[0].role;
+		}
+		{
 			// fetch tournament options for the select field
 			const { data, error } = await supabase
 				.from('Matchs')
@@ -118,11 +150,21 @@
 			});
 		}
 		{
-			const { data, error } = await supabase
-				.from('Predictions')
-				.select(
-					`id, match(id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score), made_by, team(name, id), score`
-				);
+			let data, error;
+			if (['superadmin', 'admin'].includes(current_role)) {
+				({ data, error } = await supabase
+					.from('Predictions')
+					.select(
+						`id, match(id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score), made_by, team(name, id), score`
+					));
+			} else {
+				({ data, error } = await supabase
+					.from('Predictions')
+					.select(
+						`id, match(id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score), made_by, team(name, id), score`
+					)
+					.eq('made_by', current_user.id));
+			}
 			data?.forEach((element) => {
 				let el = [
 					{

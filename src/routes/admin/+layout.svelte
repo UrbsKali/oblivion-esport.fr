@@ -5,15 +5,20 @@
 	import UserBadge from '$lib/components/UserBadge.svelte';
 	import SideBar from '$lib/components/SideBar.svelte';
 
-	const menu = [
+	let current_user = {};
+	let current_role = '';
+
+	let menu = [
 		{
 			title: 'Accueil',
 			uri: '/admin',
-			icon: 'pie-chart'
+			icon: 'pie-chart',
+			allowed_roles: ['superadmin', 'admin', 'casteur']
 		},
 		{
 			title: 'Gestion des données',
 			icon: 'cube-outline',
+			allowed_roles: ['superadmin', 'admin'],
 			sub: [
 				{
 					title: 'Tournois',
@@ -32,20 +37,57 @@
 		{
 			title: 'Prédictions',
 			uri: '/admin/predictions',
-			icon: 'analytics'
+			icon: 'analytics',
+			allowed_roles: ['superadmin', 'admin', 'casteur']
 		}
 	];
 
+	let __menu = [];
+
 	onMount(async () => {
-		const {
-			data: { user },
-			error
-		} = await supabase.auth.getUser();
-		if (error) {
-			console.error(error);
-			console.log(user);
-			window.location.href = `${window.location.origin}/login?redirect=${window.location.pathname}`;
+		{
+			const { data, error } = await supabase.auth.getUser();
+			if (error) {
+				console.error(error);
+				window.location.href = `${window.location.origin}/login?redirect=${window.location.pathname}`;
+			}
+			current_user = data.user;
 		}
+		{
+			const { data, error } = await supabase
+				.from('profiles')
+				.select('role')
+				.eq('id', current_user.id);
+			if (error) {
+				console.error(error);
+				window.location.href = `${window.location.origin}/`;
+			}
+			current_role = data[0].role;
+		}
+		const uri = window.location.pathname;
+		if (!menu.find((el) => el.uri == uri)?.allowed_roles.includes(current_role)) {
+			// check if the uri is inside a sub menu
+			let found = false;
+			menu.forEach((el) => {
+				if (!el.sub) return;
+				if (el.sub.find((el) => el.uri == uri)) {
+					found = true;
+				}
+			});
+			if (!found) window.location.href = `${window.location.origin}/`;
+			// else refer to allowed roles of the parent
+			else {
+				let parent = menu.find((el) => el.sub?.find((el) => el.uri == uri));
+				if (!parent.allowed_roles.includes(current_role)) {
+					window.location.href = `${window.location.origin}/`;
+				}
+			}
+		}
+
+		menu.forEach((el) => {
+			if (!el.allowed_roles.includes(current_role)) return;
+			__menu = [...__menu, el];
+		});
 	});
 </script>
 
@@ -103,7 +145,7 @@
 	</nav>
 
 	<!-- Sidebar -->
-	<SideBar {menu} />
+	<SideBar menu={__menu} />
 
 	<main class="p-4 md:ml-64 min-h-screen pt-20">
 		<slot />
