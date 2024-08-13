@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
+	import { config } from '$lib/config';
+	import { initFlowbite } from 'flowbite';
 
 	export let user = {
 		name: 'Mascode',
@@ -21,12 +23,13 @@
 			user.email = session.user.email || user.email;
 			user.name = session.user.user_metadata.full_name || user.email.split('@')[0];
 			user.avatar = session.user.user_metadata.avatar_url || user.avatar;
+			initFlowbite();
 		}
 	});
 
 	const LogOut = () => {
 		supabase.auth.signOut().then(() => {
-			window.location.href = `${window.location.origin}/login?redirect=${window.location.pathname}`;
+			window.location.href = `${window.location.origin}${config.basePath}/login?redirect=${window.location.pathname}`;
 		});
 	};
 </script>

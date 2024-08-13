@@ -4,6 +4,7 @@
 	import { supabase } from '$lib/supabaseClient';
 	import UserBadge from '$lib/components/UserBadge.svelte';
 	import SideBar from '$lib/components/SideBar.svelte';
+	import { config, currentOrigin, parseURI } from '$lib/config';
 
 	let current_user = {};
 	let current_role = '';
@@ -43,13 +44,14 @@
 	];
 
 	let __menu = [];
+	menu = parseURI(menu);
 
 	onMount(async () => {
 		{
 			const { data, error } = await supabase.auth.getUser();
 			if (error) {
 				console.error(error);
-				window.location.href = `${window.location.origin}/login?redirect=${window.location.pathname}`;
+				window.location.href = `${currentOrigin()}/login?redirect=${window.location.pathname}`;
 			}
 			current_user = data.user;
 		}
@@ -60,11 +62,15 @@
 				.eq('id', current_user.id);
 			if (error) {
 				console.error(error);
-				window.location.href = `${window.location.origin}/`;
+				window.location.href = `${currentOrigin()}/`;
 			}
 			current_role = data[0].role;
 		}
-		const uri = window.location.pathname;
+		// remove trailing slash if present
+		const uri = window.location.pathname.endsWith('/')
+			? window.location.pathname.slice(0, -1)
+			: window.location.pathname;
+
 		if (!menu.find((el) => el.uri == uri)?.allowed_roles.includes(current_role)) {
 			// check if the uri is inside a sub menu
 			let found = false;
@@ -74,12 +80,12 @@
 					found = true;
 				}
 			});
-			if (!found) window.location.href = `${window.location.origin}/`;
+			if (!found) window.location.href = `${currentOrigin()}/`;
 			// else refer to allowed roles of the parent
 			else {
 				let parent = menu.find((el) => el.sub?.find((el) => el.uri == uri));
 				if (!parent.allowed_roles.includes(current_role)) {
-					window.location.href = `${window.location.origin}/`;
+					window.location.href = `${currentOrigin()}/`;
 				}
 			}
 		}

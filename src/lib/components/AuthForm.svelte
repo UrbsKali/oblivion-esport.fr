@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
+	import { config } from '$lib/config';
 
 	const AuthType = {
 		login: 'Login',
@@ -8,7 +9,7 @@
 		reset: 'Mot de passe oublié'
 	};
 
-	export let redirect_uri = '/';
+	export let redirect_uri = config.basePath + '/';
 	/**
 	 * {'login' | 'register' | 'reset'}
 	 */
@@ -38,7 +39,7 @@
 		}
 		if (error && auth_type === AuthType.reset) {
 			console.error(error);
-			window.location.href = '/login';
+			window.location.href = config.basePath + '/login';
 		}
 		email = user?.email || '';
 	});
@@ -96,9 +97,9 @@
 		if (redirect) {
 			return redirect;
 		} else if (redirect_uri == '/') {
-			return window.location.origin;
+			return window.location.origin + config.basePath;
 		} else {
-			return redirect_uri;
+			return config.basePath + redirect_uri;
 		}
 	}
 </script>

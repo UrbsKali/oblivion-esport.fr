@@ -1,10 +1,15 @@
 <script>
-	import { onMount } from 'svelte';
+	// @ts-nocheck
+	import { onMount, afterUpdate } from 'svelte';
 	import { initFlowbite } from 'flowbite';
+	import { config } from '$lib/config';
 
 	export let menu = [{ title: 'fill me', icon: 'timer', uri: '/admin' }];
 
 	onMount(() => {
+		initFlowbite();
+	});
+	afterUpdate(() => {
 		initFlowbite();
 	});
 </script>
