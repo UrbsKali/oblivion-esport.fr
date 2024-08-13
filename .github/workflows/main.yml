@@ -18,5 +18,5 @@ jobs:
         server: ftp.cluster029.hosting.ovh.net
         username: oblivig
         password: ${{ secrets.ftp_password }}
-        local-dir: './www/'
+        server-dir: '/home/oblivig/www'
     
