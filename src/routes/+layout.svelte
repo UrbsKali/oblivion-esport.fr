@@ -2,6 +2,12 @@
 	import '../app.css';
 </script>
 
+<svelte:head>
+	<title>Oblivion Esport</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="icon" type="image/png" href="/oblivion.png" />
+</svelte:head>
+
 <div class="antialiased bg-gray-50 dark:bg-gray-900 dark:text-white min-w-screen min-h-screen p-5">
 	<slot />
 </div>
