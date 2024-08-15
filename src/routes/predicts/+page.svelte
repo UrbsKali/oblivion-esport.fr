@@ -74,7 +74,7 @@
 
 <svelte:head>
 	<title>Prédictions | Oblivion Esport</title>
-	<meta name="description" content="Prédiction du jours - Oblivion Esport" />
+	<meta name="description" content="Prédiction du jour - Oblivion Esport" />
 	<meta name="keywords" content="Predicts, LoL, League of Legends, Tournaments" />
 	<meta name="author" content="UrbsKali" />
 	<meta name="robots" content="index, follow" />
