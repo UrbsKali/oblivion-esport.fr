@@ -105,86 +105,100 @@
 />
 <LinkButton href="" text="" target="" onClick={async (e) => await fetchinfo(dateOfXDay(1))} />
 <h2>{date.toLocaleDateString()}</h2>
-<div class="flex flex-row justify-between">
-	<table class=" border-spacing-x-10 border-spacing-y-2 border-separate -ml-10">
-		<thead>
-			<tr>
-				<th>Matchs</th>
-				{#each casteur as cast}
-					<th
-						><div>
-							<div class=" font-extrabold text-2xl">{Math.round(cast.predict_accuracy * 100)}%</div>
-							<div class=" uppercase">{cast.username}</div>
-						</div>
-					</th>
-				{/each}
-			</tr>
-		</thead>
-		<tbody>
-			{#each matchs as match}
-				<tr>
-					<td>
-						<div
-							class="bg-gray-700 text-gray-300 rounded-t-md flex flex-row items-center p-2 justify-center"
-						>
-							<div class="tournament p-1">{match.tournament_id.title}</div>
-							-
-							<div class="date p-1">{new Date(match.date).toLocaleTimeString()}</div>
-						</div>
-						<div class="bg-white dark:bg-gray-800 p-2 rounded-b-md flex flex-col">
-							<div class="grid justify-center pt-2 pb-2 custom-grid">
-								<div class="team p-1 flex flex-col items-center">
-									<img src={match.team_one.logo_url} alt="" srcset="" class=" w-auto h-20" />
-									{match.team_one.name}
-								</div>
-								<div class="vs p-1 flex items-center"><img src="/epee.png" alt="" /></div>
-								<div class="team p-1 flex flex-col items-center">
-									<img src={match.team_two.logo_url} alt="" srcset="" class=" w-auto h-20" />
-									{match.team_two.name}
-								</div>
-							</div>
+<div class="flex flex-row justify-between w-full">
+	<div class="horizontal-scroll-except-first-column flex flex-row w-custom">
+		<div class="hideout"></div>
 
-							<LinkButton href="https://twitch.tv/kckitt_" text="Voir le match" />
-						</div>
-					</td>
+		<table class=" border-spacing-x-10 border-spacing-y-2 border-separate -ml-10 table-fixed">
+			<thead>
+				<tr>
+					<th class="w-96">Matchs</th>
 					{#each casteur as cast}
-						<td>
-							{#if predictions.find((el) => el.made_by.username == cast.username && el.match == match.id)}
-								<div class="flex flex-col items-center">
-									<img
-										src={predictions.find(
-											(el) => el.made_by.username == cast.username && el.match == match.id
-										).team.logo_url}
-										alt=""
-										class=" w-auto h-20"
-									/>
+						<th
+							><div class=" w-36">
+								<div class=" font-extrabold text-2xl">
+									{Math.round(cast.predict_accuracy * 100)}%
 								</div>
-							{:else}
-								-
-							{/if}
-						</td>
+								<div class=" uppercase">{cast.username}</div>
+							</div>
+						</th>
 					{/each}
 				</tr>
-			{/each}
-		</tbody>
-	</table>
-	<div>
-		<div class="bg-gray-800 shadow-md rounded-md overflow-hidden max-w-sm min-w-60 mx-auto mt-16">
-			<div class="bg-gray-700 py-2 px-4">
-				<h2 class="text-xl font-semibold text-gray-300">Leaderboard</h2>
-			</div>
-			<ul class="divide-y divide-gray-200">
-				{#each casteur_leaderboard as cast, index}
-					<li class="flex items-center py-4 px-6">
-						<span class="text-gray-300 text-lg font-medium mr-4">{index + 1}.</span>
-						<div class="flex-1">
-							<h3 class="text-lg font-medium text-gray-300">{cast.username}</h3>
-							<p class="text-gray-300 text-base">{cast.predict_accuracy} %</p>
-						</div>
-						<img src="https://oblivion-esport.fr/{index + 1}.png" alt="" class="ml-5 size-10" />
-					</li>
+			</thead>
+			<tbody>
+				{#each matchs as match, i}
+					<tr>
+						<td class=" w-96">
+							<div
+								class="bg-gray-700 text-gray-300 rounded-t-md flex flex-row items-center p-2 justify-center"
+							>
+								<div class="tournament p-1">{match.tournament_id.title}</div>
+								-
+								<div class="date p-1">{new Date(match.date).toLocaleTimeString()}</div>
+							</div>
+							<div class="bg-white dark:bg-gray-800 p-2 rounded-b-md flex flex-col">
+								<div class="grid justify-center pt-2 pb-2 custom-grid">
+									<div class="team p-1 flex flex-col items-center">
+										<img
+											src={match.team_one.logo_url}
+											alt=""
+											srcset=""
+											class=" w-auto h-20 aspect-auto"
+										/>
+										{match.team_one.name}
+									</div>
+									<div class="vs p-1 flex items-center"><img src="/epee.png" alt="" /></div>
+									<div class="team p-1 flex flex-col items-center">
+										<img src={match.team_two.logo_url} alt="" srcset="" class=" w-auto h-20" />
+										{match.team_two.name}
+									</div>
+								</div>
+
+								<LinkButton href="https://twitch.tv/kckitt_" text="Voir le match" />
+							</div>
+						</td>
+						{#each casteur as cast, index}
+							<td class="h-56">
+								{#if predictions.find((el) => el.made_by.username == cast.username && el.match == match.id)}
+									<div class="flex flex-col items-center align-middle h-56">
+										<img
+											src={predictions.find(
+												(el) => el.made_by.username == cast.username && el.match == match.id
+											).team.logo_url}
+											alt=""
+											class=" w-auto h-20 m-auto"
+										/>
+									</div>
+								{:else}
+									-
+								{/if}
+							</td>
+							{#if index == casteur.length - 1 && i == 1}
+								<td class="overflow-hidden"> </td>
+							{/if}
+						{/each}
+					</tr>
 				{/each}
-			</ul>
+			</tbody>
+		</table>
+		<div>
+			<div class="bg-gray-800 shadow-md rounded-md max-w-sm min-w-60 mx-auto mt-16">
+				<div class="bg-gray-700 py-2 px-4 rounded-t-md">
+					<h2 class="text-xl font-semibold text-gray-300">Leaderboard</h2>
+				</div>
+				<ul class="divide-y divide-gray-200">
+					{#each casteur_leaderboard as cast, index}
+						<li class="flex items-center py-4 px-6">
+							<span class="text-gray-300 text-lg font-medium mr-4">{index + 1}.</span>
+							<div class="flex-1">
+								<h3 class="text-lg font-medium text-gray-300">{cast.username}</h3>
+								<p class="text-gray-300 text-base">{cast.predict_accuracy} %</p>
+							</div>
+							<img src="https://oblivion-esport.fr/{index + 1}.png" alt="" class="ml-5 size-10" />
+						</li>
+					{/each}
+				</ul>
+			</div>
 		</div>
 	</div>
 </div>
@@ -192,5 +206,69 @@
 <style>
 	.custom-grid {
 		grid-template-columns: 1fr 50px 1fr;
+	}
+	.horizontal-scroll-except-first-column {
+		width: 100%;
+		overflow: auto;
+	}
+
+	.horizontal-scroll-except-first-column > table {
+		margin-left: 20em;
+	}
+
+	.horizontal-scroll-except-first-column > table > * > tr > th:first-child,
+	.horizontal-scroll-except-first-column > table > * > tr > td:first-child {
+		position: absolute;
+		margin-left: -23em;
+		background-color: #111827;
+	}
+
+	.horizontal-scroll-except-first-column > table > * > tr > th,
+	.horizontal-scroll-except-first-column > table > * > tr > td {
+		/* Without this, if a cell wraps onto two lines, the first column
+   * will look bad, and may need padding. */
+		white-space: nowrap;
+	}
+	.hideout {
+		position: absolute;
+		width: 23em;
+		background-color: #111827;
+		height: 100%;
+	}
+
+	.w-custom {
+		width: calc(100vw + 20px);
+	}
+
+	/*Mobile, let the whole table scroll*/
+	@media screen and (max-width: 640px) {
+		.horizontal-scroll-except-first-column {
+			overflow: auto;
+			margin-left: -3em;
+		}
+		.horizontal-scroll-except-first-column > table {
+			margin-left: 0;
+			padding-left: 0;
+		}
+		.horizontal-scroll-except-first-column > table > * > tr > th:first-child,
+		.horizontal-scroll-except-first-column > table > * > tr > td:first-child {
+			position: relative;
+		}
+		.hideout {
+			display: none;
+		}
+	}
+
+	/*Scrollbar styling*/
+
+	.horizontal-scroll-except-first-column::-webkit-scrollbar {
+		height: 12px;
+		margin-left: 25em;
+		width: 500px;
+		background-color: #111827;
+	}
+	.horizontal-scroll-except-first-column::-webkit-scrollbar-thumb {
+		background-color: #4b5563;
+		border-radius: 10px;
 	}
 </style>
