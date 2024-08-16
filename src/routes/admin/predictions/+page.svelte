@@ -4,6 +4,7 @@
 	import Table from '$lib/components/Table.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { onMount } from 'svelte';
+	import { currentOrigin } from '$lib/config';
 
 	const headers = ['Match', 'Tournoi', 'Prédiction', 'Score final', 'Actions'];
 	let items = [];
@@ -120,7 +121,7 @@
 			const { data, error } = await supabase.auth.getSession();
 			if (error) {
 				console.error(error);
-				window.location.href = `${window.location.origin}/login?redirect=${window.location.pathname}`;
+				window.location.href = `${currentOrigin()}/login?redirect=${window.location.pathname}`;
 			}
 			current_user = data.session.user;
 		}
@@ -139,7 +140,8 @@
 			// fetch tournament options for the select field
 			const { data, error } = await supabase
 				.from('Matchs')
-				.select(`id, team_one(name, id), team_two(name, id), tournament_id(title)`);
+				.select(`id, team_one(name, id), team_two(name, id), tournament_id(title)`)
+				.gte('date', new Date().toISOString());
 			data?.forEach((element) => {
 				let el = {
 					name: `${element.team_one.name} vs ${element.team_two.name} - ${element.tournament_id.title}`,
