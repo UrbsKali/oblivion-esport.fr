@@ -56,7 +56,7 @@
 		});
 
 		casteur_leaderboard = casteur
-			.sort((a, b) => a.predict_accuracy - b.predict_accuracy)
+			.sort((a, b) => -a.predict_accuracy + b.predict_accuracy)
 			.slice(0, 3);
 		console.log(casteur_leaderboard);
 
@@ -192,7 +192,7 @@
 							<span class="text-gray-300 text-lg font-medium mr-4">{index + 1}.</span>
 							<div class="flex-1">
 								<h3 class="text-lg font-medium text-gray-300">{cast.username}</h3>
-								<p class="text-gray-300 text-base">{cast.predict_accuracy} %</p>
+								<p class="text-gray-300 text-base">{Math.round(cast.predict_accuracy * 100)} %</p>
 							</div>
 							<img src="https://oblivion-esport.fr/{index + 1}.png" alt="" class="ml-5 size-10" />
 						</li>
