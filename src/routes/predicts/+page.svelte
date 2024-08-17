@@ -39,7 +39,9 @@
 		{
 			const { data, error } = await supabase
 				.from('Predictions')
-				.select(`id, match, team(name, logo_url), score, made_by(username, predict_accuracy)`)
+				.select(
+					`id, match, team(name, logo_url), score, made_by(username, predict_accuracy), is_true`
+				)
 				.in(
 					'match',
 					matchs.map((el) => el.id)
@@ -154,7 +156,7 @@
 											src={match.team_one.logo_url}
 											alt=""
 											srcset=""
-											class=" w-auto h-20 aspect-auto"
+											class=" w-auto h-20 aspect-auto}"
 										/>
 										{match.team_one.name}
 									</div>
@@ -177,7 +179,11 @@
 												(el) => el.made_by.username == cast.username && el.match == match.id
 											).team.logo_url}
 											alt=""
-											class=" w-auto h-20 m-auto"
+											class=" w-auto h-20 m-auto {predictions.find(
+												(el) => el.made_by.username == cast.username && el.match == match.id
+											).is_true
+												? ''
+												: 'bnw'}"
 										/>
 									</div>
 								{:else}
@@ -215,6 +221,9 @@
 </div>
 
 <style>
+	.bnw {
+		filter: grayscale(1);
+	}
 	.custom-grid {
 		grid-template-columns: 1fr 50px 1fr;
 	}
