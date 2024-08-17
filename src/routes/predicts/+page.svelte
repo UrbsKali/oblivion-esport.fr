@@ -183,7 +183,11 @@
 												(el) => el.made_by.username == cast.username && el.match == match.id
 											).is_true
 												? ''
-												: 'bnw'}"
+												: predictions.find(
+															(el) => el.made_by.username == cast.username && el.match == match.id
+													  ).is_true != null
+													? 'bnw'
+													: ''}"
 										/>
 									</div>
 								{:else}
@@ -223,6 +227,7 @@
 <style>
 	.bnw {
 		filter: grayscale(1);
+		z-index: 0;
 	}
 	.custom-grid {
 		grid-template-columns: 1fr 50px 1fr;
@@ -241,6 +246,7 @@
 		position: absolute;
 		margin-left: -23em;
 		background-color: #111827;
+		z-index: 2;
 	}
 
 	.horizontal-scroll-except-first-column > table > * > tr > th,
@@ -254,6 +260,7 @@
 		width: 23em;
 		background-color: #111827;
 		height: 100%;
+		z-index: 0;
 	}
 
 	.w-custom {
