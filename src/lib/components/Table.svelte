@@ -57,8 +57,9 @@
 				}
 			});
 
-			fields[3].value = data.date.split('T')[0];
-			fields[4].value = data.date.split('T')[1].split('+')[0];
+			let local_date = new Date(data.date).toLocaleString();
+			fields[3].value = local_date.split(' ')[0].split('/').reverse().join('-');
+			fields[4].value = local_date.split(' ')[1];
 			fields[5].value = data.winner?.id;
 			fields[6].value = data.score;
 
