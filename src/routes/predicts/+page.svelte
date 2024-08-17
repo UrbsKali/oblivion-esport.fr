@@ -56,9 +56,20 @@
 		});
 
 		casteur_leaderboard = casteur
-			.sort((a, b) => -a.predict_accuracy + b.predict_accuracy)
+			.sort((a, b) => {
+				if (a.predict_accuracy == b.predict_accuracy) {
+					if (a.username == 'KcKitt') return -1;
+					if (b.username == 'KcKitt') return 1;
+					return 0;
+				}
+				return -a.predict_accuracy + b.predict_accuracy;
+			})
 			.slice(0, 3);
-		console.log(casteur_leaderboard);
+		if (casteur_leaderboard.length < 3) {
+			for (let i = casteur_leaderboard.length; i < 3; i++) {
+				casteur_leaderboard.push({ username: 'N/A', predict_accuracy: 0 });
+			}
+		}
 
 		// update url to current date, without reloading the page
 		pushState(`${window.location.origin}${window.location.pathname}?date=${dateStr}`);
