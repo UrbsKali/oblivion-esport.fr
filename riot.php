@@ -12,6 +12,7 @@ if ($theirSecret != $secret) {
 }
 $API_KEY = 'RGAPI-e0175c0f-e515-42f9-88a6-5af4b38b10c2';
 
+$endpoint = str_replace(' ', '%20', $endpoint);
 
 // make request to the Riot API using the endpoint and API KEY 
 $response = file_get_contents("https://europe.api.riotgames.com$endpoint?api_key=$API_KEY");
