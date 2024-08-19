@@ -34,6 +34,7 @@
 			`https://oblivion-esport.fr/riot.php?endpoint=/riot/match/v5/matches/${match_id}&secret=oF8Hz9pNp9fDQoaYarAe`
 		);
 		data = await resp.json();
+		console.log(data);
 		if (data.metadata.tournamentCode === tournamentCode) {
 			MatchID = match_id;
 		} else {
