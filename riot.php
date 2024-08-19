@@ -1,6 +1,6 @@
 <?php
 
-$secret = 'gfnsudqsg61qa&é=@';
+$secret = 'oF8Hz9pNp9fDQoaYarAe';
 
 // get the value of the variable 'endpoint' from the URL
 $endpoint = $_GET['endpoint'];
