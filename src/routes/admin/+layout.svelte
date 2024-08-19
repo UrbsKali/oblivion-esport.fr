@@ -40,6 +40,12 @@
 			uri: '/admin/predictions',
 			icon: 'analytics',
 			allowed_roles: ['superadmin', 'admin', 'casteur']
+		},
+		{
+			title: 'MatchID Finder',
+			uri: '/admin/matchid',
+			icon: 'search-outline',
+			allowed_roles: ['superadmin', 'admin', 'casteur']
 		}
 	];
 
