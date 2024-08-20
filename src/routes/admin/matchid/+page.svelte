@@ -35,8 +35,9 @@
 		);
 		data = await resp.json();
 		console.log(data);
-		if (data.metadata.tournamentCode === tournamentCode) {
+		if (data.info.tournamentCode == tournamentCode) {
 			MatchID = match_id;
+			console.log(MatchID);
 		} else {
 			MatchID = 'No Match Found';
 		}
