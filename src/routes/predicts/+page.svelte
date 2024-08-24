@@ -52,12 +52,12 @@
 		}
 		// get each unique value of made_by
 		predictions.forEach((element) => {
+			if (!element.score) use_score = false;
 			if (casteur.map((el) => el.username).includes(element.made_by.username)) return;
 			casteur = [
 				...casteur,
 				{ username: element.made_by.username, predict_accuracy: element.made_by.predict_accuracy }
 			];
-			if (!element.score) use_score = false;
 		});
 
 		casteur_leaderboard = casteur
