@@ -4,6 +4,7 @@
 	import { supabase } from '$lib/supabaseClient';
 	import LinkButton from '$lib/components/LinkButton.svelte';
 	import { pushState } from '$app/navigation';
+	import { userData } from 'three/examples/jsm/nodes/Nodes.js';
 
 	let predictions = [];
 	let matchs = [];
@@ -12,6 +13,7 @@
 	let casteur_leaderboard = [];
 
 	let tournament = '';
+	let use_score = true;
 
 	onMount(async () => {
 		// check url date parameter
@@ -40,13 +42,14 @@
 			const { data, error } = await supabase
 				.from('Predictions')
 				.select(
-					`id, match, team(name, logo_url), score, made_by(username, predict_accuracy), is_true`
+					`id, match, team(name, logo_url), score, made_by(username, predict_accuracy), result`
 				)
 				.in(
 					'match',
 					matchs.map((el) => el.id)
 				);
 			predictions = data;
+			console.log(predictions);
 		}
 		// get each unique value of made_by
 		predictions.forEach((element) => {
@@ -55,6 +58,7 @@
 				...casteur,
 				{ username: element.made_by.username, predict_accuracy: element.made_by.predict_accuracy }
 			];
+			if (!element.score) use_score = false;
 		});
 
 		casteur_leaderboard = casteur
@@ -181,15 +185,28 @@
 											alt=""
 											class=" w-auto h-20 m-auto {predictions.find(
 												(el) => el.made_by.username == cast.username && el.match == match.id
-											).is_true
-												? ''
-												: predictions.find(
-															(el) => el.made_by.username == cast.username && el.match == match.id
-													  ).is_true != null
-													? 'bnw'
-													: ''}"
+											).result == 'ZERO'
+												? 'bnw'
+												: ''}"
 										/>
 									</div>
+									{#if use_score}
+										<div
+											class="flex flex-col items-center align-middle h-56 {predictions.find(
+												(el) => el.made_by.username == cast.username && el.match == match.id
+											).result == 'FULL'
+												? 'text-green-500'
+												: predictions.find(
+															(el) => el.made_by.username == cast.username && el.match == match.id
+													  ).result == 'ZERO'
+													? 'text-gray-600 italic'
+													: ''}"
+										>
+											{predictions.find(
+												(el) => el.made_by.username == cast.username && el.match == match.id
+											).score}
+										</div>
+									{/if}
 								{:else}
 									-
 								{/if}

@@ -76,6 +76,13 @@
 		}
 		payload.date += ` ${payload.time}+02`;
 		delete payload.time;
+		// parse score to always be in the form of '0-0' and the bigger number is the first
+		if (payload.score) {
+			let score = payload.score.replaceAll(' ', '').split('-');
+			score = score.map((el) => parseInt(el));
+			score = score.sort((a, b) => b - a);
+			payload.score = `${score[0]}-${score[1]}`;
+		}
 		const { ret, error } = await supabase.from('Matchs').insert([payload]);
 		if (error) {
 			console.error(error);
