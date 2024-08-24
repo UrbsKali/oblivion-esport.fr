@@ -4,7 +4,6 @@
 	import { supabase } from '$lib/supabaseClient';
 	import LinkButton from '$lib/components/LinkButton.svelte';
 	import { pushState } from '$app/navigation';
-	import { userData } from 'three/examples/jsm/nodes/Nodes.js';
 
 	let predictions = [];
 	let matchs = [];
