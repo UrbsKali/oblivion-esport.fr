@@ -4,69 +4,29 @@
 	import { initFlowbite } from 'flowbite';
 	import CrudForm from './CrudForm.svelte';
 	import { supabase } from '$lib/supabaseClient';
-	import { Select } from 'flowbite-svelte';
 
 	export let headers = ['Nom', 'Email', 'Rôle', 'Actions'];
 	export let items = [['urbain', 'eeeee@gmail.com', 'Sudo']];
-	export let actions = ['delete'];
+	export let actions = [
+		{ type: 'delete', title: 'Supprimer', icon: 'trash', handler: (e) => {} }
+		//{ type: 'edit', title: 'Editer', icon: 'edit', handler: (e) => {} }
+	];
 	export let type = 'utilisateur';
 	export let type_accord = 'un';
 
-	export let handleDelete = (e) => {};
-	export let handleEdit = async (e) => {};
-
 	// CrudForm props and methods
 	export let fields = [];
-	export let handleSubmit = (e) => {};
-	export let handleSelectUpdate = (e) => {};
-
-	let __handleSubmit = async (e) => {
-		await handleSubmit(e);
+	export let onSubmit = async () => {
+		console.log('Submit');
 	};
-	let __handleEdit = async (e) => {
-		__handleSubmit = handleEdit;
-		let tr = e.target.closest('tr');
-		let id = tr.children[0].dataset.utils;
-		const response = await supabase
-			.from('Matchs')
-			.select(
-				'id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score'
-			)
-			.eq('id', id);
-		if (response.error) {
-			console.error(response.error);
-		} else {
-			let data = response.data[0];
-			fields[0].value = data.tournament_id.id;
-			fields[0].data = data.id;
-			await handleSelectUpdate({ target: { id: 'tournament_id', value: data.tournament_id.id } });
-			fields[1].value = data.team_one.id;
-			fields[2].value = data.team_two.id;
-			await handleSelectUpdate({
-				target: {
-					id: 'team_one',
-					value: data.team_one.id,
-					selectedOptions: [{ innerText: data.team_one.name }]
-				}
-			});
-			await handleSelectUpdate({
-				target: {
-					id: 'team_two',
-					value: data.team_two.id,
-					selectedOptions: [{ innerText: data.team_two.name }]
-				}
-			});
-
-			let local_date = new Date(data.date).toLocaleString();
-			fields[3].value = local_date.split(' ')[0].split('/').reverse().join('-');
-			fields[4].value = local_date.split(' ')[1];
-			fields[5].value = data.winner?.id;
-			fields[6].value = data.score;
-
-			const modal = FlowbiteInstances.getInstance('Modal', 'CrudModal');
-			modal.show();
-		}
+	export let onEdit = async (e) => {
+		console.log('Edit');
 	};
+
+	let selectedHandler = (e) => {
+		console.log(e);
+	};
+	let selectedAction = 'Ajouter';
 
 	$: if (headers[headers.length - 1] == 'Actions') {
 		items.forEach((item) => {
@@ -126,6 +86,12 @@
 						id="CrudModalButton"
 						data-modal-target="CrudModal"
 						data-modal-toggle="CrudModal"
+						on:click={(e) => {
+							selectedAction = 'Ajouter';
+							selectedHandler = onSubmit;
+							const modal = FlowbiteInstances.getInstance('Modal', 'CrudModal');
+							modal.show();
+						}}
 					>
 						<svg
 							class="h-3.5 w-3.5 mr-2"
@@ -269,25 +235,22 @@
 													aria-labelledby="{i}-dropdown-button"
 												>
 													{#each actions as item}
-														{#if item === 'delete'}
-															<div class="py-1">
-																<a
-																	href="#"
-																	on:click={handleDelete}
-																	class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-																	>Delete</a
-																>
-															</div>
-														{:else}
-															<li>
-																<a
-																	href="#"
-																	on:click={__handleEdit}
-																	class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-																	>{item.charAt(0).toUpperCase() + item.slice(1)}</a
-																>
-															</li>
-														{/if}
+														<div class="py-1">
+															<a
+																href="#"
+																on:click={async (e) => {
+																	if (item.type === 'delete') {
+																		selectedAction = 'Supprimer';
+																	} else if (item.type === 'edit') {
+																		selectedAction = 'Editer';
+																		selectedHandler = onEdit;
+																	}
+																	await item.handler(e);
+																}}
+																class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+																>{item.title}</a
+															>
+														</div>
 													{/each}
 												</ul>
 											</div>
@@ -394,7 +357,7 @@
 			</nav>
 		</div>
 	</div>
-	<CrudForm {type} {fields} handleSubmit={__handleSubmit} {handleSelectUpdate} {type_accord} />
+	<CrudForm {type} {fields} {type_accord} action={selectedAction} onSubmit={selectedHandler} />
 </section>
 
 <style></style>

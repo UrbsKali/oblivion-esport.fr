@@ -65,6 +65,13 @@
 			items = items.filter((el) => el[0].value !== name);
 		}
 	};
+	let actions = [
+		{
+			title: 'Supprimer',
+			type: 'delete',
+			handler: handleDelete
+		}
+	];
 
 	onMount(async () => {
 		const { data, error } = await supabase.from('Tournaments').select();
@@ -87,7 +94,7 @@
 
 <section>
 	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">Teams</h1>
-	<Table {headers} {items} {type} {type_accord} {fields} {handleSubmit} {handleDelete} />
+	<Table {headers} {items} {type} {type_accord} {fields} onSubmit={handleSubmit} {actions} />
 </section>
 
 <style></style>

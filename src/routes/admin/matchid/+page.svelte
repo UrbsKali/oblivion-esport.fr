@@ -8,17 +8,6 @@
 	let MatchID = '';
 
 	async function onSubmit() {
-		/*
-		url = f"https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{username}/{tag}?api_key="
-    response = requests.get(url)
-    puuid = response.json().get("puuid")
-    url = f"https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count=1&api_key=RGAPI-e0175c0f-e515-42f9-88a6-5af4b38b10c2"
-    response = requests.get(url)
-    match_id = response.json()[0]
-    url = f"https://europe.api.riotgames.com/lol/match/v5/matches/{match_id}?api_key=RGAPI-e0175c0f-e515-42f9-88a6-5af4b38b10c2"
-    response = requests.get(url)
-    t_code = TournamentCode_entry.get()
-		*/
 		let resp = await fetch(
 			`https://oblivion-esport.fr/riot.php?endpoint=/riot/account/v1/accounts/by-riot-id/${username}/${tag}&secret=oF8Hz9pNp9fDQoaYarAe`
 		);

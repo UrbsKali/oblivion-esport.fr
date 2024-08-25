@@ -31,7 +31,7 @@
 		}
 	];
 
-	let handleSubmit = async (e) => {
+	async function handleSubmit(e) {
 		e.preventDefault();
 		const form = e.target.closest('form');
 		const data = new FormData(form);
@@ -40,9 +40,7 @@
 			payload[key] = value;
 		}
 		payload['name_id'] = payload['title'].toLowerCase().replaceAll(' ', '');
-		console.log(payload);
 		const { ret, error } = await supabase.from('Tournaments').insert([payload]);
-		console.log(ret);
 		if (error) {
 			console.error(error);
 		} else {
@@ -51,9 +49,9 @@
 			const modal = FlowbiteInstances.getInstance('Modal', 'CrudModal');
 			modal.hide();
 		}
-	};
+	}
 
-	let handleDelete = async (e) => {
+	async function handleDelete(e) {
 		e.preventDefault();
 		let tr = e.target.closest('tr');
 		let name = tr.children[0].innerText;
@@ -67,9 +65,17 @@
 		if (response.error) {
 			console.error(response.error);
 		} else {
-			items = items.filter((el) => el[0] !== name);
+			items = items.filter((el) => el[0].value !== name);
 		}
-	};
+	}
+
+	let actions = [
+		{
+			title: 'Supprimer',
+			type: 'delete',
+			handler: handleDelete
+		}
+	];
 
 	onMount(async () => {
 		const { data, error } = await supabase.from('Tournaments').select();
@@ -82,7 +88,7 @@
 
 <section>
 	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">Tournois</h1>
-	<Table {headers} {items} {type} {fields} {handleSubmit} {handleDelete} />
+	<Table {headers} {items} {type} {fields} {actions} onSubmit={handleSubmit} />
 </section>
 
 <style></style>

@@ -8,6 +8,6 @@
 	<link rel="icon" type="image/png" href="/oblivion.png" />
 </svelte:head>
 
-<div class="antialiased bg-gray-50 dark:bg-gray-900 dark:text-white min-w-screen min-h-screen p-5">
+<div class="antialiased bg-gray-50 dark:bg-gray-900 dark:text-white min-w-screen min-h-screen">
 	<slot />
 </div>

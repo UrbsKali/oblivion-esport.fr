@@ -7,63 +7,56 @@
 
 	const headers = ['Nom', 'Tournoi', 'Gagnant', 'Score', 'Actions'];
 	let items = [];
-	let actions = ['update', 'delete'];
 
 	let teams_options = [];
 	let t_id = 0;
 	let selected_team = [];
 
 	const type = 'Match';
-	let fields = [
-		{
-			name: 'Tournoi',
-			id: 'tournament_id',
-			type: 'select',
-			required: true,
-			options: [],
-			wide: true
-		},
-		{
-			name: 'Equipe 1',
-			id: 'team_one',
-			type: 'select',
-			required: true,
-			options: [...teams_options]
-		},
-		{
-			name: 'Equipe 2',
-			id: 'team_two',
-			type: 'select',
-			required: true,
-			options: [...teams_options]
-		},
-		{
-			name: 'Date',
-			id: 'date',
-			type: 'date',
-			required: true
-		},
-		{
-			name: 'Heure',
-			id: 'time',
-			type: 'time',
-			required: true
-		},
-		{
-			name: 'Gagnant',
-			id: 'winner',
-			type: 'select',
-			required: false,
-			options: []
-		},
-		{
-			name: 'Score',
-			id: 'score',
-			type: 'text',
-			required: false,
-			placeholder: '0-0'
+
+	let editLoad = async (e) => {
+		let tr = e.target.closest('tr');
+		let id = tr.children[0].dataset.utils;
+		const response = await supabase
+			.from('Matchs')
+			.select(
+				'id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score'
+			)
+			.eq('id', id);
+		if (response.error) {
+			console.error(response.error);
+		} else {
+			let data = response.data[0];
+			fields[0].value = data.tournament_id.id;
+			fields[0].data = data.id;
+			await handleSelectUpdate({ target: { id: 'tournament_id', value: data.tournament_id.id } });
+			fields[1].value = data.team_one.id;
+			fields[2].value = data.team_two.id;
+			await handleSelectUpdate({
+				target: {
+					id: 'team_one',
+					value: data.team_one.id,
+					selectedOptions: [{ innerText: data.team_one.name }]
+				}
+			});
+			await handleSelectUpdate({
+				target: {
+					id: 'team_two',
+					value: data.team_two.id,
+					selectedOptions: [{ innerText: data.team_two.name }]
+				}
+			});
+
+			let local_date = new Date(data.date).toLocaleString();
+			fields[3].value = local_date.split(' ')[0].split('/').reverse().join('-');
+			fields[4].value = local_date.split(' ')[1];
+			fields[5].value = data.winner?.id;
+			fields[6].value = data.score;
+
+			const modal = FlowbiteInstances.getInstance('Modal', 'CrudModal');
+			modal.show();
 		}
-	];
+	};
 
 	let handleSubmit = async (e) => {
 		e.preventDefault();
@@ -179,6 +172,73 @@
 		}
 	};
 
+	let actions = [
+		{
+			title: 'Editer',
+			type: 'edit',
+			handler: editLoad
+		},
+		{
+			title: 'Supprimer',
+			type: 'delete',
+			handler: handleDelete
+		}
+	];
+
+	let fields = [
+		{
+			name: 'Tournoi',
+			id: 'tournament_id',
+			type: 'select',
+			required: true,
+			options: [],
+			wide: true,
+			onChange: handleSelectUpdate
+		},
+		{
+			name: 'Equipe 1',
+			id: 'team_one',
+			type: 'select',
+			required: true,
+			options: [...teams_options],
+			onChange: handleSelectUpdate
+		},
+		{
+			name: 'Equipe 2',
+			id: 'team_two',
+			type: 'select',
+			required: true,
+			options: [...teams_options],
+			onChange: handleSelectUpdate
+		},
+		{
+			name: 'Date',
+			id: 'date',
+			type: 'date',
+			required: true
+		},
+		{
+			name: 'Heure',
+			id: 'time',
+			type: 'time',
+			required: true
+		},
+		{
+			name: 'Gagnant',
+			id: 'winner',
+			type: 'select',
+			required: false,
+			options: []
+		},
+		{
+			name: 'Score',
+			id: 'score',
+			type: 'text',
+			required: false,
+			placeholder: '0-0'
+		}
+	];
+
 	onMount(async () => {
 		{
 			// fetch tournament options for the select field
@@ -221,17 +281,7 @@
 
 <section>
 	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">Matchs</h1>
-	<Table
-		{headers}
-		{items}
-		{type}
-		{fields}
-		{actions}
-		{handleSubmit}
-		{handleDelete}
-		{handleEdit}
-		{handleSelectUpdate}
-	/>
+	<Table {headers} {items} {type} {fields} {actions} onEdit={handleEdit} onSubmit={handleSubmit} />
 </section>
 
 <style></style>
