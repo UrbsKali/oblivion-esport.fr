@@ -12,14 +12,7 @@
 	});
 </script>
 
-<section>
-	<h1>
-		Je cook sur la page <a href={url}>/admin</a>, on va refaire le reste du site juste après
-	</h1>
-	<div class=" absolute top-3 right-5">
-		<UserBadge />
-	</div>
-</section>
+<section></section>
 
 <style>
 </style>

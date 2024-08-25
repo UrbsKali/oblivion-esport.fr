@@ -53,6 +53,12 @@
 			payload[key] = value;
 		}
 		payload.made_by = (await supabase.auth.getUser())?.data?.user?.id;
+		if (payload.score) {
+			let score = payload.score.replaceAll(' ', '').split('-');
+			score = score.map((el) => parseInt(el));
+			score = score.sort((a, b) => b - a);
+			payload.score = `${score[0]}-${score[1]}`;
+		}
 		const { ret, error } = await supabase.from('Predictions').insert([payload]);
 		if (error) {
 			console.error(error);
