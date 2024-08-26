@@ -19,6 +19,17 @@
 	const type = 'Prédiction';
 	const type_accord = 'une';
 
+	let handleSelectUpdate = async (e) => {
+		// fetch teams options for the select field
+		if (e.target.id == 'match') {
+			let ids = e.target.selectedOptions[0].dataset.utils.split('#');
+			const { data, error } = await supabase.from('Teams').select('name, id').in('id', ids);
+			data?.forEach((el) => {
+				fields[1].options = [...fields[1].options, { name: el.name, value: el.id }];
+			});
+		}
+	};
+
 	let fields = [
 		{
 			name: 'Match',
@@ -26,7 +37,8 @@
 			type: 'select',
 			required: true,
 			options: [],
-			wide: true
+			wide: true,
+			onChange: handleSelectUpdate
 		},
 		{
 			name: 'Equipe Gagnante',
@@ -111,16 +123,7 @@
 		}
 	};
 
-	let handleSelectUpdate = async (e) => {
-		// fetch teams options for the select field
-		if (e.target.id == 'match') {
-			let ids = e.target.selectedOptions[0].dataset.utils.split('#');
-			const { data, error } = await supabase.from('Teams').select('name, id').in('id', ids);
-			data?.forEach((el) => {
-				fields[1].options = [...fields[1].options, { name: el.name, value: el.id }];
-			});
-		}
-	};
+	let actions = [{ type: 'delete', title: 'Supprimer', handler: handleDelete }];
 
 	onMount(async () => {
 		{
@@ -194,16 +197,7 @@
 
 <section>
 	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">Prédictions</h1>
-	<Table
-		{headers}
-		{items}
-		{type}
-		{type_accord}
-		{fields}
-		{handleSubmit}
-		{handleDelete}
-		{handleSelectUpdate}
-	/>
+	<Table {headers} {items} {type} {type_accord} {fields} onSubmit={handleSubmit} {actions} />
 </section>
 
 <style></style>
