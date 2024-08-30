@@ -11,6 +11,12 @@
 	let loading = false;
 	let loading_percentage = 0;
 	let loading_message = '';
+	let rawtournamentCodes = '';
+
+	$: tournamentCodes = rawtournamentCodes
+		.split('\n')
+		.map((el) => el.trim())
+		.filter((el) => el != '');
 
 	let secret = 'oF8Hz9pNp9fDQoaYarAe';
 
@@ -34,21 +40,18 @@
 	let currentPerTwoMinutes = 0;
 	setInterval(() => {
 		currentPerSecond = 0;
-		console.log('Resetting seconds');
 	}, 1000);
 	setInterval(() => {
 		currentPerTwoMinutes = 0;
-		console.log('Resetting minutes');
 	}, 120000);
 
 	async function getHandler(url, tryCount = 0) {
-		currentPerSecond++;
-		currentPerTwoMinutes++;
 		while (currentPerSecond > maxPerSecond || currentPerTwoMinutes > maxPerTwoMinutes) {
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 			loading_message = 'Rate limit exceeded, waiting ...';
 		} // 20 requests per second
-
+		currentPerSecond++;
+		currentPerTwoMinutes++;
 		const response = await fetch(url);
 		let data;
 		try {
@@ -66,7 +69,7 @@
 
 	async function onSubmit(e) {
 		e.preventDefault();
-		if (username == '' || tag == '' || count == '') {
+		if (username == '' || tag == '' || count == '' || rawtournamentCodes == '') {
 			alert('Please fill all the fields');
 			return;
 		}
@@ -94,12 +97,21 @@
 		loading_message = 'Getting stats from matchs (this may take a while)';
 		loading_percentage = 3;
 
+		let i = 0;
 		let bar = new Promise((resolve) => {
 			matchs.forEach(async (match) => {
 				data = await getHandler(
 					`https://oblivion-esport.fr/api/riot.php?endpoint=/lol/match/v5/matches/${match}&secret=${secret}`
 				);
-				console.log(data);
+				loading_message = `Getting stats from matchs (this may take a while) ${i + 1}/${matchs.length}`;
+				if (!tournamentCodes.includes(data.info.tournamentCode)) {
+					i++;
+					loading_percentage = (i / matchs.length) * 100;
+					if (i == matchs.length - 1) {
+						resolve();
+					}
+					return;
+				}
 				let participant = data.info.participants.find((el) => el.puuid == puuid);
 				stats.kills += participant.kills;
 				stats.deaths += participant.deaths;
@@ -114,9 +126,10 @@
 				} else {
 					stats.lose++;
 				}
-				loading_percentage = (matchs.indexOf(match) / matchs.length) * 100;
+				i++;
+				loading_percentage = (i / matchs.length) * 100;
 				console.log(stats);
-				if (matchs.indexOf(match) == matchs.length - 1) {
+				if (i == matchs.length - 1) {
 					resolve();
 				}
 			});
@@ -175,7 +188,7 @@
 								bind:value={tag}
 							/>
 						</div>
-						<div class="">
+						<div class="col-span-2">
 							<label
 								for="tournamentCode"
 								class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -193,20 +206,27 @@
 								bind:value={count}
 							/>
 						</div>
-						<div class="">
+						<div class="col-span-2">
 							<label
 								for="tournamentCode"
 								class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-								>Nombre de matchs à vérifier</label
-							>
-							<input
-								type="number"
+								>Code tournois de la Coupe, format : un code par ligne
+							</label>
+							<textarea
 								name="tournamentCode"
 								id="tournamentCode"
+								rows="10"
 								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-								placeholder="EUW04df1-8b8f139f-9867-4808-b437-b752c2f93012"
-								required=""
-							/>
+								placeholder="EUW04dfb-4bf34c24-ecd1-42d6-931c-c36f3c88ffab
+EUW04dfb-4bf34c24-ecd1-42d6-931c-c36f3c88ffab
+EUW04dfb-4bf34c24-ecd1-42d6-931c-c36f3c88ffab
+EUW04dfb-4bf34c24-ecd1-42d6-931c-c36f3c88ffab
+EUW04dfb-4bf34c24-ecd1-42d6-931c-c36f3c88ffab
+EUW04dfb-4bf34c24-ecd1-42d6-931c-c36f3c88ffab
+EUW04dfb-4bf34c24-ecd1-42d6-931c-c36f3c88ffab
+EUW04dfb-4bf34c24-ecd1-42d6-931c-c36f3c88ffab"
+								bind:value={rawtournamentCodes}
+							></textarea>
 						</div>
 						<div>
 							<button
