@@ -46,6 +46,12 @@
 			uri: '/admin/matchid',
 			icon: 'search-outline',
 			allowed_roles: ['superadmin', 'admin', 'casteur']
+		},
+		{
+			title: 'Stats des joueurs',
+			uri: '/admin/player-stats',
+			icon: 'bar-chart-outline',
+			allowed_roles: ['superadmin', 'admin', 'casteur']
 		}
 	];
 
