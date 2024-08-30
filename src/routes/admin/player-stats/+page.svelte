@@ -59,6 +59,7 @@
 		} catch (e) {
 			// recall the function if the response is not json
 			if (tryCount >= maxTry) {
+				alert('Max try reached, reload the page and wait a few minutes');
 				throw new Error('Max try reached');
 			}
 			await new Promise((resolve) => setTimeout(resolve, 1000));
