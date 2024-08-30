@@ -24,13 +24,13 @@
 		loading = true;
 		let matchs = [];
 		let resp = await fetch(
-			`https://oblivion-esport.fr/riot.php?endpoint=/riot/account/v1/accounts/by-riot-id/${username}/${tag}&secret=${secret}`
+			`https://oblivion-esport.fr/api/riot.php?endpoint=/riot/account/v1/accounts/by-riot-id/${username}/${tag}&secret=${secret}`
 		);
 		let data = await resp.json();
 		const puuid = data.puuid;
 		for (let i = 0; i < count / 100; i++) {
 			resp = await fetch(
-				`https://oblivion-esport.fr/riot.php?endpoint=/lol/match/v5/matches/by-puuid/${puuid}/ids?start=${i * 100}%26count%3D100&secret=${secret}`
+				`https://oblivion-esport.fr/api/riot.php?endpoint=/lol/match/v5/matches/by-puuid/${puuid}/ids?start=${i * 100}%26count%3D100&secret=${secret}`
 			);
 			data = await resp.json();
 			console.log(data);
@@ -54,7 +54,7 @@
 		matchs.forEach(async (match) => {
 			loading_percentage = (matchs.indexOf(match) / matchs.length) * 100;
 			resp = await fetch(
-				`https://oblivion-esport.fr/riot.php?endpoint=/lol/match/v5/matches/${match}&secret=${secret}`
+				`https://oblivion-esport.fr/api/riot.php?endpoint=/lol/match/v5/matches/${match}&secret=${secret}`
 			);
 			nb_request++;
 			data = await resp.json();
