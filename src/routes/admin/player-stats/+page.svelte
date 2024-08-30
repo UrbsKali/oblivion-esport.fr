@@ -14,50 +14,80 @@
 
 	let secret = 'oF8Hz9pNp9fDQoaYarAe';
 
+	let stats = {
+		kills: 0,
+		deaths: 0,
+		assists: 0,
+		win: 0,
+		lose: 0,
+		total: 0,
+		minions: 0,
+		totalGold: 0,
+		damageToChampions: 0,
+		towerKill: 0
+	};
+
+	const maxPerSecond = 20;
+	const maxPerTwoMinutes = 100;
+	let currentPerSecond = 0;
+	let currentPerTwoMinutes = 0;
+	setInterval(() => {
+		currentPerSecond = 0;
+	}, 1000);
+	setInterval(() => {
+		currentPerTwoMinutes = 0;
+	}, 120000);
+
+	async function getHandler(url) {
+		currentPerSecond++;
+		currentPerTwoMinutes++;
+		while (currentPerSecond > maxPerSecond) {
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+			loading_message = 'Rate limit exceeded, waiting ...';
+		} // 20 requests per second
+		while (currentPerTwoMinutes > maxPerTwoMinutes) {
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+			loading_message = 'Rate limit exceeded, waiting ...';
+		} // 100 requests per 2 minutes
+		const response = await fetch(url);
+		const data = await response.json();
+		return data;
+	}
+
 	async function onSubmit(e) {
-		let nb_request = 0;
 		e.preventDefault();
 		if (username == '' || tag == '' || count == '') {
 			alert('Please fill all the fields');
 			return;
 		}
 		loading = true;
+		loading_percentage = 0;
+		loading_message = 'Getting PUUID';
+		loading_percentage = 1;
 		let matchs = [];
-		let resp = await fetch(
+		let data = await getHandler(
 			`https://oblivion-esport.fr/api/riot.php?endpoint=/riot/account/v1/accounts/by-riot-id/${username}/${tag}&secret=${secret}`
 		);
-		let data = await resp.json();
 		const puuid = data.puuid;
+		loading_message = 'Getting matchs';
+		loading_percentage = 2;
 		for (let i = 0; i < count / 100; i++) {
-			resp = await fetch(
+			data = await getHandler(
 				`https://oblivion-esport.fr/api/riot.php?endpoint=/lol/match/v5/matches/by-puuid/${puuid}/ids?start=${i * 100}%26count%3D100&secret=${secret}`
 			);
-			data = await resp.json();
 			console.log(data);
 			if (data.length == 0) {
 				break;
 			}
 			matchs = [...matchs, ...data];
 		}
-		let stats = {
-			kills: 0,
-			deaths: 0,
-			assists: 0,
-			win: 0,
-			lose: 0,
-			total: 0,
-			minions: 0,
-			totalGold: 0,
-			damageToChampions: 0,
-			towerKill: 0
-		};
+		loading_message = 'Getting stats from matchs (this may take a while)';
+		loading_percentage = 3;
+
 		matchs.forEach(async (match) => {
-			loading_percentage = (matchs.indexOf(match) / matchs.length) * 100;
-			resp = await fetch(
+			data = await getHandler(
 				`https://oblivion-esport.fr/api/riot.php?endpoint=/lol/match/v5/matches/${match}&secret=${secret}`
 			);
-			nb_request++;
-			data = await resp.json();
 			console.log(data);
 			let participant = data.info.participants.find((el) => el.puuid == puuid);
 			stats.kills += participant.kills;
@@ -73,6 +103,7 @@
 			} else {
 				stats.lose++;
 			}
+			loading_percentage = (matchs.indexOf(match) / matchs.length) * 100;
 		});
 		console.log(stats);
 
