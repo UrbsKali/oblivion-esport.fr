@@ -88,32 +88,37 @@
 		loading_message = 'Getting stats from matchs (this may take a while)';
 		loading_percentage = 3;
 
-		matchs.forEach(async (match) => {
-			data = await getHandler(
-				`https://oblivion-esport.fr/api/riot.php?endpoint=/lol/match/v5/matches/${match}&secret=${secret}`
-			);
-			console.log(data);
-			let participant = data.info.participants.find((el) => el.puuid == puuid);
-			stats.kills += participant.kills;
-			stats.deaths += participant.deaths;
-			stats.assists += participant.assists;
-			stats.totalGold += participant.goldEarned;
-			stats.damageToChampions += participant.totalDamageDealtToChampions;
-			stats.minions += participant.totalMinionsKilled;
-			stats.towerKill += participant.turretKills;
-			stats.total++;
-			if (participant.win) {
-				stats.win++;
-			} else {
-				stats.lose++;
-			}
-			loading_percentage = (matchs.indexOf(match) / matchs.length) * 100;
-			if (matchs.indexOf(match) == matchs.length - 1) {
-				loading = false;
-				show_results = true;
-			}
-			console.log(stats);
+		let bar = new Promise((resolve) => {
+			matchs.forEach(async (match) => {
+				data = await getHandler(
+					`https://oblivion-esport.fr/api/riot.php?endpoint=/lol/match/v5/matches/${match}&secret=${secret}`
+				);
+				console.log(data);
+				let participant = data.info.participants.find((el) => el.puuid == puuid);
+				stats.kills += participant.kills;
+				stats.deaths += participant.deaths;
+				stats.assists += participant.assists;
+				stats.totalGold += participant.goldEarned;
+				stats.damageToChampions += participant.totalDamageDealtToChampions;
+				stats.minions += participant.totalMinionsKilled;
+				stats.towerKill += participant.turretKills;
+				stats.total++;
+				if (participant.win) {
+					stats.win++;
+				} else {
+					stats.lose++;
+				}
+				loading_percentage = (matchs.indexOf(match) / matchs.length) * 100;
+				console.log(stats);
+				if (matchs.indexOf(match) == matchs.length - 1) {
+					resolve();
+				}
+			});
 		});
+		await bar;
+		loading = false;
+		show_results = true;
+		console.log(stats);
 	}
 </script>
 
@@ -243,7 +248,12 @@
 					</div>
 					<!-- Modal body -->
 					<div>
-						{stats}
+						{#each stats.keys() as k}
+							<div class="flex justify-between items-center mb-4">
+								<p class="text-sm font-medium text-gray-900 dark:text-white">{k}</p>
+								<p class="text-sm font-medium text-gray-900 dark:text-white">{stats[k]}</p>
+							</div>
+						{/each}
 					</div>
 				</div>
 			</div>
