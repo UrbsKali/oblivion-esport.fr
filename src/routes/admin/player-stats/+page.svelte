@@ -35,7 +35,7 @@
 
 	const maxPerSecond = 15;
 	const maxPerTwoMinutes = 90;
-	const maxTry = 3;
+	const maxTry = 10;
 	let currentPerSecond = 0;
 	let currentPerTwoMinutes = 0;
 	setInterval(() => {
