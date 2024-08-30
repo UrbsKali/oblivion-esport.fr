@@ -27,8 +27,9 @@
 		towerKill: 0
 	};
 
-	const maxPerSecond = 20;
-	const maxPerTwoMinutes = 100;
+	const maxPerSecond = 15;
+	const maxPerTwoMinutes = 90;
+	const maxTry = 3;
 	let currentPerSecond = 0;
 	let currentPerTwoMinutes = 0;
 	setInterval(() => {
@@ -40,7 +41,7 @@
 		console.log('Resetting minutes');
 	}, 120000);
 
-	async function getHandler(url) {
+	async function getHandler(url, tryCount = 0) {
 		currentPerSecond++;
 		currentPerTwoMinutes++;
 		while (currentPerSecond > maxPerSecond) {
@@ -54,7 +55,17 @@
 			console.log('Minutes Rate limit exceeded, waiting ...');
 		} // 100 requests per 2 minutes
 		const response = await fetch(url);
-		const data = await response.json();
+		let data;
+		try {
+			data = await response.json();
+		} catch (e) {
+			// recall the function if the response is not json
+			if (tryCount >= maxTry) {
+				throw new Error('Max try reached');
+			}
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+			data = await getHandler(url, tryCount + 1);
+		}
 		return data;
 	}
 
@@ -248,7 +259,7 @@
 					</div>
 					<!-- Modal body -->
 					<div>
-						{#each stats.keys() as k}
+						{#each Object.keys(stats) as k}
 							<div class="flex justify-between items-center mb-4">
 								<p class="text-sm font-medium text-gray-900 dark:text-white">{k}</p>
 								<p class="text-sm font-medium text-gray-900 dark:text-white">{stats[k]}</p>
