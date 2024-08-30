@@ -44,16 +44,11 @@
 	async function getHandler(url, tryCount = 0) {
 		currentPerSecond++;
 		currentPerTwoMinutes++;
-		while (currentPerSecond > maxPerSecond) {
+		while (currentPerSecond > maxPerSecond || currentPerTwoMinutes > maxPerTwoMinutes) {
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 			loading_message = 'Rate limit exceeded, waiting ...';
-			console.log('Seconds Rate limit exceeded, waiting ...');
 		} // 20 requests per second
-		while (currentPerTwoMinutes > maxPerTwoMinutes) {
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			loading_message = 'Rate limit exceeded, waiting ...';
-			console.log('Minutes Rate limit exceeded, waiting ...');
-		} // 100 requests per 2 minutes
+
 		const response = await fetch(url);
 		let data;
 		try {
