@@ -30,7 +30,7 @@
 		const puuid = data.puuid;
 		for (let i = 0; i < count / 100; i++) {
 			resp = await fetch(
-				`https://oblivion-esport.fr/riot.php?endpoint=/lol/match/v5/matches/by-puuid/${puuid}/ids?start=${i * 100}&count=100&secret=${secret}`
+				`https://oblivion-esport.fr/riot.php?endpoint=/lol/match/v5/matches/by-puuid/${puuid}/ids?start=${i * 100}%26count%3D100&secret=${secret}`
 			);
 			data = await resp.json();
 			console.log(data);
