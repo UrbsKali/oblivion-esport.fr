@@ -33,9 +33,11 @@
 	let currentPerTwoMinutes = 0;
 	setInterval(() => {
 		currentPerSecond = 0;
+		console.log('Resetting seconds');
 	}, 1000);
 	setInterval(() => {
 		currentPerTwoMinutes = 0;
+		console.log('Resetting minutes');
 	}, 120000);
 
 	async function getHandler(url) {
@@ -44,10 +46,12 @@
 		while (currentPerSecond > maxPerSecond) {
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 			loading_message = 'Rate limit exceeded, waiting ...';
+			console.log('Seconds Rate limit exceeded, waiting ...');
 		} // 20 requests per second
 		while (currentPerTwoMinutes > maxPerTwoMinutes) {
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 			loading_message = 'Rate limit exceeded, waiting ...';
+			console.log('Minutes Rate limit exceeded, waiting ...');
 		} // 100 requests per 2 minutes
 		const response = await fetch(url);
 		const data = await response.json();
@@ -104,11 +108,12 @@
 				stats.lose++;
 			}
 			loading_percentage = (matchs.indexOf(match) / matchs.length) * 100;
+			if (matchs.indexOf(match) == matchs.length - 1) {
+				loading = false;
+				show_results = true;
+			}
+			console.log(stats);
 		});
-		console.log(stats);
-
-		loading = false;
-		show_results = true;
 	}
 </script>
 
