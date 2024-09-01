@@ -167,7 +167,9 @@
 						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">
 							{prettyRound(stats.damageToChampions)}
 						</dt>
-						<dd class="font-light text-gray-500 dark:text-gray-400">Dégats Infligés au Champion</dd>
+						<dd class="font-light text-gray-500 dark:text-gray-400">
+							Dégats Infligés aux Champions
+						</dd>
 					</div>
 					<div class="flex flex-col items-center justify-center">
 						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">{stats.minions}</dt>
@@ -175,7 +177,7 @@
 					</div>
 					<div class="flex flex-col items-center justify-center">
 						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">{prettyRound(stats.totalGold)}</dt>
-						<dd class="font-light text-gray-500 dark:text-gray-400">Gold Amassé</dd>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Gold Amassés</dd>
 					</div>
 				</dl>
 				<br />
@@ -184,15 +186,15 @@
 						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">
 							{stats.win}
 						</dt>
-						<dd class="font-light text-gray-500 dark:text-gray-400">Nombre de Victoire</dd>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Victoires</dd>
 					</div>
 					<div class="flex flex-col items-center justify-center">
 						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">{stats.lose}</dt>
-						<dd class="font-light text-gray-500 dark:text-gray-400">Nombre de Défaite</dd>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Défaites</dd>
 					</div>
 					<div class="flex flex-col items-center justify-center">
 						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">{stats.total}</dt>
-						<dd class="font-light text-gray-500 dark:text-gray-400">Nombre de Matchs joués</dd>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Matchs joués</dd>
 					</div>
 				</dl>
 			</div>
