@@ -143,7 +143,7 @@
 		</div>
 	</div>
 </div>
-{#if stats}
+{#if stats.kills}
 	<div class="">
 		<section class="bg-white dark:bg-gray-900">
 			<div class="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
