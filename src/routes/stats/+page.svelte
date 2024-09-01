@@ -158,7 +158,7 @@
 					</div>
 					<div class="flex flex-col items-center justify-center">
 						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">{stats.assists}</dt>
-						<dd class="font-light text-gray-500 dark:text-gray-400">Assits</dd>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Assists</dd>
 					</div>
 				</dl>
 				<br />
