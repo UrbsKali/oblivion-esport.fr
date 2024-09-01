@@ -5,7 +5,7 @@
 	import LinkButton from '$lib/components/LinkButton.svelte';
 	import { pushState } from '$app/navigation';
 
-	let stats = [];
+	let stats = {};
 	let name = '';
 	let completion = [];
 
@@ -32,7 +32,7 @@
 	});
 
 	async function fetchInfo(name) {
-		stats = [];
+		stats = {};
 		// get matchs
 		const { data, error } = await supabase
 			.from('Stats')
@@ -41,6 +41,7 @@
 			.single();
 
 		stats = data.stats;
+		console.log(stats);
 		// update url to current date, without reloading the page
 		pushState(
 			`${window.location.origin}${window.location.pathname}?name=${encodeURIComponent(name)}`
@@ -55,6 +56,15 @@
 			.limit(5);
 
 		completion = data.map((el) => el.player_name);
+	}
+
+	function prettyRound(value) {
+		if (value > 1000) {
+			value = (value / 1000).toFixed(1) + 'k';
+		} else if (value > 1000000) {
+			value = (value / 1000000).toFixed(1) + 'M';
+		}
+		return value;
 	}
 
 	$: getCompletion(name);
@@ -133,18 +143,62 @@
 		</div>
 	</div>
 </div>
-
-<div class="grid">
-	{#each Object.keys(stats) as s}
-		<div>
-			<span class="text-lg font-semibold text-gray-900 dark:text-white">{s} : </span>
-			{stats[s]}
-		</div>
-	{/each}
-</div>
+{#if stats}
+	<div class="">
+		<section class="bg-white dark:bg-gray-900">
+			<div class="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
+				<dl class="grid max-w-screen-md gap-8 mx-auto text-gray-900 sm:grid-cols-3 dark:text-white">
+					<div class="flex flex-col items-center justify-center">
+						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">{stats.kills}</dt>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Kills</dd>
+					</div>
+					<div class="flex flex-col items-center justify-center">
+						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">{stats.deaths}</dt>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Deaths</dd>
+					</div>
+					<div class="flex flex-col items-center justify-center">
+						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">{stats.assists}</dt>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Assits</dd>
+					</div>
+				</dl>
+				<br />
+				<dl class="grid max-w-screen-md gap-8 mx-auto text-gray-900 sm:grid-cols-3 dark:text-white">
+					<div class="flex flex-col items-center justify-center">
+						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">
+							{prettyRound(stats.damageToChampions)}
+						</dt>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Dégats Infligés au Champion</dd>
+					</div>
+					<div class="flex flex-col items-center justify-center">
+						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">{stats.minions}</dt>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Minions Tués</dd>
+					</div>
+					<div class="flex flex-col items-center justify-center">
+						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">{prettyRound(stats.totalGold)}</dt>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Gold Amassé</dd>
+					</div>
+				</dl>
+				<br />
+				<dl class="grid max-w-screen-md gap-8 mx-auto text-gray-900 sm:grid-cols-3 dark:text-white">
+					<div class="flex flex-col items-center justify-center">
+						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">
+							{stats.win}
+						</dt>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Nombre de Victoire</dd>
+					</div>
+					<div class="flex flex-col items-center justify-center">
+						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">{stats.lose}</dt>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Nombre de Défaite</dd>
+					</div>
+					<div class="flex flex-col items-center justify-center">
+						<dt class="mb-2 text-3xl md:text-4xl font-extrabold">{stats.total}</dt>
+						<dd class="font-light text-gray-500 dark:text-gray-400">Nombre de Matchs joués</dd>
+					</div>
+				</dl>
+			</div>
+		</section>
+	</div>
+{/if}
 
 <style>
-	.grid {
-		grid-template-columns: 1fr 1fr;
-	}
 </style>
