@@ -106,7 +106,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 	<meta name="og:title" content="Predicts" />
-	<meta name="og:description" content="Prédiction du jours - Oblivion Esport" />
+	<meta name="og:description" content="Prédiction du jour - Oblivion Esport" />
 	<meta name="og:image" content="/oblivion.png" />
 	<meta name="og:url" content="https://oblivion-esport.fr/v2/predicts" />
 	<meta name="og:site_name" content="Oblivion Esport" />
