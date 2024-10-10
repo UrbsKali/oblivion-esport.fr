@@ -174,14 +174,8 @@
 
 	let actions = [
 		{
-			title: 'Editer',
-			type: 'edit',
-			handler: editLoad
-		},
-		{
-			title: 'Supprimer',
-			type: 'delete',
-			handler: handleDelete
+			type: 'view',
+			handler: () => {}
 		}
 	];
 
@@ -238,29 +232,6 @@
 			placeholder: '0-0'
 		}
 	];
-
-	onMount(async () => {
-		{
-			// fetch tournament options for the select field
-			const { data, error } = await supabase.from('Tournaments').select();
-			data?.forEach((element) => {
-				let el = { name: element.title, value: element.id };
-				fields[0].options = [...fields[0].options, el];
-			});
-		}
-		{
-			// fetch teams options for the select field
-			const { data, error } = await supabase.from('Teams').select();
-			data?.forEach((element) => {
-				teams_options = [
-					...teams_options,
-					{ name: element.name, value: element.id, data: element.tournament_id }
-				];
-			});
-			fields[1].options = teams_options;
-			fields[2].options = teams_options;
-		}
-	});
 
 	const filters = [
 		{

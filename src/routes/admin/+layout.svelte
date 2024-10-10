@@ -49,7 +49,7 @@
 		},
 		{
 			title: 'Ressources & Liens',
-			uri: '/admin/wip',
+			uri: '/admin/ressources',
 			icon: 'link',
 			allowed_roles: ['superadmin', 'admin', 'casteur']
 		}
