@@ -260,28 +260,40 @@
 			fields[1].options = teams_options;
 			fields[2].options = teams_options;
 		}
-		{
-			const { data, error } = await supabase
-				.from('Matchs')
-				.select(
-					`id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score`
-				);
-			data?.forEach((element) => {
-				let el = [
-					{ value: `${element.team_one.name} vs ${element.team_two.name}`, data: element.id },
-					{ value: element.tournament_id.title, data: element.tournament_id.id },
-					{ value: element.winner?.name || '-', data: element.winner?.id || '' },
-					{ value: element.score || '-' }
-				];
-				items = [...items, el];
-			});
-		}
 	});
+
+	const filters = [
+		{
+			category: 'Tournoi',
+			value: 'tournament_id.id',
+			options: [
+				{ name: 'TWC 5', value: 8 },
+				{ name: 'EWC 1', value: 13 }
+			]
+		}
+	];
+	function parseItems(data) {
+		let items = [];
+		data?.forEach((element) => {
+			let el = [
+				{ value: `${element.team_one.name} vs ${element.team_two.name}`, data: element.id },
+				{ value: element.tournament_id.title, data: element.tournament_id.id },
+				{ value: element.winner?.name || '-', data: element.winner?.id || '' },
+				{ value: element.score || '-' }
+			];
+			items = [...items, el];
+		});
+		return items;
+	}
+	const dbInfo = {
+		table: 'Matchs',
+		key: 'id, team_one(name, id), team_two(name, id), tournament_id!inner(title, id), winner(name, id), date, score'
+	};
 </script>
 
 <section>
 	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">Matchs</h1>
-	<Table {headers} {items} {type} {fields} {actions} onEdit={handleEdit} onSubmit={handleSubmit} />
+	<Table {headers} {items} {type} {actions} {parseItems} {dbInfo} {filters} />
 </section>
 
 <style></style>

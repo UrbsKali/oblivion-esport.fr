@@ -48,9 +48,9 @@
 			allowed_roles: ['superadmin', 'admin', 'casteur']
 		},
 		{
-			title: 'Stats des joueurs',
-			uri: '/admin/player-stats',
-			icon: 'bar-chart-outline',
+			title: 'Ressources & Liens',
+			uri: '/admin/wip',
+			icon: 'link',
 			allowed_roles: ['superadmin', 'admin', 'casteur']
 		}
 	];
@@ -113,8 +113,8 @@
 	<nav
 		class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50"
 	>
-		<div class="flex flex-wrap justify-between items-center">
-			<div class="flex justify-start items-center">
+		<div class="flex flex-wrap items-center justify-between">
+			<div class="flex items-center justify-start">
 				<button
 					data-drawer-target="drawer-navigation"
 					data-drawer-toggle="drawer-navigation"
@@ -150,7 +150,7 @@
 					<span class="sr-only">Toggle sidebar</span>
 				</button>
 				<a href="/admin" class="flex items-center justify-between mr-4">
-					<img src="/oblivion.png" class="mr-3 h-8" alt="Flowbite Logo" />
+					<img src="/oblivion.png" class="h-8 mr-3" alt="Flowbite Logo" />
 					<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
 						>Oblivion</span
 					>
@@ -165,7 +165,7 @@
 	<!-- Sidebar -->
 	<SideBar menu={__menu} />
 
-	<main class="p-4 md:ml-64 min-h-screen pt-20">
+	<main class="min-h-screen p-4 pt-20 md:ml-64">
 		<slot />
 	</main>
 </div>

@@ -2,29 +2,43 @@
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { config } from '$lib/config';
-	import { initFlowbite } from 'flowbite';
+	import { loadUserdata, hideOnClickOutside } from '$lib/utils';
+	import { userdata } from '$lib/store';
 
 	export let user = {
-		name: 'Mascode',
-		email: 'mascode@oblivion-esport.fr',
+		name: 'Macode',
+		email: 'noreplay@oblivion-esport.fr',
 		avatar: 'https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gough.png'
 	};
 
+	let skip = false;
+
+	userdata.subscribe((value) => {
+		if (value) {
+			user = value;
+			skip = true;
+		}
+	});
+
+	function setupDropdown() {
+		// set position of the popup just below the button
+		const dropdown = document.querySelector('#dropdown');
+		const rect = document.querySelector('#user-menu-button').getBoundingClientRect();
+		dropdown.style.top = 'calc(' + rect.bottom + 'px - 0.25rem)';
+		dropdown.style.left = 'calc(' + rect.left + 'px - 12.05rem)';
+	}
+
+	onresize = () => {
+		setupDropdown();
+	};
+
 	onMount(async () => {
-		const {
-			data: { session },
-			error
-		} = await supabase.auth.getSession();
-		if (error) {
-			console.error(error);
-			return;
-		}
-		if (session) {
-			user.email = session.user.email || user.email;
-			user.name = session.user.user_metadata.full_name || user.email.split('@')[0];
-			user.avatar = session.user.user_metadata.avatar_url || user.avatar;
-			initFlowbite();
-		}
+		const dropdown = document.querySelector('#dropdown');
+		setupDropdown();
+		document.body.appendChild(dropdown);
+
+		if (skip) return;
+		await loadUserdata();
 	});
 
 	const LogOut = () => {
@@ -39,33 +53,38 @@
 	class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
 	id="user-menu-button"
 	aria-expanded="false"
-	data-dropdown-toggle="dropdown"
+	on:click={(e) => {
+		const dropdown = document.querySelector('#dropdown');
+		dropdown.classList.toggle('hidden');
+		e.stopPropagation();
+		hideOnClickOutside(dropdown);
+	}}
 >
 	<span class="sr-only">Open user menu</span>
 	<img class="w-8 h-8 rounded-full" src={user.avatar} alt="user photo" />
 </button>
 <!-- Dropdown menu -->
 <div
-	class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 rounded-xl"
+	class="absolute z-50 hidden w-56 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 rounded-xl"
 	id="dropdown"
 >
-	<div class="py-3 px-4">
+	<div class="px-4 py-3">
 		<span class="block text-sm font-semibold text-gray-900 dark:text-white">{user.name}</span>
 		<span class="block text-sm text-gray-900 truncate dark:text-white">{user.email}</span>
 	</div>
 	<ul class="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
 		<li>
 			<a
-				href="#"
-				class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
+				href="/admin/profile"
+				class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
 				>Profil</a
 			>
 		</li>
 		<li>
 			<a
 				href="#"
-				class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
-				>Paramètres</a
+				class="block px-4 py-2 text-sm hover:bg-gray-600 dark:hover:bg-gray-700 dark:text-gray-400 dark:hover:text-gray-400"
+				>Work in progress..</a
 			>
 		</li>
 	</ul>
@@ -73,7 +92,7 @@
 		<li>
 			<a
 				href="#"
-				class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+				class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
 				on:click={LogOut}>Déconnexion</a
 			>
 		</li>

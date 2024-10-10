@@ -1,12 +1,13 @@
 <script>
+	import ReadModal from '$lib/components/ReadModal.svelte';
+
 	// @ts-nocheck
 
 	import Table from '$lib/components/Table.svelte';
 	import { supabase } from '$lib/supabaseClient';
-	import { onMount } from 'svelte';
+	import CrudForm from '$lib/components/CrudForm.svelte';
 
 	const headers = ['Nom', 'Période', 'Actions'];
-	let items = [];
 	const type = 'Tournoi';
 	const fields = [
 		{
@@ -33,6 +34,10 @@
 
 	async function handleSubmit(e) {
 		e.preventDefault();
+		const btn = e.target;
+		btn.disabled = true;
+		btn.textContent = 'En cours...';
+		btn.classList.add('cursor-not-allowed', 'opacity-50');
 		const form = e.target.closest('form');
 		const data = new FormData(form);
 		const payload = {};
@@ -40,55 +45,107 @@
 			payload[key] = value;
 		}
 		payload['name_id'] = payload['title'].toLowerCase().replaceAll(' ', '');
-		const { ret, error } = await supabase.from('Tournaments').insert([payload]);
+		const { error } = await supabase.from('Tournaments').insert([payload]);
 		if (error) {
 			console.error(error);
+			btn.disabled = false;
+			btn.textContent = 'Erreur';
+			btn.classList.toggle('cursor-not-allowed', 'opacity-50');
 		} else {
-			let el = [{ value: payload.title }, { value: `${payload.start} - ${payload.end}` }];
-			items = [...items, el];
-			const modal = FlowbiteInstances.getInstance('Modal', 'CrudModal');
-			modal.hide();
+			window.location.reload();
 		}
+	}
+
+	function addNew() {
+		new CrudForm({
+			target: document.body,
+			props: { fields, onSubmit: handleSubmit, type, type_accord: 'un', open: true }
+		});
 	}
 
 	async function handleDelete(e) {
 		e.preventDefault();
-		let tr = e.target.closest('tr');
-		let name = tr.children[0].innerText;
-		let [start, end] = tr.children[1].innerText.split(' - ');
-		const response = await supabase
-			.from('Tournaments')
-			.delete()
-			.eq('title', name)
-			.eq('start', start)
-			.eq('end', end);
+		const btn = e.target;
+		btn.disabled = true;
+		btn.textContent = 'En cours...';
+		btn.classList.add('cursor-not-allowed', 'opacity-50');
+		const id = e.target.closest('.popup').id.split('-')[1];
+		const response = await supabase.from('Tournaments').delete().eq('id', id);
 		if (response.error) {
 			console.error(response.error);
+			btn.disabled = false;
+			btn.textContent = 'Erreur';
+			btn.classList.remove('cursor-not-allowed', 'opacity-50');
 		} else {
-			items = items.filter((el) => el[0].value !== name);
+			window.location.reload();
 		}
 	}
 
 	let actions = [
 		{
-			title: 'Supprimer',
-			type: 'delete',
-			handler: handleDelete
+			type: 'view',
+			handler: (e) => {
+				e.preventDefault();
+				let tr = e.target.closest('tr');
+				let name = tr.children[0].innerText;
+				const id = tr.children[0].dataset.utils;
+				let [start, end] = tr.children[1].innerText.split(' - ');
+				new ReadModal({
+					target: document.body,
+					props: {
+						open: true,
+						id: id,
+						values: {
+							header: {
+								title: name
+							},
+							body: [
+								{
+									label: 'Nom',
+									value: name
+								},
+								{
+									label: 'Période',
+									value: `${start} - ${end}`
+								}
+							]
+						},
+						actions: [
+							{
+								type: 'delete',
+								title: 'Supprimer',
+								handler: handleDelete
+							}
+						]
+					}
+				});
+				e.stopPropagation();
+			}
 		}
 	];
 
-	onMount(async () => {
-		const { data, error } = await supabase.from('Tournaments').select();
+	function parseItems(data) {
+		let items = [];
+
 		data?.forEach((element) => {
-			let el = [{ value: element.title }, { value: `${element.start} - ${element.end}` }];
+			let el = [
+				{ value: element.title, data: element.id },
+				{ value: `${element.start} - ${element.end}` }
+			];
 			items = [...items, el];
 		});
-	});
+		return items;
+	}
+
+	const dbInfo = {
+		table: 'Tournaments',
+		key: '*'
+	};
 </script>
 
 <section>
 	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">Tournois</h1>
-	<Table {headers} {items} {type} {fields} {actions} onSubmit={handleSubmit} />
+	<Table {headers} {parseItems} {addNew} {type} {actions} {dbInfo} />
 </section>
 
 <style></style>

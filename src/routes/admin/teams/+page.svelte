@@ -1,4 +1,7 @@
 <script>
+	import CrudForm from '$lib/components/CrudForm.svelte';
+	import ReadModal from '$lib/components/ReadModal.svelte';
+
 	// @ts-nocheck
 
 	import Table from '$lib/components/Table.svelte';
@@ -30,71 +33,119 @@
 
 	let handleSubmit = async (e) => {
 		e.preventDefault();
+		const btn = e.target;
+		btn.disabled = true;
+		btn.textContent = 'En cours...';
+		btn.classList.add('cursor-not-allowed', 'opacity-50');
 		const form = e.target.closest('form');
 		const data = new FormData(form);
 		const payload = {};
 		for (const [key, value] of data.entries()) {
 			payload[key] = value;
 		}
-		const { ret, error } = await supabase.from('Teams').insert([payload]);
+		const { error } = await supabase.from('Teams').insert([payload]);
 		if (error) {
 			console.error(error);
+			btn.disabled = false;
+			btn.textContent = 'Erreur';
+			btn.classList.remove('cursor-not-allowed', 'opacity-50');
 		} else {
-			let el = [
-				{ value: payload.name },
-				{
-					value: form.querySelector('select').selectedOptions[0].innerText,
-					data: payload.tournament_id
-				}
-			];
-			items = [...items, el];
-			const modal = FlowbiteInstances.getInstance('Modal', 'CrudModal');
-			modal.hide();
+			window.location.reload();
 		}
 	};
 
 	let handleDelete = async (e) => {
 		e.preventDefault();
-		let tr = e.target.closest('tr');
-		let name = tr.children[0].innerText;
-		let id = tr.children[1].dataset.utils;
-		const response = await supabase.from('Teams').delete().eq('name', name).eq('tournament_id', id);
+		const btn = e.target;
+		btn.disabled = true;
+		btn.textContent = 'En cours...';
+		btn.classList.add('cursor-not-allowed', 'opacity-50');
+		const id = e.target.closest('.popup').id.split('-')[1];
+		const response = await supabase.from('Teams').delete().eq('id', id);
 		if (response.error) {
 			console.error(response.error);
+			btn.disabled = false;
+			btn.textContent = 'Erreur';
+			btn.classList.remove('cursor-not-allowed', 'opacity-50');
 		} else {
-			items = items.filter((el) => el[0].value !== name);
+			window.location.reload();
 		}
 	};
 	let actions = [
 		{
-			title: 'Supprimer',
-			type: 'delete',
-			handler: handleDelete
+			type: 'view',
+			handler: async (e) => {
+				e.preventDefault();
+				let tr = e.target.closest('tr');
+				let name = tr.children[0].innerText;
+				const id = tr.children[0].dataset.utils;
+				let tournament = tr.children[1].innerText;
+				new ReadModal({
+					target: document.body,
+					props: {
+						open: true,
+						id: id,
+						values: {
+							header: {
+								title: name
+							},
+							body: [
+								{
+									label: 'Nom',
+									value: name
+								},
+								{
+									label: 'Tournoi',
+									value: tournament
+								}
+							]
+						},
+						actions: [
+							{
+								type: 'delete',
+								title: 'Supprimer',
+								handler: handleDelete
+							}
+						]
+					}
+				});
+				e.stopPropagation();
+			}
 		}
 	];
 
-	onMount(async () => {
+	async function addNew() {
 		const { data, error } = await supabase.from('Tournaments').select();
 		data?.forEach((element) => {
-			let el = { name: element.title, value: element.id };
+			let el = { text: element.title, value: element.id };
 			fields[1].options = [...fields[1].options, el];
 		});
-		{
-			const { data, error } = await supabase.from('Teams').select(`name, tournament_id(title, id)`);
-			data?.forEach((element) => {
-				let el = [
-					{ value: element.name },
-					{ value: element.tournament_id.title, data: element.tournament_id.id }
-				];
-				items = [...items, el];
-			});
-		}
-	});
+		new CrudForm({
+			target: document.body,
+			props: { fields, onSubmit: handleSubmit, type, type_accord: 'une', open: true }
+		});
+	}
+
+	function parseItems(data) {
+		let items = [];
+		data?.forEach((element) => {
+			let el = [
+				{ value: element.name, data: element.id },
+				{ value: element.tournament_id.title, data: element.tournament_id.id }
+			];
+			items = [...items, el];
+		});
+		return items;
+	}
+	const dbInfo = {
+		table: 'Teams',
+		key: 'id, name, tournament_id(title, id)'
+	};
 </script>
 
 <section>
 	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">Teams</h1>
-	<Table {headers} {items} {type} {type_accord} {fields} onSubmit={handleSubmit} {actions} />
+	<Table {headers} {type} {type_accord} {parseItems} {dbInfo} {actions} {addNew} />
 </section>
 
 <style></style>

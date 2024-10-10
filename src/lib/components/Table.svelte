@@ -1,52 +1,145 @@
 <script>
 	// @ts-nocheck
-	import { onMount, afterUpdate } from 'svelte';
-	import { initFlowbite } from 'flowbite';
-	import CrudForm from './CrudForm.svelte';
+	import { onMount, afterUpdate, onDestroy } from 'svelte';
+	import { writable } from 'svelte/store';
+	import { hashCode, saveSettings, loadSettings, hideOnClickOutside } from '$lib/utils';
 	import { supabase } from '$lib/supabaseClient';
+	import CrudForm from './CrudForm.svelte';
 
+	export let actions = [];
 	export let headers = ['Nom', 'Email', 'Rôle', 'Actions'];
-	export let items = [['urbain', 'eeeee@gmail.com', 'Sudo']];
-	export let actions = [
-		{ type: 'delete', title: 'Supprimer', icon: 'trash', handler: (e) => {} }
-		//{ type: 'edit', title: 'Editer', icon: 'edit', handler: (e) => {} }
-	];
+	export let filters = [];
+	export let dbInfo = {}; // { table: 'users', key: 'id, email, role'}
+
 	export let type = 'utilisateur';
 	export let type_accord = 'un';
+	export let parseItems = null;
+	export let size = 10;
 
-	// CrudForm props and methods
-	export let fields = [];
-	export let onSubmit = async () => {
-		console.log('Submit');
-	};
-	export let onEdit = async (e) => {
-		console.log('Edit');
-	};
+	export let addNew = null;
 
-	let selectedHandler = (e) => {
-		console.log(e);
-	};
-	let selectedAction = 'Ajouter';
+	let hash = hashCode(dbInfo);
+	let can_update_settings = false;
 
-	$: if (headers[headers.length - 1] == 'Actions') {
-		items.forEach((item) => {
-			if (item[item.length - 1] != 'Actions') item.push('Actions');
-		});
+	const filtersStore = writable(filters);
+
+	$: {
+		filtersStore.set(filters);
+		if (can_update_settings) saveSettings(hash, filters);
 	}
 
-	onMount(() => {
-		initFlowbite();
+	let items = [];
+	let current_page = 0;
+	let total_items = 0;
+	let page = [];
+
+	$: {
+		page = [];
+		if (items.length > 0) {
+			for (let i = 0; i <= total_items / size; i++) {
+				page = [...page, i + 1];
+			}
+		}
+	}
+
+	/**
+	 * Load the page of items
+	 * @param {number} page - The page number
+	 * @param {string} filter - The filter to apply to the query (optional, default '')
+	 * @param {number} step - The number of items per page (optional, default 5 items)
+	 * @returns {none} - Sets the items variable
+	 */
+	async function loadPage(page, filter = '', step = size) {
+		let items = [];
+
+		let query = supabase.from(dbInfo.table).select(dbInfo.key, { count: 'estimated', head: false });
+
+		if (filter) {
+			filter = filter.split('&');
+			for (let i = 0; i < filter.length; i++) {
+				query = query.filter(...filter[i].split(':'));
+			}
+		}
+
+		const { data, error, count } = await query.range(page * step, (page + 1) * step - 1);
+		if (error) {
+			console.error(error);
+			return;
+		}
+		total_items = count;
+		items = parseItems ? parseItems(data) : data;
+
+		return items;
+	}
+
+	function getFiltersString(filters) {
+		let filtersString = '';
+		// remove el from array if active is false
+		// copy array
+		let tmp = JSON.parse(JSON.stringify(filters));
+		tmp.forEach((el) => {
+			el.options = el.options.filter((option) => option.active);
+		});
+		// create string
+		tmp.forEach((el) => {
+			if (el.options.length > 0) {
+				filtersString += `${el.value}:in:("${el.options.map((option) => option.value).join('","')}")&`;
+			}
+		});
+		return filtersString.slice(0, -1);
+	}
+
+	let mounted = false;
+	let filter_state = false;
+
+	filtersStore.subscribe(async (value) => {
+		if (!mounted) return;
+		const filtersString = getFiltersString(value);
+		items = await loadPage(0, filtersString);
+		current_page = 0;
 	});
-	afterUpdate(() => {
-		initFlowbite();
+
+	onMount(async () => {
+		let tmp = loadSettings(hash);
+		if (tmp.length > 0) {
+			filters = tmp;
+		}
+		items = await loadPage(0, getFiltersString(filters));
+		mounted = true;
+
+		const dropdown = document.querySelector('#filterDropdown-' + hash);
+		setupDropdown();
+		document.body.appendChild(dropdown);
+	});
+
+	function setupDropdown() {
+		// set position of the popup just below the button
+		const dropdown = document.querySelector('#filterDropdown-' + hash);
+		const rect = document.getElementById('filterDropdownButton').getBoundingClientRect();
+		dropdown.style.top = 'calc(' + rect.bottom + 'px + 0.5rem)';
+		if (window.innerWidth < 768) {
+			dropdown.style.left = rect.left + 'px';
+			dropdown.style.width = rect.width + 'px';
+		} else {
+			dropdown.style.left = 'calc(' + rect.left + 'px - 1.5rem)';
+		}
+	}
+
+	onresize = () => {
+		setupDropdown();
+	};
+
+	onDestroy(() => {
+		const dropdown = document.querySelector('#filterDropdown-' + hash);
+		dropdown.remove();
 	});
 </script>
 
-<section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
-	<div class="mx-auto max-w-screen-xl px-4 lg:px-12">
-		<div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+<section class="bg-gray-50 dark:bg-gray-900 sm:p-5">
+	<div class="max-w-screen-xl mx-auto sm:px-4 lg:px-12">
+		<div class="relative bg-white rounded-lg shadow-md dark:bg-gray-800">
 			<div
-				class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4"
+				class="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4"
 			>
 				<div class="w-full md:w-1/2">
 					<form class="flex items-center">
@@ -70,7 +163,7 @@
 							<input
 								type="text"
 								id="simple-search"
-								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 								placeholder="Search"
 								required=""
 							/>
@@ -78,48 +171,48 @@
 					</form>
 				</div>
 				<div
-					class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0"
+					class="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3"
 				>
-					<button
-						type="button"
-						class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-						id="CrudModalButton"
-						data-modal-target="CrudModal"
-						data-modal-toggle="CrudModal"
-						on:click={(e) => {
-							selectedAction = 'Ajouter';
-							selectedHandler = onSubmit;
-							const modal = FlowbiteInstances.getInstance('Modal', 'CrudModal');
-							modal.show();
-						}}
-					>
-						<svg
-							class="h-3.5 w-3.5 mr-2"
-							fill="currentColor"
-							viewbox="0 0 20 20"
-							xmlns="http://www.w3.org/2000/svg"
-							aria-hidden="true"
+					{#if addNew != null}
+						<button
+							type="button"
+							class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+							id="addNewButton"
+							on:click={addNew}
 						>
-							<path
-								clip-rule="evenodd"
-								fill-rule="evenodd"
-								d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-							/>
-						</svg>
-						Ajouter {type_accord}
-						{type}
-					</button>
-					<div class="flex items-center space-x-3 w-full md:w-auto">
+							<svg
+								class="h-3.5 w-3.5 mr-2"
+								fill="currentColor"
+								viewbox="0 0 20 20"
+								xmlns="http://www.w3.org/2000/svg"
+								aria-hidden="true"
+							>
+								<path
+									clip-rule="evenodd"
+									fill-rule="evenodd"
+									d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+								/>
+							</svg>
+							Ajouter {type_accord}
+							{type}
+						</button>
+					{/if}
+					<div class="flex items-center w-full space-x-3 md:w-auto">
 						<button
 							id="filterDropdownButton"
-							data-dropdown-toggle="filterDropdown"
-							class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+							class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 							type="button"
+							on:click={(e) => {
+								const el = document.querySelector('#filterDropdown-' + hash);
+								el.classList.toggle('hidden');
+								e.stopPropagation();
+								hideOnClickOutside(el);
+							}}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								aria-hidden="true"
-								class="h-4 w-4 mr-2 text-gray-400"
+								class="w-4 h-4 mr-2 text-gray-400"
 								viewbox="0 0 20 20"
 								fill="currentColor"
 							>
@@ -145,36 +238,43 @@
 							</svg>
 						</button>
 						<div
-							id="filterDropdown"
-							class="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700"
+							id="filterDropdown-{hash}"
+							class="absolute z-10 hidden p-3 bg-white rounded-lg shadow md:w-48 dark:bg-gray-700 w-72"
 						>
-							<h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">JSP encore</h6>
-							<ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
-								<li class="flex items-center">
-									<input
-										id="apple"
-										type="checkbox"
-										value=""
-										class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-									/>
-									<label
-										for="apple"
-										class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">TWC 5</label
-									>
-								</li>
-								<li class="flex items-center">
-									<input
-										id="fitbit"
-										type="checkbox"
-										value=""
-										class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-									/>
-									<label
-										for="fitbit"
-										class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">TI 1</label
-									>
-								</li>
-							</ul>
+							{#each filters as filter, i}
+								{#if filter.category != 'hidden'}
+									{#if i > 0}
+										<hr class="my-3 border-gray-200 dark:border-gray-600" />
+									{/if}
+									<h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
+										{filter.category}
+									</h6>
+									<ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
+										{#each filter.options as option}
+											<li class="flex items-center">
+												<input
+													id={option.name}
+													type="checkbox"
+													value={option.value}
+													checked={option.active}
+													class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+													on:change={(e) => {
+														e.preventDefault();
+														can_update_settings = true;
+														option.active = e.target.checked;
+														filtersStore.set(filters);
+													}}
+												/>
+												<label
+													for={option.name}
+													class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
+													>{option.name}</label
+												>
+											</li>
+										{/each}
+									</ul>
+								{/if}
+							{/each}
 						</div>
 					</div>
 				</div>
@@ -203,82 +303,69 @@
 									{#if key.value === item[0].value && headers[0] === 'Nom'}
 										<th
 											scope="row"
-											class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-											data-utils={key.data || ''}>{key.value}</th
+											class="flex items-center px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+											data-utils={key.data || ''}
 										>
-									{:else if key.value === item[item.length - 1].value && headers[headers.length - 1] === 'Actions' && item.length > 2}
-										<td class="px-4 py-3 flex items-center justify-end">
-											<button
-												id="{i}-dropdown-button"
-												data-dropdown-toggle="{i}-dropdown"
-												class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
-												type="button"
-											>
-												<svg
-													class="w-5 h-5"
-													aria-hidden="true"
-													fill="currentColor"
-													viewbox="0 0 20 20"
-													xmlns="http://www.w3.org/2000/svg"
-												>
-													<path
-														d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"
-													/>
-												</svg>
-											</button>
-											<div
-												id="{i}-dropdown"
-												class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-											>
-												<ul
-													class="py-1 text-sm text-gray-700 dark:text-gray-200"
-													aria-labelledby="{i}-dropdown-button"
-												>
-													{#each actions as item}
-														<div class="py-1">
-															<a
-																href="#"
-																on:click={async (e) => {
-																	if (item.type === 'delete') {
-																		selectedAction = 'Supprimer';
-																	} else if (item.type === 'edit') {
-																		selectedAction = 'Editer';
-																		selectedHandler = onEdit;
-																	}
-																	await item.handler(e);
-																}}
-																class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-																>{item.title}</a
-															>
-														</div>
-													{/each}
-												</ul>
-											</div>
-										</td>
+											{#if key.avatar}
+												<div class="flex items-center mr-2 space-x-2">
+													<img src={key.avatar} class="w-8 h-8 rounded-full" alt="user face" />
+												</div>
+											{/if}
+											{key.value}</th
+										>
 									{:else}
 										<td class="px-4 py-3" data-utils={key.data || ''}>{key.value}</td>
 									{/if}
 								{/each}
-							</tr>
-						{/each}
+								{#if actions.length > 0}
+									<td class="flex items-center justify-end px-4 py-3">
+										<button
+											id="{i}-dropdown-button"
+											class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+											type="button"
+											on:click={(e) => {
+												actions.find((el) => el.type == 'view').handler(e);
+											}}
+										>
+											<svg
+												class="w-5 h-5"
+												aria-hidden="true"
+												fill="currentColor"
+												viewbox="0 0 20 20"
+												xmlns="http://www.w3.org/2000/svg"
+											>
+												<path
+													d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"
+												/>
+											</svg>
+										</button>
+									</td>
+								{/if}
+							</tr>{/each}
 					</tbody>
 				</table>
 			</div>
 			<nav
-				class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
+				class="flex flex-col items-start justify-between p-4 space-y-3 md:flex-row md:items-center md:space-y-0"
 				aria-label="Table navigation"
 			>
 				<span class="text-sm font-normal text-gray-500 dark:text-gray-400">
 					Showing
-					<span class="font-semibold text-gray-900 dark:text-white">1-10</span>
+					<span class="font-semibold text-gray-900 dark:text-white">{items.length}</span>
 					of
-					<span class="font-semibold text-gray-900 dark:text-white">1000</span>
+					<span class="font-semibold text-gray-900 dark:text-white">{total_items}</span>
 				</span>
 				<ul class="inline-flex items-stretch -space-x-px">
 					<li>
 						<a
 							href="#"
 							class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+							on:click={async (e) => {
+								e.preventDefault();
+								current_page--;
+								if (current_page < 0) current_page = 0;
+								items = await loadPage(current_page, getFiltersString(filters));
+							}}
 						>
 							<span class="sr-only">Previous</span>
 							<svg
@@ -296,46 +383,78 @@
 							</svg>
 						</a>
 					</li>
-					<li>
-						<a
-							href="#"
-							class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-							>1</a
-						>
-					</li>
-					<li>
-						<a
-							href="#"
-							class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-							>2</a
-						>
-					</li>
-					<li>
-						<a
-							href="#"
-							aria-current="page"
-							class="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-							>3</a
-						>
-					</li>
-					<li>
-						<a
-							href="#"
-							class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-							>...</a
-						>
-					</li>
-					<li>
-						<a
-							href="#"
-							class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-							>100</a
-						>
-					</li>
+					{#if page.length < 5}
+						{#each page as p}
+							{#if p == current_page + 1}
+								<li>
+									<a
+										href="#"
+										aria-current="page"
+										class="z-10 flex items-center justify-center px-3 py-2 text-sm leading-tight border text-primary-600 bg-primary-50 border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+										>{p}</a
+									>
+								</li>
+							{:else}
+								<li>
+									<a
+										href="#"
+										class="flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+										on:click={async (e) => {
+											e.preventDefault();
+											current_page = p - 1;
+											items = await loadPage(current_page, getFiltersString(filters));
+										}}>{p}</a
+									>
+								</li>
+							{/if}
+						{/each}
+					{:else}
+						{#if current_page != 0}
+							<li>
+								<a
+									href="#"
+									class="flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+									on:click={async (e) => {
+										e.preventDefault();
+										current_page = 0;
+										items = await loadPage(current_page, getFiltersString(filters));
+									}}>{1}</a
+								>
+							</li>
+						{/if}
+						<li>
+							<a
+								href="#"
+								aria-current="page"
+								class="z-10 flex items-center justify-center px-3 py-2 text-sm leading-tight border text-primary-600 bg-primary-50 border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+								>{current_page + 1}</a
+							>
+						</li>
+						{#if current_page != page.length - 1}
+							<li>
+								<a
+									href="#"
+									class="flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+									on:click={async (e) => {
+										e.preventDefault();
+										current_page = page.length - 1;
+										items = await loadPage(current_page, getFiltersString(filters));
+									}}>{page.length}</a
+								>
+							</li>
+						{/if}
+					{/if}
+
 					<li>
 						<a
 							href="#"
 							class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+							on:click={async (e) => {
+								e.preventDefault();
+								current_page++;
+								if (current_page >= total_items / size) current_page = total_items / size - 1;
+								items = await loadPage(current_page, getFiltersString(filters));
+							}}
 						>
 							<span class="sr-only">Next</span>
 							<svg
@@ -357,7 +476,6 @@
 			</nav>
 		</div>
 	</div>
-	<CrudForm {type} {fields} {type_accord} action={selectedAction} onSubmit={selectedHandler} />
 </section>
 
 <style></style>
