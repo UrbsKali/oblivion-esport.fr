@@ -46,6 +46,7 @@
 		"marked": "^14.1.2",
 		"postcss": "^8.4.40",
 		"svelte-markdown": "^0.4.1",
-		"tailwind-merge": "^2.4.0"
+		"tailwind-merge": "^2.4.0",
+		"three": "^0.169.0"
 	}
 }
