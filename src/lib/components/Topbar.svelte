@@ -50,35 +50,35 @@
 				<ul class="flex gap-10">
 					<li>
 						<a
-							href="/blog"
+							href="/"
 							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
 							>Actus</a
 						>
 					</li>
 					<li>
 						<a
-							href="/about"
+							href="/"
 							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
 							>Tournois</a
 						>
 					</li>
 					<li>
 						<a
-							href="/contact"
+							href="/"
 							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
 							>Staff</a
 						>
 					</li>
 					<li>
 						<a
-							href="/contact"
+							href="/"
 							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
 							>Partenaires</a
 						>
 					</li>
 					<li>
 						<a
-							href="/contact"
+							href="/"
 							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
 							>Contact</a
 						>
