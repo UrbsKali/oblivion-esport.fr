@@ -4,6 +4,7 @@
 	import * as THREE from 'three';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 	import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+	import { currentOrigin } from '$lib/config';
 
 	onMount(() => {
 		const rl = document.querySelector('#rl');
@@ -22,7 +23,7 @@
 		rl.appendChild(renderer.domElement);
 
 		const gltfLoader = new GLTFLoader();
-		gltfLoader.load('/3d/octane.glb', (gltf) => {
+		gltfLoader.load(currentOrigin() + '/3d/octane.glb', (gltf) => {
 			scene.add(gltf.scene);
 			// scale it
 			gltf.scene.scale.set(0.03, 0.03, 0.03);
