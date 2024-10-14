@@ -1,12 +1,9 @@
 <script>
-	import CrudForm from '$lib/components/CrudForm.svelte';
-	import ReadModal from '$lib/components/ReadModal.svelte';
-
-	// @ts-nocheck
-
-	import Table from '$lib/components/Table.svelte';
 	import { supabase } from '$lib/supabaseClient';
-	import { onMount } from 'svelte';
+
+	import CrudForm from '$lib/components/modals/CrudForm.svelte';
+	import ReadModal from '$lib/components/modals/ReadModal.svelte';
+	import Table from '$lib/components/admin/Table.svelte';
 
 	const headers = ['Nom', 'Tournoi', 'Actions'];
 	let items = [];

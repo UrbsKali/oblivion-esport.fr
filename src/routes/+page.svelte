@@ -1,11 +1,12 @@
 <script>
-	import Topbar from '$lib/components/Topbar.svelte';
 	import { onMount } from 'svelte';
+	import { currentOrigin } from '$lib/config';
+
 	import * as THREE from 'three';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-	import { currentOrigin } from '$lib/config';
-	import Title from '$lib/components/Title.svelte';
-	import Cursor from '$lib/components/Cursor.svelte';
+
+	import Title from '$lib/components/utils/Title.svelte';
+	import Cursor from '$lib/components/share/Cursor.svelte';
 
 	let TeaserLink = '/Teaser.mp4';
 
@@ -69,8 +70,7 @@
 	});
 </script>
 
-<Topbar />
-<div class="border-b border-gray-700 landing">
+<div class="border-b border-gray-700 landing enabled-cursor">
 	<div class="relative z-10 h-screen">
 		<div class="flex items-center justify-center w-6/12 h-full">
 			<div class="text-center">
@@ -94,7 +94,6 @@
 <div class="border-b border-gray-700 lol">
 	<div class="h-screen"></div>
 </div>
-
 <Cursor />
 
 <style>

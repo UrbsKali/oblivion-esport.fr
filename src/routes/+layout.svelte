@@ -1,5 +1,13 @@
 <script>
 	import '../app.css';
+	import Topbar from '$lib/components/share/Topbar.svelte';
+	import { page } from '$app/stores';
+
+	let is_on_admin_route = false;
+
+	page.subscribe((value) => {
+		is_on_admin_route = value?.route?.id?.includes('admin');
+	});
 </script>
 
 <svelte:head>
@@ -9,6 +17,9 @@
 </svelte:head>
 
 <div class="min-h-screen antialiased text-white bg-gray-900 min-w-screen">
+	{#if !is_on_admin_route}
+		<Topbar />
+	{/if}
 	<slot />
 </div>
 

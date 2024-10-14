@@ -1,7 +1,7 @@
 <script>
 	// @ts-nocheck
 
-	import Table from '$lib/components/Table.svelte';
+	import Table from '$lib/components/admin/Table.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { onMount } from 'svelte';
 

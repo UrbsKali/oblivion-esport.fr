@@ -1,13 +1,13 @@
 <script>
 	// @ts-nocheck
 
-	import Table from '$lib/components/Table.svelte';
+	import Table from '$lib/components/admin/Table.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { onMount } from 'svelte';
 	import { currentOrigin } from '$lib/config';
 	import { userdata } from '$lib/store';
-	import CrudForm from '$lib/components/CrudForm.svelte';
-	import ReadModal from '$lib/components/ReadModal.svelte';
+	import CrudForm from '$lib/components/modals/CrudForm.svelte';
+	import ReadModal from '$lib/components/modals/ReadModal.svelte';
 
 	const headers = ['Match', 'Tournoi', 'Prédiction', 'Score final', 'Actions'];
 	let items = [];

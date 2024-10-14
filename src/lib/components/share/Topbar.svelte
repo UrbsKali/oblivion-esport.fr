@@ -1,5 +1,21 @@
 <script>
-	import LinkButton from './LinkButton.svelte';
+	import { userdata } from '$lib/store';
+	import { loadUserdata } from '$lib/utils';
+	import { onMount } from 'svelte';
+	import UserBadge from './UserBadge.svelte';
+
+	let user;
+	let skip = false;
+
+	userdata.subscribe((value) => {
+		if (value) {
+			user = value;
+		}
+	});
+
+	onMount(async () => {
+		if (!skip) await loadUserdata();
+	});
 </script>
 
 <section>
@@ -55,7 +71,7 @@
 					</li>
 					<li>
 						<a
-							href="/"
+							href="/tournaments"
 							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
 							>Tournois</a
 						>
@@ -84,16 +100,20 @@
 				</ul>
 			</div>
 			<div class="gap-5">
-				<button
-					class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white border border-white rounded-lg focus:ring-4 focus:ring-white focus:outline-none bg-opacity-10 hover:bg-gray-900"
-				>
-					Register
-				</button>
-				<button
-					class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-				>
-					Login
-				</button>
+				{#if user}
+					<UserBadge />
+				{:else}
+					<button
+						class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white border border-white rounded-lg focus:ring-4 focus:ring-white focus:outline-none bg-opacity-10 hover:bg-gray-900"
+					>
+						Register
+					</button>
+					<button
+						class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+					>
+						Login
+					</button>
+				{/if}
 			</div>
 		</div>
 	</nav>

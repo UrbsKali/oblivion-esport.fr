@@ -4,7 +4,7 @@
 	import { writable } from 'svelte/store';
 	import { hashCode, saveSettings, loadSettings, hideOnClickOutside } from '$lib/utils';
 	import { supabase } from '$lib/supabaseClient';
-	import CrudForm from './CrudForm.svelte';
+	import CrudForm from '../modals/CrudForm.svelte';
 
 	export let actions = [];
 	export let headers = ['Nom', 'Email', 'Rôle', 'Actions'];

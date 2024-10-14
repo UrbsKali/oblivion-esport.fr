@@ -2,8 +2,8 @@
 	// @ts-nocheck
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
-	import UserBadge from '$lib/components/UserBadge.svelte';
-	import SideBar from '$lib/components/SideBar.svelte';
+	import UserBadge from '$lib/components/share/UserBadge.svelte';
+	import SideBar from '$lib/components/admin/SideBar.svelte';
 	import { config, currentOrigin, parseURI } from '$lib/config';
 
 	let current_user = {};

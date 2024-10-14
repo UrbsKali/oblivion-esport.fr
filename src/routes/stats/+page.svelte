@@ -2,7 +2,7 @@
 	// @ts-nocheck
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
-	import LinkButton from '$lib/components/LinkButton.svelte';
+	import LinkButton from '$lib/components/utils/LinkButton.svelte';
 	import { pushState } from '$app/navigation';
 
 	let stats = {};

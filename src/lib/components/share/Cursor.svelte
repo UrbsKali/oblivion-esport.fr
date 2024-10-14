@@ -46,10 +46,10 @@
 <div class="cursor-inner" bind:this={cursorInner}></div>
 
 <style>
-	:global(body) {
+	:global(.enable-cursor) {
 		cursor: none;
 	}
-	:global(*):hover {
+	:global(.enable-cursor *):hover {
 		cursor: none;
 	}
 

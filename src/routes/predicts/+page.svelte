@@ -2,7 +2,7 @@
 	// @ts-nocheck
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
-	import LinkButton from '$lib/components/LinkButton.svelte';
+	import LinkButton from '$lib/components/utils/LinkButton.svelte';
 	import { pushState } from '$app/navigation';
 
 	let predictions = [];
@@ -122,20 +122,20 @@
 <LinkButton href="" text="" target="" onClick={async (e) => await fetchinfo(dateOfXDay(1))} />
 <h2>{date.toLocaleDateString()}</h2>
 <div class="flex flex-row justify-between w-full">
-	<div class="horizontal-scroll-except-first-column flex flex-row w-custom">
+	<div class="flex flex-row horizontal-scroll-except-first-column w-custom">
 		<div class="hideout"></div>
 
-		<table class=" border-spacing-x-10 border-spacing-y-2 border-separate -ml-10 table-fixed">
+		<table class="-ml-10 border-separate table-fixed border-spacing-x-10 border-spacing-y-2">
 			<thead>
 				<tr>
 					<th class="w-96">Matchs</th>
 					{#each casteur as cast}
 						<th
 							><div class=" w-36">
-								<div class=" font-extrabold text-2xl">
+								<div class="text-2xl font-extrabold">
 									{Math.round(cast.predict_accuracy * 100)}%
 								</div>
-								<div class=" uppercase">{cast.username}</div>
+								<div class="uppercase">{cast.username}</div>
 							</div>
 						</th>
 					{/each}
@@ -146,15 +146,15 @@
 					<tr>
 						<td class=" w-96">
 							<div
-								class="bg-gray-700 text-gray-300 rounded-t-md flex flex-row items-center p-2 justify-center"
+								class="flex flex-row items-center justify-center p-2 text-gray-300 bg-gray-700 rounded-t-md"
 							>
-								<div class="tournament p-1">{match.tournament_id.title}</div>
+								<div class="p-1 tournament">{match.tournament_id.title}</div>
 								-
-								<div class="date p-1">{new Date(match.date).toLocaleTimeString()}</div>
+								<div class="p-1 date">{new Date(match.date).toLocaleTimeString()}</div>
 							</div>
-							<div class="bg-white dark:bg-gray-800 p-2 rounded-b-md flex flex-col">
+							<div class="flex flex-col p-2 bg-white dark:bg-gray-800 rounded-b-md">
 								<div class="grid justify-center pt-2 pb-2 custom-grid">
-									<div class="team p-1 flex flex-col items-center">
+									<div class="flex flex-col items-center p-1 team">
 										<img
 											src={match.team_one.logo_url}
 											alt=""
@@ -163,9 +163,9 @@
 										/>
 										{match.team_one.name}
 									</div>
-									<div class="vs p-1 flex items-center"><img src="/epee.png" alt="" /></div>
-									<div class="team p-1 flex flex-col items-center">
-										<img src={match.team_two.logo_url} alt="" srcset="" class=" w-auto h-20" />
+									<div class="flex items-center p-1 vs"><img src="/epee.png" alt="" /></div>
+									<div class="flex flex-col items-center p-1 team">
+										<img src={match.team_two.logo_url} alt="" srcset="" class="w-auto h-20" />
 										{match.team_two.name}
 									</div>
 								</div>
@@ -176,7 +176,7 @@
 						{#each casteur as cast, index}
 							<td class="h-56">
 								{#if predictions.find((el) => el.made_by.username == cast.username && el.match == match.id)}
-									<div class="flex flex-col items-center align-middle h-56">
+									<div class="flex flex-col items-center h-56 align-middle">
 										<img
 											src={predictions.find(
 												(el) => el.made_by.username == cast.username && el.match == match.id
@@ -219,17 +219,17 @@
 			</tbody>
 		</table>
 		<div>
-			<div class="bg-gray-800 shadow-md rounded-md max-w-sm min-w-60 mx-auto mt-16">
-				<div class="bg-gray-700 py-2 px-4 rounded-t-md">
+			<div class="max-w-sm mx-auto mt-16 bg-gray-800 rounded-md shadow-md min-w-60">
+				<div class="px-4 py-2 bg-gray-700 rounded-t-md">
 					<h2 class="text-xl font-semibold text-gray-300">Leaderboard</h2>
 				</div>
 				<ul class="divide-y divide-gray-200">
 					{#each casteur_leaderboard as cast, index}
-						<li class="flex items-center py-4 px-6">
-							<span class="text-gray-300 text-lg font-medium mr-4">{index + 1}.</span>
+						<li class="flex items-center px-6 py-4">
+							<span class="mr-4 text-lg font-medium text-gray-300">{index + 1}.</span>
 							<div class="flex-1">
 								<h3 class="text-lg font-medium text-gray-300">{cast.username}</h3>
-								<p class="text-gray-300 text-base">{Math.round(cast.predict_accuracy * 100)} %</p>
+								<p class="text-base text-gray-300">{Math.round(cast.predict_accuracy * 100)} %</p>
 							</div>
 							<img src="https://oblivion-esport.fr/{index + 1}.png" alt="" class="ml-5 size-10" />
 						</li>
