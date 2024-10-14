@@ -40,7 +40,7 @@
 					<span class="sr-only">Toggle sidebar</span>
 				</button>
 				<a href="/" class="flex items-center justify-between mr-4">
-					<img src="/oblivion.png" class="h-8 mr-3" alt="Oblivion Logo" />
+					<img src="/oblivion.png" class="h-12 mr-3" alt="Oblivion Logo" />
 					<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
 				</a>
 			</div>
@@ -85,7 +85,7 @@
 			</div>
 			<div class="gap-5">
 				<button
-					class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white rounded-lg ring-4 ring-primary-800 focus:outline-none bg-opacity-5 hover:bg-gray-900"
+					class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white border border-white rounded-lg focus:ring-4 focus:ring-white focus:outline-none bg-opacity-10 hover:bg-gray-900"
 				>
 					Register
 				</button>

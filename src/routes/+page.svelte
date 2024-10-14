@@ -20,7 +20,7 @@
 		camera.position.z = 5;
 
 		const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-		renderer.setSize(1200, 720);
+		renderer.setSize(window.innerWidth - 20, window.innerHeight - 20);
 		rl.appendChild(renderer.domElement);
 
 		const gltfLoader = new GLTFLoader();
@@ -59,6 +59,9 @@
 		light4.position.set(10, 0, 1);
 
 		const animate = () => {
+			if (car) {
+				car.rotation.y += 0.001;
+			}
 			renderer.render(scene, camera);
 			requestAnimationFrame(animate);
 		};
@@ -78,7 +81,7 @@
 	</div>
 	<div id="teaser">
 		<video
-			src="/Teaser.mp4"
+			src="{currentOrigin()}/Teaser.mp4"
 			class="absolute top-0 left-0 object-cover w-full h-full opacity-50 pointer-events-none -z-10"
 			autoplay
 			loop

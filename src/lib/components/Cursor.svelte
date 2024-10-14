@@ -8,11 +8,23 @@
 	let cursorX = 0;
 	let cursorY = 0;
 	let dampening = 0.1;
+	let hover = false;
 
 	onMount(() => {
 		document.addEventListener('mousemove', (e) => {
 			mouseX = e.clientX;
 			mouseY = e.clientY;
+		});
+		const buttons = document.querySelectorAll('button, a, .cursor-hover');
+
+		buttons.forEach((button) => {
+			button.addEventListener('mouseenter', () => {
+				hover = true;
+			});
+
+			button.addEventListener('mouseleave', () => {
+				hover = false;
+			});
 		});
 
 		requestAnimationFrame(animateCursor);
@@ -22,11 +34,12 @@
 		cursorX += (mouseX - cursorX) * dampening;
 		cursorY += (mouseY - cursorY) * dampening;
 
-		cursor.style.transform = `translate3d(${cursorX + 4}px, ${cursorY + 4}px, 0)`;
-		cursorInner.style.transform = `translate3d(${mouseX + 20}px, ${mouseY + 20}px, 0)`;
+		cursor.style.transform = `translate3d(${cursorX + 4 - 24}px, ${cursorY + 4 - 24}px, 0) scale(${hover ? 1.5 : 1})`;
+		cursorInner.style.transform = `translate3d(${mouseX + 20 - 24}px, ${mouseY + 20 - 24}px, 0) scale(${hover ? 1 : 1})`;
 
 		requestAnimationFrame(animateCursor);
 	}
+	// make the cursor bigger when hovering over a button or link
 </script>
 
 <div class="cursor" bind:this={cursor}></div>
@@ -34,6 +47,9 @@
 
 <style>
 	:global(body) {
+		cursor: none;
+	}
+	:global(*):hover {
 		cursor: none;
 	}
 
@@ -60,5 +76,11 @@
 		border-radius: 50%;
 		pointer-events: none;
 		z-index: 1000;
+		transition: transform 0.15s ease-out;
+	}
+
+	.cursor,
+	.cursor-inner {
+		mix-blend-mode: difference;
 	}
 </style>
