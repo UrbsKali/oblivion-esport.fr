@@ -1,6 +1,7 @@
 <script>
 	import { userdata } from '$lib/store';
 	import { loadUserdata } from '$lib/utils';
+	import { config } from '$lib/config';
 	import { onMount } from 'svelte';
 	import UserBadge from './UserBadge.svelte';
 
@@ -71,7 +72,7 @@
 					</li>
 					<li>
 						<a
-							href="/tournaments"
+							href="{config.basePath}/tournaments"
 							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
 							>Tournois</a
 						>
