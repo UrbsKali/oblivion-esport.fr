@@ -84,7 +84,6 @@
 			src={TeaserLink}
 			class="absolute top-0 left-0 object-cover w-full h-full opacity-50 pointer-events-none -z-10"
 			autoplay
-			loop
 			muted
 		></video>
 	</div>
