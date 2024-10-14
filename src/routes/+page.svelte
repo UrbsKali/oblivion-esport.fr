@@ -7,20 +7,20 @@
 	import Title from '$lib/components/Title.svelte';
 	import Cursor from '$lib/components/Cursor.svelte';
 
+	let TeaserLink = '/Teaser.mp4';
+
 	onMount(() => {
+		TeaserLink = currentOrigin() + '/Teaser.mp4';
+
 		const rl = document.querySelector('#rl');
+		const { width, height } = rl.getBoundingClientRect();
 
 		const scene = new THREE.Scene();
-		const camera = new THREE.PerspectiveCamera(
-			75,
-			window.innerWidth / window.innerHeight,
-			0.1,
-			1000
-		);
+		const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
 		camera.position.z = 5;
 
 		const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-		renderer.setSize(window.innerWidth - 20, window.innerHeight - 20);
+		renderer.setSize(width, height);
 		rl.appendChild(renderer.domElement);
 
 		const gltfLoader = new GLTFLoader();
@@ -81,7 +81,7 @@
 	</div>
 	<div id="teaser">
 		<video
-			src="{currentOrigin()}/Teaser.mp4"
+			src={TeaserLink}
 			class="absolute top-0 left-0 object-cover w-full h-full opacity-50 pointer-events-none -z-10"
 			autoplay
 			loop
