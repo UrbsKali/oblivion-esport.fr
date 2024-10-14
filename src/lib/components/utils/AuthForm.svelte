@@ -9,7 +9,7 @@
 		reset: 'Mot de passe oublié'
 	};
 
-	export let redirect_uri = config.basePath + '/';
+	export let redirect_uri = '/v2/';
 	/**
 	 * {'login' | 'register' | 'reset'}
 	 */
@@ -39,7 +39,7 @@
 		}
 		if (error && auth_type === AuthType.reset) {
 			console.error(error);
-			window.location.href = config.basePath + '/login';
+			window.location.href = '/v2/login';
 		}
 		email = user?.email || '';
 	});
@@ -108,7 +108,7 @@
 	<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
 		<!-- svelte-ignore a11y-missing-attribute -->
 		<a class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-			<img class="w-8 h-8 mr-2" src="/oblivion.png" alt="logo" />
+			<img class="w-8 h-8 mr-2" src="/v2/oblivion.png" alt="logo" />
 			Oblivion Esport
 		</a>
 		<div

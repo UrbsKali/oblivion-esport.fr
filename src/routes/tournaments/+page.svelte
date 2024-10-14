@@ -3,6 +3,4 @@
 	import Topbar from '$lib/components/share/Topbar.svelte';
 </script>
 
-<Topbar />
-
 <Cursor />

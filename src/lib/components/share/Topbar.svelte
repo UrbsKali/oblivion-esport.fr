@@ -56,8 +56,8 @@
 					</svg>
 					<span class="sr-only">Toggle sidebar</span>
 				</button>
-				<a href="/" class="flex items-center justify-between mr-4">
-					<img src="/oblivion.png" class="h-12 mr-3" alt="Oblivion Logo" />
+				<a href="/v2/" class="flex items-center justify-between mr-4">
+					<img src="/v2/oblivion.png" class="h-12 mr-3" alt="Oblivion Logo" />
 					<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
 				</a>
 			</div>
@@ -65,35 +65,35 @@
 				<ul class="flex gap-10">
 					<li>
 						<a
-							href="/"
+							href="/v2/"
 							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
 							>Actus</a
 						>
 					</li>
 					<li>
 						<a
-							href="{config.basePath}/tournaments"
+							href="/v2/tournaments"
 							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
 							>Tournois</a
 						>
 					</li>
 					<li>
 						<a
-							href="/"
+							href="/v2/"
 							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
 							>Staff</a
 						>
 					</li>
 					<li>
 						<a
-							href="/"
+							href="/v2/"
 							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
 							>Partenaires</a
 						>
 					</li>
 					<li>
 						<a
-							href="/"
+							href="/v2/"
 							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
 							>Contact</a
 						>
@@ -109,11 +109,12 @@
 					>
 						Register
 					</button>
-					<button
+					<a
 						class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+						href="/v2/login"
 					>
 						Login
-					</button>
+					</a>
 				{/if}
 			</div>
 		</div>

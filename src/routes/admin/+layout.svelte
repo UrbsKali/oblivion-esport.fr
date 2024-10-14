@@ -4,7 +4,7 @@
 	import { supabase } from '$lib/supabaseClient';
 	import UserBadge from '$lib/components/share/UserBadge.svelte';
 	import SideBar from '$lib/components/admin/SideBar.svelte';
-	import { config, currentOrigin, parseURI } from '$lib/config';
+	import { config, parseURI } from '$lib/config';
 
 	let current_user = {};
 	let current_role = '';
@@ -63,7 +63,7 @@
 			const { data, error } = await supabase.auth.getUser();
 			if (error) {
 				console.error(error);
-				window.location.href = `${currentOrigin()}/login?redirect=${window.location.pathname}`;
+				window.location.href = `/v2/login?redirect=${window.location.pathname}`;
 			}
 			current_user = data.user;
 		}
@@ -74,7 +74,7 @@
 				.eq('id', current_user.id);
 			if (error) {
 				console.error(error);
-				window.location.href = `${currentOrigin()}/`;
+				window.location.href = `/v2/`;
 			}
 			current_role = data[0].role;
 		}
@@ -92,12 +92,12 @@
 					found = true;
 				}
 			});
-			if (!found) window.location.href = `${currentOrigin()}/`;
+			if (!found) window.location.href = `/v2/`;
 			// else refer to allowed roles of the parent
 			else {
 				let parent = menu.find((el) => el.sub?.find((el) => el.uri == uri));
 				if (!parent.allowed_roles.includes(current_role)) {
-					window.location.href = `${currentOrigin()}/`;
+					window.location.href = `/v2/`;
 				}
 			}
 		}
@@ -149,8 +149,8 @@
 					</svg>
 					<span class="sr-only">Toggle sidebar</span>
 				</button>
-				<a href="/admin" class="flex items-center justify-between mr-4">
-					<img src="/oblivion.png" class="h-8 mr-3" alt="Flowbite Logo" />
+				<a href="/v2/admin" class="flex items-center justify-between mr-4">
+					<img src="/v2/oblivion.png" class="h-8 mr-3" alt="Oblivion Logo" />
 					<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
 						>Oblivion</span
 					>

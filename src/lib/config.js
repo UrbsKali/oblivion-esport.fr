@@ -12,9 +12,6 @@ export const config = {
     basePath: basePath
 };
 
-export function currentOrigin() {
-    return window.location.origin + basePath;
-}
 
 export function parseURI(uri) {
     if (typeof uri == 'string') return basePath + uri;

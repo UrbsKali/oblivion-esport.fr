@@ -1,6 +1,5 @@
 <script>
 	import { onMount } from 'svelte';
-	import { currentOrigin } from '$lib/config';
 
 	import * as THREE from 'three';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -8,11 +7,7 @@
 	import Title from '$lib/components/utils/Title.svelte';
 	import Cursor from '$lib/components/share/Cursor.svelte';
 
-	let TeaserLink = '/Teaser.mp4';
-
 	onMount(() => {
-		TeaserLink = currentOrigin() + '/Teaser.mp4';
-
 		const rl = document.querySelector('#rl');
 		const { width, height } = rl.getBoundingClientRect();
 
@@ -26,7 +21,7 @@
 
 		const gltfLoader = new GLTFLoader();
 		let car = null;
-		gltfLoader.load(currentOrigin() + '/3d/octane.glb', (gltf) => {
+		gltfLoader.load('/v2/3d/octane.glb', (gltf) => {
 			scene.add(gltf.scene);
 			// scale it
 			gltf.scene.scale.set(0.03, 0.03, 0.03);
@@ -81,7 +76,7 @@
 	</div>
 	<div id="teaser">
 		<video
-			src={TeaserLink}
+			src="/v2/Teaser.mp4"
 			class="absolute top-0 left-0 object-cover w-full h-full opacity-50 pointer-events-none -z-10"
 			autoplay
 			muted

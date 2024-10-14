@@ -13,9 +13,14 @@ const config = {
 			fallback: undefined,
 			precompress: false,
 			strict: true
-		})
+		}),
+		paths: {
+			base: '/v2'
+		},
 	},
-	preprocess: vitePreprocess()
+
+	preprocess: vitePreprocess(),
+
 };
 
 export default config;

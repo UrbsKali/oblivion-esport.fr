@@ -11,7 +11,7 @@
 	export let id = 'successModal';
 	export let open = false;
 	export let onClose = (e) => {
-		window.location.href = `${currentOrigin()}/admin`;
+		window.location.href = `/v2/admin`;
 	};
 
 	let __onClose = (e) => {
