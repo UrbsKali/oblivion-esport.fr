@@ -7,6 +7,7 @@
 
 	let user;
 	let skip = false;
+	let enable_cursor = true;
 
 	userdata.subscribe((value) => {
 		if (value) {
@@ -16,10 +17,17 @@
 
 	onMount(async () => {
 		if (!skip) await loadUserdata();
+		enable_cursor = document.querySelector('.cursor') != null;
+		// check after full page load
+		if (!enable_cursor) {
+			document.addEventListener('DOMContentLoaded', () => {
+				enable_cursor = document.querySelector('.cursor') != null;
+			});
+		}
 	});
 </script>
 
-<section>
+<section class={enable_cursor ? 'enable-cursor' : ''}>
 	<nav
 		class="border-b px-4 py-2.5 border-gray-700 fixed left-0 right-0 top-0 z-50 backdrop-blur-lg"
 	>

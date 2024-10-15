@@ -11,6 +11,8 @@
 		avatar: 'https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gough.png'
 	};
 
+	export let fixed = true;
+
 	let skip = false;
 
 	userdata.subscribe((value) => {
@@ -50,7 +52,7 @@
 
 <button
 	type="button"
-	class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+	class="flex mx-3 text-sm bg-gray-800 rounded-full focus:ring-3 focus:ring-gray-700 md:mr-0"
 	id="user-menu-button"
 	aria-expanded="false"
 	on:click={(e) => {
@@ -65,26 +67,27 @@
 </button>
 <!-- Dropdown menu -->
 <div
-	class="absolute z-50 hidden w-56 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 rounded-xl"
+	class="{fixed
+		? 'fixed'
+		: 'absolute'} z-50 hidden w-56 my-4 text-base list-none bg-gray-900 divide-y divide-gray-700 shadow bg-opacity-20 rounded-xl backdrop-blur-lg border border-gray-700"
 	id="dropdown"
 >
 	<div class="px-4 py-3">
-		<span class="block text-sm font-semibold text-gray-900 dark:text-white">{user.name}</span>
-		<span class="block text-sm text-gray-900 truncate dark:text-white">{user.email}</span>
+		<span class="block text-sm font-semibold text-white">{user.name}</span>
+		<span class="block text-sm text-white truncate">{user.email}</span>
 	</div>
-	<ul class="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
+	<ul class="py-1 text-gray-300" aria-labelledby="dropdown">
 		<li>
 			<a
-				href="/v2//profile"
-				class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-				>Profil</a
+				href="/v2/user/"
+				class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80">Profil</a
 			>
 		</li>
 		{#if ['admin', 'superadmin', 'casteur'].includes(user.role)}
 			<li>
 				<a
 					href="/v2/admin/"
-					class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+					class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80"
 					>Pannel Admin</a
 				>
 			</li>
@@ -92,16 +95,16 @@
 		<li>
 			<a
 				href="#"
-				class="block px-4 py-2 text-sm hover:bg-gray-600 dark:hover:bg-gray-700 dark:text-gray-400 dark:hover:text-gray-400"
+				class="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-700 hover:text-gray-400 bg-opacity-80"
 				>Work in progress..</a
 			>
 		</li>
 	</ul>
-	<ul class="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
+	<ul class="py-1 text-gray-300" aria-labelledby="dropdown">
 		<li>
 			<a
 				href="#"
-				class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+				class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80"
 				on:click={LogOut}>Déconnexion</a
 			>
 		</li>

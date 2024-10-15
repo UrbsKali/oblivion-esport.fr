@@ -65,7 +65,7 @@
 	});
 </script>
 
-<div class="border-b border-gray-700 landing enabled-cursor">
+<div class="border-b border-gray-700 landing enable-cursor">
 	<div class="relative z-10 h-screen">
 		<div class="flex items-center justify-center w-6/12 h-full">
 			<div class="text-center">

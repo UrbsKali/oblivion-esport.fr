@@ -39,7 +39,6 @@
 
 		requestAnimationFrame(animateCursor);
 	}
-	// make the cursor bigger when hovering over a button or link
 </script>
 
 <div class="cursor" bind:this={cursor}></div>
@@ -76,7 +75,6 @@
 		border-radius: 50%;
 		pointer-events: none;
 		z-index: 1000;
-		transition: transform 0.15s ease-out;
 	}
 
 	.cursor,
