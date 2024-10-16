@@ -4,7 +4,6 @@
 	import Table from '$lib/components/admin/Table.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { onMount } from 'svelte';
-	import { currentOrigin } from '$lib/config';
 	import { userdata } from '$lib/store';
 	import CrudForm from '$lib/components/modals/CrudForm.svelte';
 	import ReadModal from '$lib/components/modals/ReadModal.svelte';

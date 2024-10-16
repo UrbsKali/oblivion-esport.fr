@@ -5,14 +5,22 @@
 	import UserBadge from '$lib/components/share/UserBadge.svelte';
 	import SideBar from '$lib/components/admin/SideBar.svelte';
 	import { config, parseURI } from '$lib/config';
+	import { userdata } from '$lib/store';
 
-	let current_user = {};
-	let current_role = '';
+	let user;
+	let mount = false;
+
+	userdata.subscribe((value) => {
+		if (value) {
+			user = value;
+			if (mount) checkPermission();
+		}
+	});
 
 	let menu = [
 		{
 			title: 'Accueil',
-			uri: '/admin',
+			uri: '/v2/admin',
 			icon: 'pie-chart',
 			allowed_roles: ['superadmin', 'admin', 'casteur']
 		},
@@ -23,33 +31,33 @@
 			sub: [
 				{
 					title: 'Tournois',
-					uri: '/admin/tournaments'
+					uri: '/v2/admin/tournaments'
 				},
 				{
 					title: 'Teams',
-					uri: '/admin/teams'
+					uri: '/v2/admin/teams'
 				},
 				{
 					title: 'Matchs',
-					uri: '/admin/matches'
+					uri: '/v2/admin/matches'
 				}
 			]
 		},
 		{
 			title: 'Prédictions',
-			uri: '/admin/predictions',
+			uri: '/v2/admin/predictions',
 			icon: 'analytics',
 			allowed_roles: ['superadmin', 'admin', 'casteur']
 		},
 		{
 			title: 'MatchID Finder',
-			uri: '/admin/matchid',
+			uri: '/v2/admin/matchid',
 			icon: 'search-outline',
 			allowed_roles: ['superadmin', 'admin', 'casteur']
 		},
 		{
 			title: 'Ressources & Liens',
-			uri: '/admin/ressources',
+			uri: '/v2/admin/ressources',
 			icon: 'link',
 			allowed_roles: ['superadmin', 'admin', 'casteur']
 		}
@@ -58,32 +66,18 @@
 	let __menu = [];
 	menu = parseURI(menu);
 
-	onMount(async () => {
-		{
-			const { data, error } = await supabase.auth.getUser();
-			if (error) {
-				console.error(error);
-				window.location.href = `/v2/login?redirect=${window.location.pathname}`;
-			}
-			current_user = data.user;
-		}
-		{
-			const { data, error } = await supabase
-				.from('profiles')
-				.select('role')
-				.eq('id', current_user.id);
-			if (error) {
-				console.error(error);
-				window.location.href = `/v2/`;
-			}
-			current_role = data[0].role;
-		}
+	onMount(() => {
+		mount = true;
+		if (user) checkPermission();
+	});
+
+	function checkPermission() {
 		// remove trailing slash if present
 		const uri = window.location.pathname.endsWith('/')
 			? window.location.pathname.slice(0, -1)
 			: window.location.pathname;
 
-		if (!menu.find((el) => el.uri == uri)?.allowed_roles.includes(current_role)) {
+		if (!menu.find((el) => el.uri == uri)?.allowed_roles.includes(user?.role)) {
 			// check if the uri is inside a sub menu
 			let found = false;
 			menu.forEach((el) => {
@@ -96,17 +90,17 @@
 			// else refer to allowed roles of the parent
 			else {
 				let parent = menu.find((el) => el.sub?.find((el) => el.uri == uri));
-				if (!parent.allowed_roles.includes(current_role)) {
+				if (!parent.allowed_roles.includes(user?.role)) {
 					window.location.href = `/v2/`;
 				}
 			}
 		}
 
 		menu.forEach((el) => {
-			if (!el.allowed_roles.includes(current_role)) return;
+			if (!el.allowed_roles.includes(user?.role)) return;
 			__menu = [...__menu, el];
 		});
-	});
+	}
 </script>
 
 <div class="antialiased bg-gray-50 dark:bg-gray-900">
