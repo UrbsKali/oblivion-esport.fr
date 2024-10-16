@@ -34,7 +34,7 @@
 		<div class="flex flex-wrap items-center justify-between">
 			<div class="flex items-center justify-start">
 				<button
-					class="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+					class="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer sm:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
 				>
 					<svg
 						aria-hidden="true"
@@ -69,7 +69,7 @@
 					<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
 				</a>
 			</div>
-			<div class="flex items-center">
+			<div class="items-center hidden sm:flex">
 				<ul class="flex gap-10">
 					<li>
 						<a
