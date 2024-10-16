@@ -126,17 +126,22 @@
 	function parseItems(data) {
 		let items = [];
 		data?.forEach((element) => {
-			let el = [
-				{ value: element.name, data: element.id },
-				{ value: element.tournament_id.title, data: element.tournament_id.id }
-			];
-			items = [...items, el];
+			for (let i = 0; i < element.part_of.length; i++) {
+				let el = [
+					{ value: element.name, data: element.id },
+					{
+						value: element.part_of[i].tournament_id.title,
+						data: element.part_of[i].tournament_id.id
+					}
+				];
+				items = [...items, el];
+			}
 		});
 		return items;
 	}
 	const dbInfo = {
 		table: 'Teams',
-		key: 'id, name, tournament_id(title, id)'
+		key: 'id, name, part_of(team_id, tournament_id(title, id))'
 	};
 </script>
 
