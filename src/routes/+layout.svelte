@@ -2,6 +2,7 @@
 	import '../app.css';
 	import Topbar from '$lib/components/share/Topbar.svelte';
 	import { page } from '$app/stores';
+	import Footer from '$lib/components/share/Footer.svelte';
 
 	let is_on_admin_route = false;
 

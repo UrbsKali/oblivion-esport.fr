@@ -6,6 +6,7 @@
 
 	import Title from '$lib/components/utils/Title.svelte';
 	import Cursor from '$lib/components/share/Cursor.svelte';
+	import Footer from '$lib/components/share/Footer.svelte';
 
 	onMount(() => {
 		const rl = document.querySelector('#rl');
@@ -90,6 +91,7 @@
 	<div class="h-screen"></div>
 </div>
 <Cursor />
+<Footer />
 
 <style>
 	.landing {
