@@ -64,7 +64,7 @@
 					/></svg
 				>
 			</a>
-			<a href="twitch.tv/kckitt_" target="_blank">
+			<a href="https://twitch.tv/kckitt_" target="_blank">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="shareTwitch"
