@@ -3,7 +3,7 @@
 </script>
 
 <section class="min-h-screen overflow-hidden min-w-screen">
-	<div class="cross">
+	<div class="pt-16 cross md:pt-0">
 		<AuthForm />
 	</div>
 </section>
