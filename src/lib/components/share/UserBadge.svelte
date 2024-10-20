@@ -1,7 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
-	import { config } from '$lib/config';
 	import { loadUserdata, hideOnClickOutside } from '$lib/utils';
 	import { userdata } from '$lib/store';
 
@@ -45,7 +44,7 @@
 
 	const LogOut = () => {
 		supabase.auth.signOut().then(() => {
-			window.location.href = `${window.location.origin}${config.basePath}/login?redirect=${window.location.pathname}`;
+			window.location.href = `/v2/login?redirect=${window.location.pathname}`;
 		});
 	};
 </script>

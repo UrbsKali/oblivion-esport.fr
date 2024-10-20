@@ -1,5 +1,4 @@
 <script>
-	import { currentOrigin } from '$lib/config';
 	import { get_current_component } from 'svelte/internal';
 	import { hideOnClickOutside } from '$lib/utils';
 	import { onMount } from 'svelte';

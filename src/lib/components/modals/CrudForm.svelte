@@ -1,6 +1,8 @@
 <script>
 	// @ts-nocheck
 
+	import { readonly } from 'svelte/store';
+
 	export let type = 'Utilisateur';
 	export let type_accord = 'un';
 	export let action = 'Ajouter';
@@ -71,19 +73,26 @@
 				<div class="grid gap-4 mb-4 sm:grid-cols-2">
 					{#each fields as field}
 						<div class={field.wide ? 'col-span-2' : ''}>
-							<label
-								for="brand"
-								class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-								data-utils={field.data || ''}>{field.name}</label
-							>
+							{#if field.type !== 'duplicate'}
+								<label
+									for="random"
+									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+									data-utils={field.data || ''}>{field.name}</label
+								>
+							{/if}
 							{#if field.type === 'select'}
 								<select
 									id={field.id || field.name.toLowerCase()}
 									name={field.id || field.name.toLowerCase()}
 									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 									on:change={field.onChange || null}
+									readonly={field.readonly || false}
 								>
-									<option selected={!field.autoselect} value="NULL">----------</option>
+									{#if (field.readonly || false) == false}<option
+											selected={!field.autoselect}
+											value="NULL">----------</option
+										>
+									{/if}
 									{#each field.options as option}
 										<option
 											value={option.value}
@@ -104,6 +113,7 @@
 									min={field.min || 0}
 									max={field.max || 2000}
 									step={field.step || 1}
+									readonly={field.readonly || false}
 								/>
 							{:else if field.type === 'textarea'}
 								<textarea
@@ -113,7 +123,130 @@
 									placeholder={field.placeholder || field.name.toLowerCase()}
 									required={field.required}
 									value={field.value || ''}
+									readonly={field.readonly || false}
 								></textarea>
+							{:else if field.type === 'img'}
+								<input
+									type="file"
+									name={field.id || field.name.toLowerCase()}
+									id={field.id || field.name.toLowerCase()}
+									accept="image/png, image/jpeg"
+									class="hidden"
+									on:change={field.onChange ||
+										((e) => {
+											console.log(e.target.files[0]);
+											const file = e.target.files[0];
+											const reader = new FileReader();
+											reader.onload = (e) => (field.value = e.target.result);
+											reader.readAsDataURL(file);
+
+											const label = document.querySelector(
+												`label[for=${field.id || field.name.toLowerCase()}]`
+											);
+											label.innerHTML = '';
+											const img = document.createElement('img');
+											img.src = URL.createObjectURL(file);
+											img.alt = field.name;
+											img.className = 'object-contain w-full h-full rounded-lg ';
+											label.appendChild(img);
+										})}
+								/>
+								<label
+									for={field.id || field.name.toLowerCase()}
+									class="flex items-center justify-center w-full h-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								>
+									{#if field.value}
+										<img
+											src={field.value}
+											alt={field.name}
+											class="object-contain w-full h-full rounded-lg"
+										/>
+									{:else}
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 24 24"
+											class="w-6 h-6 fill-gray-400"
+											><path
+												d="M12 8.25a.75.75 0 0 1 .75.75v2.25H15a.75.75 0 0 1 0 1.5h-2.25V15a.75.75 0 0 1-1.5 0v-2.25H9a.75.75 0 0 1 0-1.5h2.25V9a.75.75 0 0 1 .75-.75Z"
+											></path><path
+												d="M3 3a2 2 0 0 1 2-2h9.982a2 2 0 0 1 1.414.586l4.018 4.018A2 2 0 0 1 21 7.018V21a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3Zm2-.5a.5.5 0 0 0-.5.5v18a.5.5 0 0 0 .5.5h14a.5.5 0 0 0 .5-.5V7.018a.5.5 0 0 0-.146-.354l-4.018-4.018a.5.5 0 0 0-.354-.146H5Z"
+											></path></svg
+										>
+									{/if}
+								</label>
+							{:else if field.type === 'duplicate'}
+								<!--Duplicate is a + btn to replicate the last collumn -->
+								<button
+									type="button"
+									class="flex items-center justify-center w-full h-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+									on:click={() => {
+										const clean_filter = fields.filter((el) => el.type != 'duplicate');
+										let lasts = []; // get the last full row, 1 if wide, 2 if not
+										for (let i = clean_filter.length - 1; i >= 0; i--) {
+											if (lasts.length == 2) break;
+											if (clean_filter[i].wide) {
+												lasts.push({ ...clean_filter[i] });
+												break;
+											} else {
+												lasts.push({ ...clean_filter[i] });
+											}
+										}
+
+										// drop the values of lasts to avoid duplicate
+										lasts = lasts.map((el) => {
+											el.value = '';
+											el.data = '';
+											// add number at the end of the id
+											const num = parseInt(el.id.match(/\d+/g));
+											if (num) {
+												el.id = el.id.replace(/\d+/g, num + 1);
+											} else {
+												el.id = el.id + '_1';
+											}
+											return el;
+										});
+
+										fields = [
+											...clean_filter,
+											...lasts.reverse(),
+											{ type: 'duplicate', wide: true }
+										];
+									}}
+									>+
+								</button>
+							{:else if field.type === 'autocomplete'}
+								<input
+									type="text"
+									id={field.id || field.name.toLowerCase()}
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+									placeholder={field.placeholder || field.name.toLowerCase()}
+									required={field.required}
+									value={field.value || ''}
+									data-utils=""
+									readonly={field.readonly || false}
+									name={field.id || field.name.toLowerCase()}
+									on:input={async (e) => {
+										field.completion = await field.onChange(e);
+									}}
+								/>
+								{#if field.completion?.length > 0}
+									<div
+										class="absolute z-10 block w-full p-2 pl-10 mt-1 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+									>
+										{#each field.completion as c}
+											<button
+												on:click={(e) => {
+													field.value = c.text;
+													field.data = c.value;
+													field.completion = [];
+												}}
+											>
+												{c.text}
+											</button>
+											<br />
+										{/each}
+									</div>
+								{/if}
 							{:else}
 								<input
 									type={field.type}
@@ -123,6 +256,7 @@
 									placeholder={field.placeholder || field.name.toLowerCase()}
 									required={field.required}
 									value={field.value || ''}
+									readonly={field.readonly || false}
 								/>
 							{/if}
 						</div>

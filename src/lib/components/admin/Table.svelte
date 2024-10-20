@@ -35,7 +35,7 @@
 
 	$: {
 		page = [];
-		if (items.length > 0) {
+		if (items?.length > 0) {
 			for (let i = 0; i <= total_items / size; i++) {
 				page = [...page, i + 1];
 			}
@@ -67,8 +67,16 @@
 			return;
 		}
 		total_items = count;
-		items = parseItems ? parseItems(data) : data;
-
+		// if parseItems is async we need to wait for it
+		if (parseItems) {
+			if (parseItems.constructor.name === 'AsyncFunction') {
+				items = await parseItems(data);
+			} else {
+				items = parseItems(data);
+			}
+		} else {
+			items = data;
+		}
 		return items;
 	}
 
@@ -100,16 +108,21 @@
 	});
 
 	onMount(async () => {
+		mounted = true;
+
 		let tmp = loadSettings(hash);
 		if (tmp.length > 0) {
 			filters = tmp;
 		}
 		items = await loadPage(0, getFiltersString(filters));
-		mounted = true;
 
 		const dropdown = document.querySelector('#filterDropdown-' + hash);
 		setupDropdown();
 		document.body.appendChild(dropdown);
+
+		onresize = () => {
+			setupDropdown();
+		};
 	});
 
 	function setupDropdown() {
@@ -125,19 +138,18 @@
 		}
 	}
 
-	onresize = () => {
-		setupDropdown();
-	};
-
 	onDestroy(() => {
-		const dropdown = document.querySelector('#filterDropdown-' + hash);
-		dropdown.remove();
+		try {
+			document.body.removeChild(document.querySelector('#filterDropdown-' + hash));
+		} catch (e) {
+			console.error(e);
+		}
 	});
 </script>
 
-<section class="bg-gray-50 dark:bg-gray-900 sm:p-5">
-	<div class="max-w-screen-xl mx-auto sm:px-4 lg:px-12">
-		<div class="relative bg-white rounded-lg shadow-md dark:bg-gray-800">
+<section class="w-full">
+	<div>
+		<div class="relative rounded-lg shadow-md backdrop-blur-lg">
 			<div
 				class="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4"
 			>
@@ -300,7 +312,7 @@
 						{#each items as item, i}
 							<tr class="border-b dark:border-gray-700">
 								{#each item as key}
-									{#if key.value === item[0].value && headers[0] === 'Nom'}
+									{#if key.value === item[0].value && item[0].avatar}
 										<th
 											scope="row"
 											class="flex items-center px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -341,7 +353,13 @@
 										</button>
 									</td>
 								{/if}
-							</tr>{/each}
+							</tr>
+						{/each}
+						{#if items.length == 0}
+							<tr>
+								<td class="px-4 py-3 text-center" colspan={headers.length}> Aucun résultat </td>
+							</tr>
+						{/if}
 					</tbody>
 				</table>
 			</div>
