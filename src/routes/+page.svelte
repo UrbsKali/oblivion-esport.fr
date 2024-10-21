@@ -22,10 +22,10 @@
 
 		const gltfLoader = new GLTFLoader();
 		let car = null;
-		gltfLoader.load('/v2/3d/octane.glb', (gltf) => {
+		gltfLoader.load('/v2/3d/EWC.glb', (gltf) => {
 			scene.add(gltf.scene);
 			// scale it
-			gltf.scene.scale.set(0.03, 0.03, 0.03);
+			gltf.scene.scale.set(10, 10, 10);
 			// move the car (inside the scene) to center of rotation
 			gltf.scene.children[0].position.x = 0;
 			gltf.scene.children[0].position.y = 0;
@@ -33,11 +33,8 @@
 			// rotate it
 			gltf.scene.children[0].rotation.x = -Math.PI / 8;
 
-			// rotate it
-			/*
-			gltf.scene.rotation.x = -Math.PI / 16;
-			gltf.scene.rotation.z = Math.PI / 3;
-			gltf.scene.rotation.y = Math.PI / 6;*/
+			// move down
+			gltf.scene.position.y = -1;
 
 			car = gltf.scene;
 		});
@@ -84,8 +81,25 @@
 		></video>
 	</div>
 </div>
-<div class="border-b border-gray-700 rl">
-	<div class="h-screen" id="rl"></div>
+<div class="flex flex-row justify-center w-full gap-5 border-b border-gray-700">
+	<div class="w-6/12 aspect-square min-w-96" id="rl"></div>
+	<!--Add text floating next to the crown-->
+	<div>
+		<div class="flex flex-col items-center justify-center h-96">
+			<div class="flex flex-col items-center justify-center w-9/12 h-full">
+				<div class="text-center">
+					<h1 class="text-4xl font-bold text-gray-300 w-max">ELEON WORLD CUP</h1>
+					<p class="text-lg text-gray-300">300 € de cashprize, en seriez-vous digne ?</p>
+					<div>
+						<button class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
+							>En savoir +</button
+						>
+						<button class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500">Inscription</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="border-b border-gray-700 lol">
 	<div class="h-screen"></div>
