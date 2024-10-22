@@ -13,7 +13,9 @@
 	<div class="flex flex-col gap-1">
 		<h2 class="text-2xl font-bold text-white">{title}</h2>
 		<div class="flex flex-col gap-5">
-			<a href={url} class="px-4 py-2 text-center text-white rounded-md bg-primary-500 max-w-32"
+			<a
+				href={url}
+				class="px-4 py-2 text-center text-white border rounded-md border-primary-700 backdrop-blur-lg max-w-32 bg-opacity-30 bg-primary-500 hover:bg-opacity-70"
 				>Lire l'article</a
 			>
 		</div>
