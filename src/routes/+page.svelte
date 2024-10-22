@@ -7,18 +7,33 @@
 	import Title from '$lib/components/utils/Title.svelte';
 	import Cursor from '$lib/components/share/Cursor.svelte';
 	import Footer from '$lib/components/share/Footer.svelte';
-
-	let currentIndex = 0;
-	const images = [
-		{ src: 'https://placecats.com/350/200', alt: 'Image 1' },
-		{ src: 'https://placecats.com/350/200', alt: 'Image 2' },
-		{ src: 'https://placecats.com/350/200', alt: 'Image 3' }
-	];
+	import Card from '$lib/components/share/Card.svelte';
 
 	const articles = [
-		{ title: 'Article 1', description: 'Description for article 1' },
-		{ title: 'Article 2', description: 'Description for article 2' },
-		{ title: 'Article 3', description: 'Description for article 3' }
+		{
+			title: 'Lancement de la ELEON WOLRD CUP',
+			description:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+			image: 'https://placecats.com/350/200'
+		},
+		{
+			title: 'Nouveau partenaire : AFK Arena',
+			description:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+			image: 'https://placecats.com/350/200'
+		},
+		{
+			title: 'Retour sur la TWC 5',
+			description:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+			image: 'https://placecats.com/350/200'
+		},
+		{
+			title: 'Nouveau site web',
+			description:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+			image: 'https://placecats.com/350/200'
+		}
 	];
 
 	onMount(() => {
@@ -201,56 +216,21 @@
 	<div class="flex flex-col items-center justify-center w-full p-5">
 		<h1 class="text-4xl font-bold text-white">Nos Actus</h1>
 	</div>
-	<div class="h-screen">
-		<div class="flex justify-center h-full">
-			<!-- Carousel -->
-			<div class="w-1/4 h-full overflow-hidden">
-				<div class="flex flex-col gap-5 carousel">
-					{#each images as image, index}
-						<div class="carousel-item {index === currentIndex ? 'active' : ''}">
-							<img src={image.src} alt={image.alt} class="object-cover rounded-lg h-52" />
-						</div>
-					{/each}
-				</div>
-			</div>
-
-			<!-- Article Details -->
-			<div class="p-5 pt-10 text-white mt-52">
-				<h2 class="text-3xl font-bold">{articles[currentIndex].title}</h2>
-				<p class="mt-4 text-lg">{articles[currentIndex].description}</p>
-			</div>
+	<div class="flex flex-col items-center justify-center w-full h-full p-5">
+		<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+			{#each articles as article}
+				<Card title={article.title} description={article.description} image={article.image} />
+			{/each}
 		</div>
+	</div>
+	<div class="flex flex-col items-center justify-center w-full p-5">
+		<a href="/v2/" class="text-center hover:text-primary-50">Voir plus d'article</a>
 	</div>
 </div>
 <Cursor />
 <Footer />
 
 <style>
-	.carousel {
-		display: flex;
-		transition: transform 0.5s ease-in-out;
-	}
-	.carousel::after {
-		content: '';
-		width: 100%;
-		height: 41.5rem;
-		top: -42.75rem;
-		position: relative;
-		background: linear-gradient(
-			rgba(17, 24, 39, 1) 0%,
-			rgba(0, 0, 0, 0) 50%,
-			rgba(17, 24, 39, 1) 100%
-		);
-		z-index: 1;
-	}
-	.carousel-item {
-		min-width: 100%;
-		transition: opacity 0.5s ease-in-out;
-		opacity: 1;
-	}
-	.carousel-item.active {
-		opacity: 1;
-	}
 	.landing {
 		filter: brightness(0.8);
 		height: 100vh;
