@@ -152,83 +152,90 @@
 	}
 </script>
 
-<div class="border-b border-gray-700 landing enable-cursor">
-	<div class="relative z-10 h-screen">
-		<div class="flex items-center justify-center w-6/12 h-full">
-			<div class="text-center">
-				<Title size={200} />
-				<p class="text-lg text-gray-300">Vivez l'expérience e-sport</p>
+<div class="enable-cursor">
+	<div class="border-b border-gray-700 landing">
+		<div class="relative z-10 h-screen">
+			<div class="flex items-center justify-center w-6/12 h-full">
+				<div class="text-center">
+					<Title size={200} />
+					<p class="text-lg text-gray-300">Vivez l'expérience e-sport</p>
+				</div>
 			</div>
 		</div>
+		<div id="teaser">
+			<video
+				src="/v2/Teaser.mp4"
+				class="absolute top-0 left-0 object-cover w-full h-full opacity-50 pointer-events-none -z-10"
+				autoplay
+				muted
+			></video>
+		</div>
 	</div>
-	<div id="teaser">
-		<video
-			src="/v2/Teaser.mp4"
-			class="absolute top-0 left-0 object-cover w-full h-full opacity-50 pointer-events-none -z-10"
-			autoplay
-			muted
-		></video>
+	<div class="w-full border-b border-gray-700">
+		<div class="flex flex-col items-center justify-center w-full p-5">
+			<h1 class="text-4xl font-bold text-white">Nos Tournois</h1>
+		</div>
+
+		<!-- ELEON WOLRD CUP -->
+		<div class="flex flex-col justify-center gap-5 sm:flex-row">
+			<div class="w-6/12 aspect-square min-w-96" id="rl"></div>
+			<div class="flex flex-col items-center justify-center">
+				<div class="flex flex-col items-center justify-center w-9/12 h-full">
+					<div class="text-center">
+						<h1 class="text-4xl font-bold text-gray-300 w-max">ELEON WORLD CUP</h1>
+						<p class="text-lg text-gray-300">300 € de cashprize, en êtes-vous digne ?</p>
+						<div>
+							<button class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
+								>En savoir +</button
+							>
+							<button class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
+								>Inscription</button
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- TWC 5 -->
+		<div class="flex flex-col justify-center gap-5 sm:flex-row">
+			<div class="flex flex-col items-center justify-center">
+				<div class="flex flex-col items-center justify-center w-9/12 h-full">
+					<div class="text-center">
+						<h1 class="text-4xl font-bold text-gray-300 w-max">TRANKIL WOLD CUP</h1>
+						<p class="text-lg text-gray-300">500 € de cashprize, Nabot viens m'aider !</p>
+						<div>
+							<button class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
+								>En savoir +</button
+							>
+							<button class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
+								>Inscription</button
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="w-6/12 aspect-square min-w-96" id="twc"></div>
+		</div>
 	</div>
-</div>
-<div class="w-full border-b border-gray-700">
-	<div class="flex flex-col items-center justify-center w-full p-5">
-		<h1 class="text-4xl font-bold text-white">Nos Tournois</h1>
+	<div class="border-b border-gray-700 lol">
+		<div class="flex flex-col items-center justify-center w-full p-5">
+			<h1 class="text-4xl font-bold text-white">Nos Actus</h1>
+		</div>
+		<div class="flex flex-col items-center justify-center w-full h-full p-5">
+			<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+				{#each articles as article}
+					<Card title={article.title} description={article.description} image={article.image} />
+				{/each}
+			</div>
+		</div>
+		<div class="flex flex-col items-center justify-center w-full p-5">
+			<a href="/v2/" class="text-center hover:text-primary-50">Voir plus d'article</a>
+		</div>
 	</div>
 
-	<!-- ELEON WOLRD CUP -->
-	<div class="flex flex-col justify-center gap-5 sm:flex-row">
-		<div class="w-6/12 aspect-square min-w-96" id="rl"></div>
-		<div class="flex flex-col items-center justify-center">
-			<div class="flex flex-col items-center justify-center w-9/12 h-full">
-				<div class="text-center">
-					<h1 class="text-4xl font-bold text-gray-300 w-max">ELEON WORLD CUP</h1>
-					<p class="text-lg text-gray-300">300 € de cashprize, en êtes-vous digne ?</p>
-					<div>
-						<button class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
-							>En savoir +</button
-						>
-						<button class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500">Inscription</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- TWC 5 -->
-	<div class="flex flex-col justify-center gap-5 sm:flex-row">
-		<div class="flex flex-col items-center justify-center">
-			<div class="flex flex-col items-center justify-center w-9/12 h-full">
-				<div class="text-center">
-					<h1 class="text-4xl font-bold text-gray-300 w-max">TRANKIL WOLD CUP</h1>
-					<p class="text-lg text-gray-300">500 € de cashprize, Nabot viens m'aider !</p>
-					<div>
-						<button class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
-							>En savoir +</button
-						>
-						<button class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500">Inscription</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="w-6/12 aspect-square min-w-96" id="twc"></div>
-	</div>
-</div>
-<div class="border-b border-gray-700 lol">
-	<div class="flex flex-col items-center justify-center w-full p-5">
-		<h1 class="text-4xl font-bold text-white">Nos Actus</h1>
-	</div>
-	<div class="flex flex-col items-center justify-center w-full h-full p-5">
-		<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-			{#each articles as article}
-				<Card title={article.title} description={article.description} image={article.image} />
-			{/each}
-		</div>
-	</div>
-	<div class="flex flex-col items-center justify-center w-full p-5">
-		<a href="/v2/" class="text-center hover:text-primary-50">Voir plus d'article</a>
-	</div>
+	<Footer />
 </div>
 <Cursor />
-<Footer />
 
 <style>
 	.landing {
