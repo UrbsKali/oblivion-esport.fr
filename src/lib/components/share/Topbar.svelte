@@ -16,11 +16,14 @@
 	});
 
 	page.subscribe((value) => {
-		enable_cursor = document.querySelector('.cursor') != null;
-		if (!enable_cursor) {
-			document.addEventListener('DOMContentLoaded', () => {
-				enable_cursor = document.querySelector('.cursor') != null;
-			});
+		// only client side
+		if (typeof window !== 'undefined') {
+			enable_cursor = document.querySelector('.cursor') != null;
+			if (!enable_cursor) {
+				document.addEventListener('DOMContentLoaded', () => {
+					enable_cursor = document.querySelector('.cursor') != null;
+				});
+			}
 		}
 	});
 
