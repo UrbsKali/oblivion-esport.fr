@@ -1,7 +1,6 @@
 <script>
 	import { userdata } from '$lib/store';
 	import { loadUserdata } from '$lib/utils';
-	import { config } from '$lib/config';
 	import { onMount } from 'svelte';
 	import UserBadge from './UserBadge.svelte';
 
@@ -92,13 +91,7 @@
 							>Staff</a
 						>
 					</li>
-					<li>
-						<a
-							href="/v2/"
-							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-							>Partenaires</a
-						>
-					</li>
+
 					<li>
 						<a
 							href="/v2/"

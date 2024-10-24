@@ -87,7 +87,11 @@
 	function animateOblivon() {
 		currentPercentage += (scrollPercentage - currentPercentage) * 0.1;
 		lastPercentage = currentPercentage;
-		oblivion.style.top = currentPercentage * timelineHeight + lerp(72, 0, currentPercentage) + 'px';
+		let min = 0.975;
+		oblivion.style.top =
+			currentPercentage * timelineHeight * lerp(1.5, min, 1 - Math.exp(-currentPercentage * 3)) +
+			lerp(72, 0, currentPercentage) +
+			'px';
 
 		// if the oblivion obj is close to a cup, make it rotate 360 degrees
 		const closest = cups_positions.reduce((prev, curr) => {
