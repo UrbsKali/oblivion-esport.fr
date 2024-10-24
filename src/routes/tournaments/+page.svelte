@@ -148,7 +148,7 @@
 									<div>
 										<a
 											class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
-											href="/v2/tournaments/{item.slug}">En savoir +</a
+											href="/v2/tournaments/">En savoir +</a
 										>
 										<button class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
 											>Inscription</button
@@ -184,7 +184,7 @@
 									<div>
 										<a
 											class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
-											href="/v2/tournaments/{item.slug}">En savoir +</a
+											href="/v2/tournaments/">En savoir +</a
 										>
 										<button class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
 											>Inscription</button
