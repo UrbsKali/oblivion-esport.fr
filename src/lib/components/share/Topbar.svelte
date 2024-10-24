@@ -3,6 +3,7 @@
 	import { loadUserdata } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import UserBadge from './UserBadge.svelte';
+	import { page } from '$app/stores';
 
 	let user;
 	let skip = false;
@@ -11,6 +12,15 @@
 	userdata.subscribe((value) => {
 		if (value) {
 			user = value;
+		}
+	});
+
+	page.subscribe((value) => {
+		enable_cursor = document.querySelector('.cursor') != null;
+		if (!enable_cursor) {
+			document.addEventListener('DOMContentLoaded', () => {
+				enable_cursor = document.querySelector('.cursor') != null;
+			});
 		}
 	});
 

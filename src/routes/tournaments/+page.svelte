@@ -202,8 +202,8 @@
 			{/each}
 		</div>
 	</div>
+	<Footer />
 </div>
-<Footer />
 
 <style>
 	.cup::after {
