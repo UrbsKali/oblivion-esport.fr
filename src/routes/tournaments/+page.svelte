@@ -55,26 +55,27 @@
 	let lastPercentage = 0;
 	let t = 0;
 	const FPS = 30;
+	let rotation = 0;
 
 	let cups_positions = [];
 
 	onMount(() => {
+		oblivion = document.getElementById('oblivion');
+		let middle = window.innerWidth / 2;
+		oblivion.style.left = middle - 25 + 'px';
+
 		// add the middle x and y coordinates for each .cup element
 		const cups = document.querySelectorAll('.cup');
 		cups.forEach((cup) => {
 			const rect = cup.getBoundingClientRect();
 			cup.dataset.middleX = rect.left + rect.width / 2;
 			cup.dataset.middleY = rect.top + rect.height / 2;
-			cups_positions.push(rect.top + rect.height / 2);
+			cups_positions.push(rect.top + rect.height / 2 - 16);
 		});
-		oblivion = document.getElementById('oblivon');
-		let middle = window.innerWidth / 2;
-		oblivion.style.left = middle - 24 + 'px';
 
 		const timeline = document.getElementById('timeline');
 		const timelineRect = timeline.getBoundingClientRect();
 		timelineHeight = timelineRect.height;
-		console.log(timelineHeight);
 
 		window.addEventListener('scroll', () => {
 			scrollPercentage = window.scrollY / (document.body.scrollHeight - window.innerHeight);
@@ -88,40 +89,50 @@
 		currentPercentage += (scrollPercentage - currentPercentage) * 0.1;
 		lastPercentage = currentPercentage;
 		let min = 0.975;
-		oblivion.style.top =
+
+		let currentY =
 			currentPercentage * timelineHeight * lerp(1.5, min, 1 - Math.exp(-currentPercentage * 3)) +
-			lerp(72, 0, currentPercentage) +
-			'px';
+			lerp(72, 0, currentPercentage);
 
-		// if the oblivion obj is close to a cup, make it rotate 360 degrees
+		let can_hover = true;
+
 		const closest = cups_positions.reduce((prev, curr) => {
-			return Math.abs(curr - currentPercentage * timelineHeight) <
-				Math.abs(prev - currentPercentage * timelineHeight)
-				? curr
-				: prev;
+			return Math.abs(curr - currentY) < Math.abs(prev - currentY) ? curr : prev;
 		});
-		if (Math.abs(closest - currentPercentage * timelineHeight) < 50) {
-			oblivion.style.transform = 'rotate(360deg)';
+		if (Math.abs(closest - currentY) < 30) {
+			currentY = closest;
+			can_hover = false;
+			oblivion.classList.add('animate-spin');
 		} else {
-			oblivion.style.transform = 'rotate(0deg)';
+			oblivion.classList.remove('animate-spin');
 		}
-
 		// make it hover if not scrolling
-		if (Math.abs(lastPercentage - currentPercentage) < 0.01) {
-			oblivion.style.transform = 'rotate(0deg) translateY(' + Math.sin(t) * 10 + 'px)';
-			t += 0.025;
+		if (Math.abs(lastPercentage - currentPercentage) < 0.01 && can_hover) {
+			currentY += Math.sin(t) * 10;
+			t += 0.05;
 			if (t > Math.PI * 2) {
 				t = 0;
-				oblivion.style.transform = 'rotate(360deg)';
 			}
 		}
+
+		oblivion.style.top = currentY + 'px';
 	}
+
+	function rotateOblivion(reset = false) {
+		if (reset) {
+			rotation = 0;
+		} else {
+			rotation += 360;
+		}
+		oblivion.style.transform = 'rotate(' + rotation + 'deg)';
+	}
+
 	function lerp(start, end, t) {
 		return start * (1 - t) + end * t;
 	}
 </script>
 
-<img id="oblivon" class="absolute z-20 hidden sm:block" src="/v2/oblivion.png" />
+<img id="oblivion" class="absolute z-20 hidden sm:block" src="/v2/oblivion.png" />
 <Cursor />
 <div class="enable-cursor">
 	<div class="container py-8 mx-auto">
@@ -228,9 +239,21 @@
 		left: calc(50% - 1px);
 		top: 40px;
 	}
-	#oblivon {
+	#oblivion {
 		width: 33px;
 		height: 33px;
 		transition: all 0.1s ease-out;
+	}
+
+	.animate-spin {
+		animation: rotate 1s linear infinite;
+	}
+	@keyframes rotate {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
 	}
 </style>
