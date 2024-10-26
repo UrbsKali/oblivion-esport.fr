@@ -107,7 +107,11 @@
 					target: document.body,
 					props: {
 						title: 'Inscription réussie',
-						message: 'Un email de confirmation vous a été envoyé.'
+						message: 'Un email de confirmation vous a été envoyé.',
+
+						onClose: () => {
+							window.location.href = '/v2/';
+						}
 					}
 				});
 			}
