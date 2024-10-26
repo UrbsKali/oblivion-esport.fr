@@ -51,6 +51,7 @@
 
 	const carta = new Carta({
 		sanitizer: false,
+		theme: 'github-dark',
 		extensions: [
 			attachment({
 				async upload() {
@@ -90,6 +91,21 @@
 
 		<!--Markdown editor-->
 		<MarkdownEditor bind:value mode="tabs" theme="github" {carta} />
+
+		<!--Save button-->
+		<button
+			class="p-2 mt-4 text-white bg-blue-500 rounded-md"
+			on:click={async () => {
+				// update the body of the selected tournament
+				const { error } = await supabase
+					.from('tournaments_info')
+					.update({ body: value })
+					.eq('slug', selectedTournament.slug.slug);
+				if (error) {
+					console.error(error);
+				}
+			}}>Enregistrer</button
+		>
 	{/if}
 </section>
 
