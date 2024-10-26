@@ -14,7 +14,7 @@ export const config = {
 
 
 export function parseURI(uri) {
-    if (typeof uri == 'string') return basePath + uri;
+    if (typeof uri == 'string') return uri;
     else {
         // go recusively and check each uri props 
         uri.forEach(element => {

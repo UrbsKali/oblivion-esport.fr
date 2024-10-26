@@ -92,3 +92,6 @@
 		<MarkdownEditor bind:value mode="tabs" theme="github" {carta} />
 	{/if}
 </section>
+
+<style>
+</style>
