@@ -2,51 +2,32 @@
 	import Cursor from '$lib/components/share/Cursor.svelte';
 	import Footer from '$lib/components/share/Footer.svelte';
 	import { onMount } from 'svelte';
+	import { supabase } from '$lib/supabaseClient';
 
 	let items = [
 		{
 			title: 'ELEON WORLD CUP',
-			content: 'Description for event 1',
-			date: '2024-11-24',
-			slug: 'eleon-world-cup'
-		},
-		{
-			title: 'Trankil World Cup 5',
-			content: 'Description for event 2',
-			date: '2024-08-01',
-			slug: 'trankil-world-cup5'
-		},
-		{
-			title: 'Trankil Invitational',
-			content: 'Description for event 3',
-			date: '2023-12-12',
-			slug: 'trankil-invitational'
-		},
-		{
-			title: 'Trankil World Cup 4',
-			content: 'Description for event 4',
-			date: '2023-08-01',
-			slug: 'trankil-world-cup-4'
-		},
-		{
-			title: 'Trankil World Cup 3',
-			content: 'Description for event 5',
-			date: '2022-08-01',
-			slug: 'trankil-world-cup-3'
-		},
-		{
-			title: 'Trankil World Cup 2',
-			content: 'Description for event 6',
-			date: '2021-08-01',
-			slug: 'trankil-world-cup-2'
-		},
-		{
-			title: 'Trankil World Cup 1',
-			content: 'Description for event 7',
-			date: '2020-08-01',
-			slug: 'trankil-world-cup-1'
+			slug: {
+				slug: 'eleon-world-cup',
+				description: 'Description for event 1',
+				image:
+					'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/eleon-world-cup/main.png'
+			},
+			start: '2024-11-24'
 		}
 	];
+
+	async function loadTournaments() {
+		const { data, error } = await supabase
+			.from('Tournaments')
+			.select('start, title, slug(slug, description, image), can_register')
+			.order('start', { ascending: false });
+		if (error) {
+			console.error('error', error);
+		} else {
+			items = data;
+		}
+	}
 
 	let currentPercentage = 0;
 	let scrollPercentage = 0;
@@ -59,7 +40,9 @@
 
 	let cups_positions = [];
 
-	onMount(() => {
+	onMount(async () => {
+		await loadTournaments();
+
 		oblivion = document.getElementById('oblivion');
 		let middle = window.innerWidth / 2;
 		oblivion.style.left = middle - 25 + 'px';
@@ -150,7 +133,7 @@
 			),
 			linear-gradient(0deg, rgb(14, 19, 31, 1) 10%, rgb(14, 19, 31, 0) 50%, rgb(14, 19, 31, 1) 90%),
 			linear-gradient(90deg, rgb(14, 19, 31, 1) 0%, rgb(14, 19, 31, 0) 2%, rgb(14, 19, 31, 0) 98%, rgb(14, 19, 31, 1) 100%),
-			url('https://placecats.com/350/200');"
+			url('{item.slug.image}');"
 					>
 						<div
 							class="flex flex-col items-center justify-center p-5 bg-gray-900 bg-opacity-25 border border-gray-700 rounded-lg lg:p-10 backdrop-blur-lg"
@@ -158,12 +141,12 @@
 							<div class="flex flex-col items-center justify-center w-9/12 h-full">
 								<div class="">
 									<h1 class="text-4xl font-bold text-gray-300 w-max">{item.title}</h1>
-									<span class="text-lg text-left text-gray-500">// {item.date}</span>
-									<p class="text-lg text-gray-300">{item.content}</p>
+									<span class="text-lg text-left text-gray-500">// {item.start}</span>
+									<p class="text-lg text-gray-300">{item.slug.description}</p>
 									<div>
 										<a
 											class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
-											href="/v2/tournaments/{item.slug}">En savoir +</a
+											href="/v2/tournaments/{item.slug.slug}">En savoir +</a
 										>
 										<button class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
 											>Inscription</button
@@ -185,7 +168,7 @@
 	),
 	linear-gradient(0deg, rgb(14, 19, 31, 1) 10%, rgb(14, 19, 31, 0) 50%, rgb(14, 19, 31, 1) 90%),
 	linear-gradient(90deg, rgb(14, 19, 31, 1) 0%, rgb(14, 19, 31, 0) 2%, rgb(14, 19, 31, 0) 98%, rgb(14, 19, 31, 1) 100%),
-	url('https://placecats.com/350/200');"
+	url('{item.slug.image}');"
 					>
 						<div class="hidden w-6/12 md:block aspect-square min-w-96" id="rl"></div>
 						<div
@@ -194,12 +177,12 @@
 							<div class="flex flex-col items-center justify-center w-9/12 h-full">
 								<div class="text-right">
 									<h1 class="text-4xl font-bold text-gray-300 w-max">{item.title}</h1>
-									<span class="text-lg text-left text-gray-500">{item.date} //</span>
-									<p class="text-lg text-gray-300">{item.content}</p>
+									<span class="text-lg text-left text-gray-500">{item.start} //</span>
+									<p class="text-lg text-gray-300">{item.slug.description}</p>
 									<div>
 										<a
 											class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
-											href="/v2/tournaments/{item.slug}">En savoir +</a
+											href="/v2/tournaments/{item.slug.slug}">En savoir +</a
 										>
 										<button class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
 											>Inscription</button

@@ -60,6 +60,18 @@
 			uri: '/v2/admin/ressources',
 			icon: 'link',
 			allowed_roles: ['superadmin', 'admin', 'casteur']
+		},
+		{
+			title: 'Edition des tournois',
+			uri: '/v2/admin/tournament-edition',
+			icon: 'pencil-outline',
+			allowed_roles: ['superadmin', 'admin']
+		},
+		{
+			title: 'Blog',
+			uri: '/v2/admin/blog',
+			icon: 'document-text',
+			allowed_roles: ['superadmin', 'admin']
 		}
 	];
 
