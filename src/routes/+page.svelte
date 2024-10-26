@@ -206,7 +206,7 @@
 				<div class="flex flex-col items-center justify-center w-9/12 h-full">
 					<div class="text-center">
 						<h1 class="text-4xl font-bold text-gray-300 w-max">TRANKIL WOLD CUP</h1>
-						<p class="text-lg text-gray-300">500 € de cashprize, Nabot viens m'aider !</p>
+						<p class="text-lg text-gray-300">500 € de cashprize, une occasion de vous démarquer</p>
 						<div class="p-8">
 							<a
 								class="px-4 py-3 mt-5 text-white border rounded-md border-primary-500"
