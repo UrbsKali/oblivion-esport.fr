@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { config } from '$lib/config';
+	import SucessModal from '../modals/SucessModal.svelte';
 
 	const AuthType = {
 		login: 'Login',
@@ -88,8 +89,36 @@
 			await handleLogin();
 		} else if (auth_type === AuthType.reset) {
 			await handleReset();
+		} else {
+			await handleRegister();
 		}
 	};
+
+	async function handleRegister() {
+		try {
+			loading = true;
+			const { data, error } = await supabase.auth.signUp({
+				email: email,
+				password: password
+			});
+			if (error) throw error;
+			if (data) {
+				new SucessModal({
+					target: document.body,
+					props: {
+						title: 'Inscription réussie',
+						message: 'Un email de confirmation vous a été envoyé.'
+					}
+				});
+			}
+		} catch (error) {
+			if (error instanceof Error) {
+				alert(error.message);
+			}
+		} finally {
+			loading = false;
+		}
+	}
 
 	function parseRedirectURI(redirect_uri: string) {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -99,7 +128,7 @@
 		} else if (redirect_uri == '/') {
 			return window.location.origin + config.basePath;
 		} else {
-			return config.basePath + redirect_uri;
+			return redirect_uri;
 		}
 	}
 </script>

@@ -41,8 +41,10 @@
 	}
 </script>
 
-<div class="cursor" bind:this={cursor}></div>
-<div class="cursor-inner" bind:this={cursorInner}></div>
+<div class="hidden sm:block">
+	<div class="cursor" bind:this={cursor}></div>
+	<div class="cursor-inner" bind:this={cursorInner}></div>
+</div>
 
 <style>
 	:global(.enable-cursor) {

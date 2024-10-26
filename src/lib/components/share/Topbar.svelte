@@ -118,11 +118,12 @@
 				{#if user}
 					<UserBadge />
 				{:else}
-					<button
+					<a
 						class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white border border-white rounded-lg focus:ring-4 focus:ring-white focus:outline-none bg-opacity-10 hover:bg-gray-900"
+						href="/v2/register"
 					>
 						Register
-					</button>
+					</a>
 					<a
 						class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
 						href="/v2/login"

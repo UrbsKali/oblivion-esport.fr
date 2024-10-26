@@ -19,7 +19,7 @@
 				'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/eleon-world-cup/main.png'
 		},
 		{
-			title: 'Nouveau partenaire : AFK Arena',
+			title: 'Nouveau partenaire : AFK Journey',
 			description:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
 			image:
