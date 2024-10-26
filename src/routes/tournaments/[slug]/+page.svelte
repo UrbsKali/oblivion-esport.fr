@@ -39,8 +39,8 @@
 	></div>
 	<div class="container flex items-center justify-center px-4 align-middle sm:mx-auto">
 		<div class="w-10/12 p-5 mt-[-25%] border border-gray-700 rounded-lg backdrop-blur-lg">
-			<h1 class="text-4xl font-bold">{tournament?.title}</h1>
-			<p class="text-lg text-gray-500">// {tournament?.start} - {tournament?.end}</p>
+			<h1 class="text-4xl font-bold">{tournament?.title || slug}</h1>
+			<p class="text-lg text-gray-500">// {tournament?.start || ''} - {tournament?.end || ''}</p>
 			<SvelteMarkdown source={tournament?.slug?.body} {renderers} />
 			<span>
 				{#if tournament?.can_register}
