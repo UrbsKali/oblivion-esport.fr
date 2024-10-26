@@ -125,7 +125,6 @@
 					const form_data = new FormData(e.target.closest('form'));
 					let data = {};
 					for (let [key, value] of form_data.entries()) {
-						console.log(key, value);
 						if (key.startsWith('member')) {
 							const num = key.match(/\d+/g);
 							if (!data.member) data.member = [];
@@ -145,7 +144,6 @@
 						Math.random().toString(36).substring(2, 15) +
 						Math.random().toString(36).substring(2, 15);
 
-					console.log(data);
 					// upload logo
 					const logoFile = form_data.get('logo');
 					let extension = logoFile.name.split('.').pop();
@@ -180,11 +178,11 @@
 					}
 					console.log(data__);
 					// add users to team
-					for (const el in data.member) {
-						console.log(el);
+					for (const i in data.member) {
+						console.log(data.member[i]);
 						const { data: data___, error: error__ } = await supabase
 							.from('member_of')
-							.insert({ team_id: data__.id, uid: el.uid, role: el.role });
+							.insert({ team_id: data__.id, uid: data.member[i].uid, role: data.member[i].role });
 						if (error__) {
 							console.error(error__);
 							alert("Une erreur est survenue lors de l'ajout d'un membre à l'équipe");

@@ -8,13 +8,11 @@
 	export let title = 'On est bon!';
 	export let message = 'La commande a été passée avec succès.';
 	export let id = 'successModal';
-	export let open = false;
 	export let onClose = (e) => {
-		window.location.href = `/v2/admin`;
+		window.location.reload();
 	};
 
 	let __onClose = (e) => {
-		open = false;
 		// remove componant from tree
 		current_component.$destroy();
 		onClose(e);
@@ -29,10 +27,7 @@
 <div
 	{id}
 	tabindex="-1"
-	aria-hidden="true"
-	class="{open
-		? ''
-		: 'hidden'} overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full backdrop-blur-sm"
+	class="fixed top-0 left-0 right-0 z-50 items-center justify-center w-full h-full overflow-x-hidden overflow-y-auto md:inset-0 backdrop-blur-sm"
 >
 	<div class="relative flex w-full h-full max-w-md p-4 m-auto">
 		<!-- Modal content -->

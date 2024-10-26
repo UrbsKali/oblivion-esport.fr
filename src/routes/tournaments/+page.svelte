@@ -1,6 +1,7 @@
 <script>
 	import Cursor from '$lib/components/share/Cursor.svelte';
 	import Footer from '$lib/components/share/Footer.svelte';
+	import RegisterButton from '$lib/components/others/RegisterButton.svelte';
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
 
@@ -143,14 +144,19 @@
 									<h1 class="text-4xl font-bold text-gray-300 w-max">{item.title}</h1>
 									<span class="text-lg text-left text-gray-500">// {item.start}</span>
 									<p class="text-lg text-gray-300">{item.slug.description}</p>
-									<div>
+									<div class="mt-5">
 										<a
 											class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
 											href="/v2/tournaments/{item.slug.slug}">En savoir +</a
 										>
-										<button class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
-											>Inscription</button
-										>
+										{#if item.can_register}
+											<RegisterButton tournament_id={1} />
+										{:else}
+											<a
+												class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
+												href="/v2/tournaments/{item.slug.slug}">Voir les résultats</a
+											>
+										{/if}
 									</div>
 								</div>
 							</div>
@@ -179,14 +185,19 @@
 									<h1 class="text-4xl font-bold text-gray-300 w-max">{item.title}</h1>
 									<span class="text-lg text-left text-gray-500">{item.start} //</span>
 									<p class="text-lg text-gray-300">{item.slug.description}</p>
-									<div>
+									<div class="mt-5">
 										<a
 											class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
 											href="/v2/tournaments/{item.slug.slug}">En savoir +</a
 										>
-										<button class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
-											>Inscription</button
-										>
+										{#if item.can_register}
+											<RegisterButton tournament_id={1} />
+										{:else}
+											<a
+												class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
+												href="/v2/tournaments/{item.slug.slug}">Voir les résultats</a
+											>
+										{/if}
 									</div>
 								</div>
 							</div>

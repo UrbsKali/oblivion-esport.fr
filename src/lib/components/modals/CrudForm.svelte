@@ -2,16 +2,23 @@
 	// @ts-nocheck
 
 	import { readonly } from 'svelte/store';
+	import { get_current_component } from 'svelte/internal';
+	const current_component = get_current_component();
 
 	export let type = 'Utilisateur';
 	export let type_accord = 'un';
 	export let action = 'Ajouter';
 	export let fields = [];
 	export let id = 'CrudModal';
-	export let open = false;
+
+	export let title = `${action} ${type_accord} ${type}`;
 
 	export let onSubmit = async () => {
 		console.log('Submit');
+	};
+
+	export let onClose = (e) => {
+		current_component.$destroy();
 	};
 
 	$: for (let field of fields) {
@@ -30,10 +37,7 @@
 <div
 	{id}
 	tabindex="-1"
-	aria-hidden="true"
-	class="{open
-		? ''
-		: 'hidden'} overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full backdrop-blur-sm"
+	class="fixed top-0 left-0 right-0 z-50 items-center justify-center w-full h-full overflow-x-hidden overflow-y-auto md:inset-0 backdrop-blur-sm"
 >
 	<div class="relative flex w-full h-full p-4 m-auto">
 		<!-- Modal content -->
@@ -44,14 +48,12 @@
 			<!-- Modal header -->
 			<div class="flex justify-between mb-4 rounded-t sm:mb-5">
 				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-					{action}
-					{type_accord}
-					{type}
+					{title}
 				</h3>
 				<button
 					type="button"
 					class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-					on:click={() => (open = false)}
+					on:click={onClose}
 				>
 					<svg
 						aria-hidden="true"
@@ -73,7 +75,7 @@
 				<div class="grid gap-4 mb-4 sm:grid-cols-2">
 					{#each fields as field}
 						<div class={field.wide ? 'col-span-2' : ''}>
-							{#if field.type !== 'duplicate'}
+							{#if field.type !== 'duplicate' && field.type !== 'info'}
 								<label
 									for="random"
 									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -101,6 +103,12 @@
 										>
 									{/each}
 								</select>
+							{:else if field.type === 'info'}
+								<p
+									class="block p-3 mb-2 text-sm text-justify text-gray-200 bg-gray-700 rounded-lg max-w-prose"
+								>
+									{field.text}
+								</p>
 							{:else if field.type === 'number'}
 								<input
 									type="number"
@@ -139,16 +147,6 @@
 											const reader = new FileReader();
 											reader.onload = (e) => (field.value = e.target.result);
 											reader.readAsDataURL(file);
-
-											const label = document.querySelector(
-												`label[for=${field.id || field.name.toLowerCase()}]`
-											);
-											label.innerHTML = '';
-											const img = document.createElement('img');
-											img.src = URL.createObjectURL(file);
-											img.alt = field.name;
-											img.className = 'object-contain w-full h-full rounded-lg ';
-											label.appendChild(img);
 										})}
 								/>
 								<label
@@ -157,6 +155,7 @@
 								>
 									{#if field.value}
 										<img
+											id="svelte_breffffffffff"
 											src={field.value}
 											alt={field.name}
 											class="object-contain w-full h-full rounded-lg"
@@ -231,19 +230,26 @@
 								/>
 								{#if field.completion?.length > 0}
 									<div
-										class="absolute z-10 block w-full p-2 pl-10 mt-1 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+										class="absolute z-10 block w-full p-2 pl-4 mt-1 text-sm text-white text-gray-900 bg-gray-700 border border-gray-600 rounded-lg focus:ring-primary-500 focus:border-primary-500"
 									>
 										{#each field.completion as c}
 											<button
+												class=" w-full rounded-lg
+												flex items-center border-b border-gray-700 {c.image ? 'p-1' : ''} cursor-pointer"
 												on:click={(e) => {
 													field.value = c.text;
 													field.data = c.value;
 													field.completion = [];
 												}}
 											>
-												{c.text}
+												{#if c.image}
+													<img src={c.image} alt={c.text} class="w-6 h-6 mr-1 -ml-1 rounded-full" />
+												{/if}
+												<p>
+													{c.text}
+												</p>
+												<br />
 											</button>
-											<br />
 										{/each}
 									</div>
 								{/if}
@@ -278,9 +284,7 @@
 							clip-rule="evenodd"
 						></path></svg
 					>
-					{action}
-					{type_accord}
-					{type}
+					{title}
 				</button>
 			</form>
 		</div>

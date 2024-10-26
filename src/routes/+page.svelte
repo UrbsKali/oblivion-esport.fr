@@ -8,6 +8,7 @@
 	import Cursor from '$lib/components/share/Cursor.svelte';
 	import Footer from '$lib/components/share/Footer.svelte';
 	import Card from '$lib/components/share/Card.svelte';
+	import RegisterButton from '$lib/components/others/RegisterButton.svelte';
 
 	const articles = [
 		{
@@ -185,12 +186,11 @@
 						<h1 class="text-4xl font-bold text-gray-300 w-max">ELEON WORLD CUP</h1>
 						<p class="text-lg text-gray-300">300 € de cashprize, en êtes-vous digne ?</p>
 						<div>
-							<button class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
-								>En savoir +</button
+							<a
+								class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
+								href="/v2/tournaments/eleon-world-cup">En savoir +</a
 							>
-							<button class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
-								>Inscription</button
-							>
+							<RegisterButton tournament_id={13} />
 						</div>
 					</div>
 				</div>
@@ -203,12 +203,14 @@
 					<div class="text-center">
 						<h1 class="text-4xl font-bold text-gray-300 w-max">TRANKIL WOLD CUP</h1>
 						<p class="text-lg text-gray-300">500 € de cashprize, Nabot viens m'aider !</p>
-						<div>
-							<button class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
-								>En savoir +</button
+						<div class="p-8">
+							<a
+								class="px-4 py-3 mt-5 text-white border rounded-md border-primary-500"
+								href="/v2/tournaments/trankil-world-cup5">En savoir +</a
 							>
-							<button class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
-								>Inscription</button
+							<a
+								class="px-4 py-3 mt-5 text-white rounded-md bg-primary-500"
+								href="/v2/tournaments/trankil-world-cup5">Voir les résultats</a
 							>
 						</div>
 					</div>
