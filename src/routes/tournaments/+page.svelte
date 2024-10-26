@@ -150,7 +150,7 @@
 											href="/v2/tournaments/{item.slug.slug}">En savoir +</a
 										>
 										{#if item.can_register}
-											<RegisterButton tournament_id={1} />
+											<RegisterButton tournament_id={13} />
 										{:else}
 											<a
 												class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
