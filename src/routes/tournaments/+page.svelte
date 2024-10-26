@@ -14,7 +14,7 @@
 			title: 'Trankil World Cup 5',
 			content: 'Description for event 2',
 			date: '2024-08-01',
-			slug: 'trankil-world-cup-5'
+			slug: 'trankil-world-cup5'
 		},
 		{
 			title: 'Trankil Invitational',
