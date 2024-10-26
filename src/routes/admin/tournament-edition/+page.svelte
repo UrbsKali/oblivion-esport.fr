@@ -13,6 +13,7 @@
 	let search = '';
 
 	let value = '';
+	let description = '';
 
 	let selectedTournament = null;
 
@@ -37,7 +38,7 @@
 		selectedTournament = tournaments.find((tournament) => tournament.slug === slug);
 		const { data, error } = await supabase
 			.from('Tournaments')
-			.select('slug(slug, body, image), can_register, title, start, end')
+			.select('slug(slug, body, description, image), can_register, title, start, end')
 			.eq('slug', slug)
 			.single();
 
@@ -45,6 +46,7 @@
 			console.error(error);
 		} else {
 			value = data.slug.body;
+			description = data.slug.description;
 			selectedTournament = data;
 		}
 	}
@@ -89,6 +91,14 @@
 		<h2>{selectedTournament.title}</h2>
 		<p>{selectedTournament.slug.slug}</p>
 
+		<!--Description-->
+		<br />
+		<label for="description">Description</label>
+		<textarea
+			bind:value={description}
+			class="w-full p-2 mb-4 bg-gray-900 border-2 border-gray-700 rounded-md"
+		></textarea>
+
 		<!--Markdown editor-->
 		<MarkdownEditor bind:value mode="tabs" theme="github" {carta} />
 
@@ -99,10 +109,13 @@
 				// update the body of the selected tournament
 				const { error } = await supabase
 					.from('tournaments_info')
-					.update({ body: value })
+					.update({ body: value, description: description })
 					.eq('slug', selectedTournament.slug.slug);
 				if (error) {
 					console.error(error);
+				} else {
+					console.log('Tournament updated');
+					alert('Tournoi mis à jour');
 				}
 			}}>Enregistrer</button
 		>
