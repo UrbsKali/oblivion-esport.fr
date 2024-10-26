@@ -1,8 +1,18 @@
 <script>
 	import { supabase } from '$lib/supabaseClient';
 
+	import { Carta, MarkdownEditor } from 'carta-md';
+	import { attachment } from '@cartamd/plugin-attachment';
+	import { emoji } from '@cartamd/plugin-emoji';
+	import { slash } from '@cartamd/plugin-slash';
+	import { code } from '@cartamd/plugin-code';
+
+	import '$lib/styles/github.scss';
+
 	let tournaments = [];
 	let search = '';
+
+	let value = '';
 
 	let selectedTournament = null;
 
@@ -23,15 +33,21 @@
 
 	$: getCompletion(search);
 
-	function selecTournament(slug) {
+	async function selecTournament(slug) {
 		selectedTournament = tournaments.find((tournament) => tournament.slug === slug);
-	}
+		const { data, error } = await supabase
+			.from('Tournaments')
+			.select('slug(slug, body, image), can_register, title, start, end')
+			.eq('slug', slug)
+			.single();
 
-	import { Carta, MarkdownEditor } from 'carta-md';
-	import { attachment } from '@cartamd/plugin-attachment';
-	import { emoji } from '@cartamd/plugin-emoji';
-	import { slash } from '@cartamd/plugin-slash';
-	import { code } from '@cartamd/plugin-code';
+		if (error) {
+			console.error(error);
+		} else {
+			value = data.slug.body;
+			selectedTournament = data;
+		}
+	}
 
 	const carta = new Carta({
 		sanitizer: false,
@@ -46,11 +62,6 @@
 			code()
 		]
 	});
-
-	export let value = `This is an example inspired by [GitHub](https://github.com)
-\`\`\`js
-console.log('Hello, World!');
-\`\`\``;
 </script>
 
 <section>
@@ -75,7 +86,7 @@ console.log('Hello, World!');
 	{:else}
 		<!--Display tournament informations, and markdown editor-->
 		<h2>{selectedTournament.title}</h2>
-		<p>{selectedTournament.slug}</p>
+		<p>{selectedTournament.slug.slug}</p>
 
 		<!--Markdown editor-->
 		<MarkdownEditor bind:value mode="tabs" theme="github" {carta} />
