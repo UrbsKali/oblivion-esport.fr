@@ -60,14 +60,14 @@
 		gltfLoader.load('/v2/3d/TWC.glb', (gltf) => {
 			scene.add(gltf.scene);
 			// scale it
-			gltf.scene.scale.set(1, 1, 1);
+			gltf.scene.scale.set(8, 8, 8);
 
 			// rotate it
-			gltf.scene.children[0].rotation.x = -Math.PI / 8;
-			gltf.scene.children[0].rotation.x = -Math.PI / 8;
+			// gltf.scene.children[0].rotation.y = -Math.PI / 1;
+			gltf.scene.children[0].rotation.x -= Math.PI / 16;
 
 			// move down
-			gltf.scene.position.y = -0.25;
+			gltf.scene.position.y = 0.25;
 
 			// cast shadow
 			gltf.scene.children[0].castShadow = true;
@@ -90,7 +90,7 @@
 
 		const animate = () => {
 			if (car) {
-				car.rotation.y += 0.001;
+				car.rotation.y -= 0.001;
 			}
 			renderer.render(scene, camera);
 			requestAnimationFrame(animate);
