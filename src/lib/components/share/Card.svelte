@@ -8,7 +8,7 @@
 
 <div
 	class="flex flex-row items-end gap-5 p-5 bg-opacity-25 bg-center bg-no-repeat bg-cover border border-gray-700 rounded-lg min-h-36 backdrop-blur-lg sm:h-48"
-	style="background: linear-gradient(rgba(14, 19, 31, 0.3) 0%, rgba(14, 19, 31, 1) 100%), url({image});"
+	style="background-image: linear-gradient(rgba(14, 19, 31, 0.3) 0%, rgba(14, 19, 31, 1) 100%), url({image});"
 >
 	<div class="flex flex-col gap-1">
 		<h2 class="text-2xl font-bold text-white">{title}</h2>

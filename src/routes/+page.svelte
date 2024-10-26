@@ -15,25 +15,29 @@
 			title: 'Lancement de la ELEON WOLRD CUP',
 			description:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
-			image: 'https://placecats.com/350/200'
+			image:
+				'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/eleon-world-cup/main.png'
 		},
 		{
 			title: 'Nouveau partenaire : AFK Arena',
 			description:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
-			image: 'https://placecats.com/350/200'
-		},
-		{
-			title: 'Retour sur la TWC 5',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
-			image: 'https://placecats.com/350/200'
+			image:
+				'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/nouveau-partenaire-afk/main.jpg'
 		},
 		{
 			title: 'Nouveau site web',
 			description:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
-			image: 'https://placecats.com/350/200'
+			image:
+				'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/nouveau-site-web/main.png'
+		},
+		{
+			title: 'Annonce de la TWC 5',
+			description:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+			image:
+				'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/trankil-world-cup5/main.png'
 		}
 	];
 

@@ -16,7 +16,7 @@ export async function loadUserdata() {
         // fetch user data
         const { data, error } = await supabase
             .from('profiles')
-            .select('username,avatar_url,role')
+            .select('username,avatar_url,role, tracker, discord, pseudo_rl')
             .eq('id', session.user.id)
             .single();
         if (error) {
@@ -31,6 +31,9 @@ export async function loadUserdata() {
         user.avatar = data.avatar_url || user.avatar;
         user.id = session.user.id;
         user.role = data.role || user.role;
+        user.tracker = data.tracker || user.tracker;
+        user.discord = data.discord || user.discord;
+        user.pseudo_rl = data.pseudo_rl || user.pseudo_rl;
         userdata.set(user);
     }
 }

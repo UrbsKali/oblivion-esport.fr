@@ -118,7 +118,6 @@
 				],
 				type_accord: 'une',
 				type: 'Équipe',
-				open: true,
 				onSubmit: async (e) => {
 					// get forms data
 					e.preventDefault();
@@ -192,11 +191,7 @@
 					new SucessModal({
 						target: document.body,
 						props: {
-							message: "L'équipe a bien été créée",
-							open: true,
-							onClose: () => {
-								window.location.reload();
-							}
+							message: "L'équipe a bien été créée"
 						}
 					});
 				}

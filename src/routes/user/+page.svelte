@@ -10,11 +10,19 @@
 	let new_password = '';
 	let new_password_confirmation = '';
 
+	let discord = '';
+	let rocket = '';
+	let tracker = '';
+
 	userdata.subscribe((value) => {
 		if (value) {
 			user = value;
 			new_username = user.name;
 			new_email = user.email;
+
+			discord = user.discord;
+			rocket = user.pseudo_rl;
+			tracker = user.tracker;
 		}
 	});
 
@@ -60,6 +68,27 @@
 		new_password = '';
 		new_password_confirmation = '';
 	}
+
+	async function handleInfo() {
+		loading = true;
+
+		// add @ on discord if not present
+		if (!discord.startsWith('@')) {
+			discord = '@' + discord;
+		}
+
+		const { data, error } = await supabase
+			.from('profiles')
+			.update({ discord, pseudo_rl: rocket, tracker })
+			.eq('id', user.id);
+
+		if (error) {
+			console.error(error);
+			alert('Une erreur est survenue lors de la modification de vos pseudos');
+		}
+
+		loading = false;
+	}
 </script>
 
 <section class="relative z-10 pb-10">
@@ -100,6 +129,60 @@
 						disabled={loading}
 						class="w-full text-white bg-primary-300 hover:bg-primary-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
 						>{loading ? 'Chargement ...' : 'Modifer mes paramètres'}</button
+					>
+				</form>
+				<form
+					class="w-full pt-10 space-y-4 border-t border-gray-700 md:space-y-6"
+					on:submit|preventDefault={handleInfo}
+				>
+					<!-- ask for Discord pseudo, Rocket League pseudo, and tracker link -->
+					<div>
+						<label for="discord" class="block mb-2 text-sm font-medium text-white"
+							>Votre pseudo Discord</label
+						>
+						<input
+							type="text"
+							name="discord"
+							id="discord"
+							bind:value={discord}
+							class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50"
+							placeholder="@Mascode"
+						/>
+					</div>
+
+					<div>
+						<label for="rocket" class="block mb-2 text-sm font-medium text-white"
+							>Votre pseudo Rocket League</label
+						>
+						<input
+							type="text"
+							name="rocket"
+							id="rocket"
+							class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50"
+							placeholder="Mascode"
+							bind:value={rocket}
+						/>
+					</div>
+
+					<div>
+						<label for="tracker" class="block mb-2 text-sm font-medium text-white"
+							>Votre lien de tracker</label
+						>
+						<input
+							type="text"
+							name="tracker"
+							id="tracker"
+							bind:value={tracker}
+							class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50"
+							placeholder="https://tracker.gg/rocket-league/profile/steam/76561198000000000"
+						/>
+					</div>
+
+					<button
+						type="submit"
+						disabled={loading}
+						class="w-full text-white bg-primary-300 hover:bg-primary-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
+						>{loading ? 'Chargement ...' : 'Enregistrer mes pseudos'}</button
 					>
 				</form>
 				<form
