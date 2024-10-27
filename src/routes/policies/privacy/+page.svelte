@@ -21,7 +21,9 @@
 		</ul>
 		<p>
 			Cette politique complète les mentions légales et les Conditions Générales d'Utilisation
-			consultables par les utilisateurs <a href="#cgu">au bas de la page</a>.
+			consultables par les utilisateurs via ces liens : <a href="/v2/policies/cgu">CGU</a>,
+			<a href="/v2/policies/legal">Mentions légales</a>
+			.
 		</p>
 
 		<h2>ARTICLE 2 : PRINCIPES RELATIFS À LA COLLECTE ET AU TRAITEMENT DES DONNÉES PERSONNELLES</h2>
@@ -209,7 +211,9 @@
 			l'utilisateur peut être tenu de lui communiquer certaines informations telles que : ses noms
 			et prénoms, son adresse e-mail ainsi que son numéro de compte, d'espace personnel ou d'abonné.
 		</p>
-		<p>Consultez le site cnil.fr pour plus d'informations sur vos droits.</p>
+		<p>
+			Consultez le site <a href="https://cnil.fr/">cnil.fr</a> pour plus d'informations sur vos droits.
+		</p>
 
 		<h2>ARTICLE 6 : CONDITIONS DE MODIFICATION DE LA POLITIQUE DE CONFIDENTIALITÉ</h2>
 		<p>
@@ -221,20 +225,6 @@
 			L'utilisateur est invité à prendre connaissance de cette Politique à chaque fois qu'il utilise
 			nos services, sans qu'il soit nécessaire de l'en prévenir formellement. La présente politique,
 			éditée le 27/10/2024, a été mise à jour le 27/10/2024.
-		</p>
-	</section>
-
-	<section id="cgu">
-		<h1>Conditions d'utilisation du site Internet www.oblivion-esport.fr</h1>
-		<p>
-			Le site et chacun des éléments, y compris mais sans limitation les marques, les logos, icônes,
-			infographies, photographies, qui le composent sont protégés au titre de la législation
-			internationale de la propriété intellectuelle. Les contenus figurant sur le site sont la
-			propriété d'Oblivion ou d'autres entreprises. Toute utilisation, reproduction ou
-			représentation, par quelque procédé que ce soit, et sur quelque support que ce soit, de tout
-			ou partie du site et/ou des éléments qui le composent n'est pas autorisée sans le consentement
-			expresse d'Oblivion. Toutes les autres marques qui figurent sur le présent site internet sont
-			la propriété de leurs titulaires respectifs.
 		</p>
 	</section>
 </div>
