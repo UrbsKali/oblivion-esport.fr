@@ -35,6 +35,19 @@ export async function loadUserdata() {
         user.discord = data.discord || user.discord;
         user.pseudo_rl = data.pseudo_rl || user.pseudo_rl;
         userdata.set(user);
+
+        {
+            const { data: dat, error } = await supabase.auth.getUserIdentities();
+            if (error) {
+                console.error(error);
+                return;
+            }
+            if (data) {
+                user.providers = dat.identities;
+                userdata.set(user);
+            }
+        }
+
     }
 }
 

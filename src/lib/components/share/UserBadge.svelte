@@ -44,7 +44,7 @@
 
 	const LogOut = () => {
 		supabase.auth.signOut().then(() => {
-			window.location.href = `/v2/login?redirect=${window.location.pathname}`;
+			window.location.href = `/v2/`;
 		});
 	};
 </script>
@@ -62,13 +62,13 @@
 	}}
 >
 	<span class="sr-only">Open user menu</span>
-	<img class="w-8 h-8 rounded-full" src={user.avatar} alt="user photo" />
+	<img class="w-8 h-8 rounded-full" src={user.avatar} alt="user avatar" />
 </button>
 <!-- Dropdown menu -->
 <div
 	class="{fixed
 		? 'fixed'
-		: 'absolute'} z-50 hidden w-56 my-4 text-base list-none bg-gray-900 divide-y divide-gray-700 shadow bg-opacity-20 rounded-xl backdrop-blur-lg border border-gray-700"
+		: 'absolute'} z-50 hidden w-56 my-4 text-base list-none bg-gray-900 divide-y divide-gray-700 shadow bg-opacity-20 rounded-xl backdrop-blur-lg border border-gray-700 overflow-hidden"
 	id="dropdown"
 >
 	<div class="px-4 py-3">
@@ -82,6 +82,22 @@
 				class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80">Profil</a
 			>
 		</li>
+		<li>
+			<a
+				href="/v2/user/notifications"
+				class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80"
+				>Notifications</a
+			>
+		</li>
+		<li>
+			<a
+				href="/v2/user/settings"
+				class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80"
+				>Paramètres</a
+			>
+		</li>
+	</ul>
+	<ul class="py-1 text-gray-300" aria-labelledby="dropdown">
 		{#if ['admin', 'superadmin', 'casteur'].includes(user.role)}
 			<li>
 				<a
@@ -93,17 +109,24 @@
 		{/if}
 		<li>
 			<a
-				href="#"
-				class="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-700 hover:text-gray-400 bg-opacity-80"
-				>Work in progress..</a
+				href="/v2/user/teams"
+				class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80"
+				>Mes équipes</a
+			>
+		</li>
+		<li>
+			<a
+				href="/v2/user/tournaments"
+				class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80"
+				>Mes Tournois</a
 			>
 		</li>
 	</ul>
 	<ul class="py-1 text-gray-300" aria-labelledby="dropdown">
 		<li>
 			<a
-				href="#"
-				class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80"
+				href="#top"
+				class="block px-4 py-2 text-sm hover:bg-red-700 hover:text-white bg-opacity-80 hover:bg-opacity-50"
 				on:click={LogOut}>Déconnexion</a
 			>
 		</li>

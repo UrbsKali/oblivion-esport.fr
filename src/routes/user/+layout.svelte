@@ -1,8 +1,17 @@
 <script>
 	import { userdata } from '$lib/store';
 	import { supabase } from '$lib/supabaseClient';
+	import { page } from '$app/stores';
 
 	let user;
+	let path = '';
+
+	page.subscribe((value) => {
+		if (value) {
+			path = value.url.pathname;
+			console.log(path);
+		}
+	});
 
 	userdata.subscribe((value) => {
 		if (value) {
@@ -77,29 +86,31 @@
 				</div>
 			</div>
 		</div>
-
+		<!--{#if path.includes('notifications') || path.includes('settings') || path === '/v2/user/'}-->
 		<div class="flex flex-col items-center justify-center w-full px-5 my-5 sm:p-0">
 			<div class="flex flex-row items-center justify-center w-full gap-5 sm:w-9/12 md:w-6/12">
 				<a
 					href="/v2/user/"
 					class="w-full p-2 text-sm text-center text-gray-400 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-lg shadow hover:text-white sm:max-w-md backdrop-blur-sm"
+					>Profil</a
+				>
+
+				<a
+					href="/v2/user/notifications"
+					class="w-full p-2 text-sm text-center text-gray-400 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-lg shadow hover:text-white sm:max-w-md backdrop-blur-sm"
+					>Notifications</a
+				>
+				<a
+					href="/v2/user/settings"
+					class="w-full p-2 text-sm text-center text-gray-400 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-lg shadow hover:text-white sm:max-w-md backdrop-blur-sm"
 				>
 					Paramètres
 				</a>
-
-				<a
-					href="/v2/user/teams"
-					class="w-full p-2 text-sm text-center text-gray-400 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-lg shadow hover:text-white sm:max-w-md backdrop-blur-sm"
-					>Mes Équipes</a
-				>
-
-				<a
-					href="/v2/user/tournaments"
-					class="w-full p-2 text-sm text-center text-gray-400 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-lg shadow hover:text-white sm:max-w-md backdrop-blur-sm"
-					>Mes Tournois</a
-				>
 			</div>
 		</div>
+		<!--{:else}
+		<div class="mb-5"></div>
+		{/if}-->
 	</div>
 </section>
 <slot />
