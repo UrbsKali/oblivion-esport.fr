@@ -3,6 +3,7 @@
 
 	import * as THREE from 'three';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+	import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 	import Title from '$lib/components/utils/Title.svelte';
 	import Cursor from '$lib/components/share/Cursor.svelte';
@@ -60,7 +61,13 @@
 		renderer.setSize(width, height);
 		renderElement.appendChild(renderer.domElement);
 
+		// load with draco
 		const gltfLoader = new GLTFLoader();
+		const draco = new DRACOLoader();
+		draco.setDecoderConfig({ type: 'js' });
+		draco.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+		gltfLoader.setDRACOLoader(draco);
+
 		let car = null;
 		gltfLoader.load('/v2/3d/TWC.glb', (gltf) => {
 			scene.add(gltf.scene);
@@ -115,8 +122,12 @@
 		renderElement.appendChild(renderer.domElement);
 
 		const gltfLoader = new GLTFLoader();
+		const draco = new DRACOLoader();
+		draco.setDecoderConfig({ type: 'js' });
+		draco.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+		gltfLoader.setDRACOLoader(draco);
 		let car = null;
-		gltfLoader.load('/v2/3d/EWC.glb', (gltf) => {
+		gltfLoader.load('/v2/3d/EWC_c.glb', (gltf) => {
 			scene.add(gltf.scene);
 			// scale it
 			gltf.scene.scale.set(10, 10, 10);
