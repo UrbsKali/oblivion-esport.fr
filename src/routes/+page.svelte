@@ -16,28 +16,28 @@
 			description:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
 			image:
-				'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/eleon-world-cup/main.png'
+				'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/eleon-world-cup/main.avif'
 		},
 		{
 			title: 'Nouveau partenaire : AFK Journey',
 			description:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
 			image:
-				'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/nouveau-partenaire-afk/main.jpg'
+				'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/nouveau-partenaire-afk/main.avif'
 		},
 		{
 			title: 'Nouveau site web',
 			description:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
 			image:
-				'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/nouveau-site-web/main.png'
+				'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/nouveau-site-web/main.avif'
 		},
 		{
 			title: 'Annonce de la TWC 5',
 			description:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
 			image:
-				'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/trankil-world-cup5/main.png'
+				'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/articles/trankil-world-cup5/main.avif'
 		}
 	];
 
