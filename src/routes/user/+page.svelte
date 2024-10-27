@@ -51,14 +51,9 @@
 	async function handleInfo() {
 		loading = true;
 
-		// add @ on discord if not present
-		if (!discord.startsWith('@')) {
-			discord = '@' + discord;
-		}
-
 		const { data, error } = await supabase
 			.from('profiles')
-			.update({ discord, pseudo_rl: rocket, tracker })
+			.update({ pseudo_rl: rocket, tracker })
 			.eq('id', user.id);
 
 		if (error) {
@@ -79,7 +74,8 @@
 
 	async function linkDiscord() {
 		const { data, error } = await supabase.auth.linkIdentity({
-			provider: 'discord'
+			provider: 'discord',
+			options: { redirectTo: 'https://oblivion-esport.fr/v2/user' }
 		});
 
 		if (error) {
@@ -160,7 +156,9 @@
 							>Lier vos comptes</label
 						>
 						<button
-							class="min-w-28 text-white flex align-middle items-center justify-start bg-[#5865F2] focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-3 space-x-2 py-2.5 text-center"
+							class="min-w-28 text-white flex align-middle items-center justify-start bg-[#5865F2] focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-3 space-x-2 py-2.5 text-center {discord
+								? 'hover-x'
+								: ''}"
 							on:click={handleDiscord}
 						>
 							<svg
@@ -229,3 +227,6 @@
 		</div>
 	</div>
 </section>
+
+<style>
+</style>
