@@ -83,8 +83,24 @@
 			<p>© {current_year} Oblivion Esport</p>
 		</div>
 	</div>
-	<div></div>
+	<div class="grid w-full h-auto text-gray-300" id="sitemap">
+		<div class="flex flex-col items-center justify-center h-auto gap-2 align-middle sm:px-5">
+			<p class="font-bold text-white">Légal</p>
+			<a href="/v2/policies/privacy" class=""> Données personnelles </a>
+			<a href="/v2/policies/cgu"> CGU </a>
+			<a href="/v2/policies/legal"> Mentions légales </a>
+		</div>
+		<div class="flex flex-col items-center justify-center h-auto gap-2 align-middle sm:px-5">
+			<p class="font-bold text-white">Association</p>
+			<a href="/v2/tournaments" class=""> Tournois </a>
+			<a href="/v2/staff"> Notre équipe </a>
+			<a href="/v2/blog"> Le blog </a>
+		</div>
+	</div>
 </footer>
 
 <style>
+	#sitemap {
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	}
 </style>
