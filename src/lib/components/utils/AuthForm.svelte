@@ -28,6 +28,7 @@
 	let loading = false;
 	let email = '';
 	let password = '';
+	let accept_privacy = false;
 
 	onMount(async () => {
 		redirect_uri = parseRedirectURI(redirect_uri);
@@ -97,6 +98,11 @@
 	async function handleRegister() {
 		try {
 			loading = true;
+			if (!accept_privacy) {
+				throw new Error(
+					'Vous devez accepter la politique de confidentialité pour utiliser notre site'
+				);
+			}
 			const { data, error } = await supabase.auth.signUp({
 				email: email,
 				password: password
@@ -172,6 +178,24 @@
 							bind:value={password}
 						/>
 					</div>
+					{#if auth_type === AuthType.register}
+						<div class="flex items-center justify-start">
+							<input
+								type="checkbox"
+								id="privacy"
+								bind:checked={accept_privacy}
+								class="w-4 h-4 border border-gray-300 rounded text-primary-600 focus:ring-primary-600 focus:border-primary-600"
+							/>
+							<label for="privacy" class="ml-2 text-sm text-white"
+								>J'accepte la <a
+									href="/v2/policies/privacy"
+									class="text-primary-100"
+									target="_blank"
+									>Politique de confidentialité
+								</a></label
+							>
+						</div>
+					{/if}
 
 					<button
 						type="submit"
