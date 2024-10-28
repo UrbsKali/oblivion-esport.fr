@@ -127,7 +127,7 @@
 		draco.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
 		gltfLoader.setDRACOLoader(draco);
 		let car = null;
-		gltfLoader.load('/v2/3d/EWC_c.glb', (gltf) => {
+		gltfLoader.load('/v2/3d/EWC.glb', (gltf) => {
 			scene.add(gltf.scene);
 			// scale it
 			gltf.scene.scale.set(10, 10, 10);
