@@ -123,7 +123,7 @@
 		display: block;
 		z-index: 0;
 		position: relative;
-		background-image: url('https://assets.codepen.io/1468070/plus-pattern-center.png');
+		background-image: url('/plus-pattern-center.webp');
 		background-size: 5%;
 		background-repeat: repeat;
 		opacity: 0.1;

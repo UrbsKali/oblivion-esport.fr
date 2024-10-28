@@ -287,7 +287,7 @@
 		top: -50%;
 		left: -50%;
 		z-index: 5;
-		background-image: url('https://assets.codepen.io/1468070/plus-pattern-center.png');
+		background-image: url('/plus-pattern-center.webp');
 		background-size: 5%;
 		background-repeat: repeat;
 		opacity: 0.1;
