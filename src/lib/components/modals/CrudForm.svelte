@@ -77,7 +77,7 @@
 						<div class={field.wide ? 'col-span-2' : ''}>
 							{#if field.type !== 'duplicate' && field.type !== 'info'}
 								<label
-									for="random"
+									for={field.id || field.name.toLowerCase()}
 									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
 									data-utils={field.data || ''}>{field.name}</label
 								>
@@ -214,20 +214,31 @@
 									>+
 								</button>
 							{:else if field.type === 'autocomplete'}
-								<input
-									type="text"
-									id={field.id || field.name.toLowerCase()}
-									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-									placeholder={field.placeholder || field.name.toLowerCase()}
-									required={field.required}
-									value={field.value || ''}
-									data-utils=""
-									readonly={field.readonly || false}
-									name={field.id || field.name.toLowerCase()}
-									on:input={async (e) => {
-										field.completion = await field.onChange(e);
-									}}
-								/>
+								<div
+									class="relative w-full flex flex-row items-center justify-center border text-sm rounded-lg p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
+								>
+									{#if field.image}
+										<img
+											src={field.image}
+											alt={field.name}
+											class="w-6 h-6 mr-1 -ml-1 rounded-full"
+										/>
+									{/if}
+									<input
+										type="text"
+										id={field.id || field.name.toLowerCase()}
+										class=" bordertext-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
+										placeholder={field.placeholder || field.name.toLowerCase()}
+										required={field.required}
+										value={field.value || ''}
+										data-utils=""
+										readonly={field.readonly || false}
+										name={field.id || field.name.toLowerCase()}
+										on:input={async (e) => {
+											field.completion = await field.onChange(e);
+										}}
+									/>
+								</div>
 								{#if field.completion?.length > 0}
 									<div
 										class="absolute z-10 block w-full p-2 pl-4 mt-1 text-sm text-white text-gray-900 bg-gray-700 border border-gray-600 rounded-lg focus:ring-primary-500 focus:border-primary-500"
@@ -240,6 +251,10 @@
 													field.value = c.text;
 													field.data = c.value;
 													field.completion = [];
+													// add image to field if exists
+													if (c.image) {
+														field.image = c.image;
+													}
 												}}
 											>
 												{#if c.image}

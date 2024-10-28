@@ -17,6 +17,7 @@
 	export let size = 10;
 
 	export let can_load = true;
+	export let clickable = false;
 
 	export let addNew = null;
 
@@ -313,7 +314,15 @@
 					</thead>
 					<tbody>
 						{#each items as item, i}
-							<tr class="border-b dark:border-gray-700">
+							<tr
+								class="border-b dark:border-gray-700 {clickable ? 'cursor-pointer' : ''}"
+								on:click={clickable
+									? (e) => {
+											e.preventDefault();
+											actions.find((el) => el.type == 'view').handler(e);
+										}
+									: null}
+							>
 								{#each item as key}
 									{#if key.value === item[0].value && item[0].avatar}
 										<th

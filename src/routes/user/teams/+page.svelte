@@ -4,6 +4,7 @@
 	import SucessModal from '$lib/components/modals/SucessModal.svelte';
 	import { userdata } from '$lib/store';
 	import { supabase } from '$lib/supabaseClient';
+	import { goto } from '$app/navigation';
 
 	let user;
 
@@ -63,60 +64,12 @@
 					{ name: 'TAG', type: 'text', required: true },
 					{ name: 'Logo', type: 'img', required: true, wide: true },
 					{
-						name: 'Membre',
-						id: 'member',
-						type: 'text',
-						value: user?.name,
-						data: user?.id,
+						name: 'Description',
+						type: 'textarea',
+						id: 'description',
 						required: true,
-						readonly: true
-					},
-					{
-						name: 'Rôle',
-						type: 'select',
-						id: 'role',
-						required: true,
-						options: [{ value: 'owner', text: 'Propriétaire', selected: true }],
-						readonly: true
-					},
-					{
-						name: 'Membre',
-						id: 'member_1',
-						type: 'autocomplete',
-						value: '',
-						data: '',
-						required: true,
-						onChange: async (e) => {
-							// search through users
-							const { data, error } = await supabase
-								.from('profiles')
-								.select('id, username')
-								.ilike('username', `${e.target.value}*`)
-								.range(0, 4);
-							if (error) {
-								console.error(error);
-								return;
-							}
-							// create options
-							let options = [];
-							for (let i = 0; i < data.length; i++) {
-								let el = data[i];
-								options.push({ value: el.id, text: el.username });
-							}
-							return options;
-						}
-					},
-					{
-						name: 'Rôle',
-						type: 'select',
-						id: 'role_1',
-						required: true,
-						options: [
-							{ value: 'player', text: 'Joueur' },
-							{ value: 'substitute', text: 'Remplaçant' }
-						]
-					},
-					{ type: 'duplicate', wide: true }
+						wide: true
+					}
 				],
 				type_accord: 'une',
 				type: 'Équipe',
@@ -126,18 +79,7 @@
 					const form_data = new FormData(e.target.closest('form'));
 					let data = {};
 					for (let [key, value] of form_data.entries()) {
-						if (key.startsWith('member')) {
-							const num = key.match(/\d+/g);
-							if (!data.member) data.member = [];
-							const uid = document.querySelector(`#${key}`).previousElementSibling.dataset.utils;
-							let role_slug = 'role';
-							if (num) role_slug += `_${num}`;
-							data.member.push({ uid: uid, role: form_data.get(role_slug) });
-						} else if (key.startsWith('role')) {
-							continue;
-						} else {
-							data[key.toLowerCase()] = value;
-						}
+						data[key.toLowerCase()] = value;
 					}
 
 					// create a hash for the team
@@ -166,7 +108,12 @@
 					data.logo_url = data_.publicUrl;
 
 					// create team
-					const team_data = { name: data.name, tag: data.tag, logo_url: data.logo_url };
+					const team_data = {
+						name: data.name,
+						tag: data.tag,
+						logo_url: data.logo_url,
+						description: data.description
+					};
 					const { data: data__, error } = await supabase
 						.from('Teams')
 						.insert(team_data)
@@ -178,17 +125,14 @@
 						return;
 					}
 					console.log(data__);
-					// add users to team
-					for (const i in data.member) {
-						console.log(data.member[i]);
-						const { data: data___, error: error__ } = await supabase
-							.from('member_of')
-							.insert({ team_id: data__.id, uid: data.member[i].uid, role: data.member[i].role });
-						if (error__) {
-							console.error(error__);
-							alert("Une erreur est survenue lors de l'ajout d'un membre à l'équipe");
-							return;
-						}
+					// add user to team
+					const { data: data___, error: error__ } = await supabase
+						.from('member_of')
+						.insert({ team_id: data__.id, uid: user.id, role: 'owner' });
+					if (error__) {
+						console.error(error__);
+						alert("Une erreur est survenue lors de l'ajout d'un membre à l'équipe");
+						return;
 					}
 					new SucessModal({
 						target: document.body,
@@ -200,6 +144,17 @@
 			}
 		});
 	}
+
+	let actions = [
+		{
+			type: 'view',
+			handler: (e) => {
+				const id = e.target.closest('tr').firstChild.dataset.utils;
+				// do window.location.href += `${id}`; but in the svelte way
+				goto(`/v2/user/teams/${id}`, { replaceState: false });
+			}
+		}
+	];
 </script>
 
 <div class="flex flex-col items-center justify-center px-5 py-0 mx-auto sm:p-0">
@@ -213,7 +168,9 @@
 			{filters}
 			{addNew}
 			{can_load}
-			type="Équipe"
+			{actions}
+			clickable={true}
+			type="équipe"
 			type_accord="une"
 		/>
 	</div>
