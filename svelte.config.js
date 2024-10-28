@@ -1,6 +1,16 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
+
+let extra_entries = [];
+
+// Add all the pages in the /user/teams/ directory
+for (let i = 1; i <= 100; i++) {
+	extra_entries.push(`/user/teams/${i}`);
+}
+
+
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
@@ -16,6 +26,9 @@ const config = {
 		}),
 		paths: {
 			base: '/v2'
+		},
+		prerender: {
+			entries: ['*', ...extra_entries],
 		},
 	},
 

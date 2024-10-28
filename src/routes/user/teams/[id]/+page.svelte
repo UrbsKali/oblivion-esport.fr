@@ -259,7 +259,7 @@
 			</svg>
 		</button>
 		<h2 class="text-2xl font-bold text-center text-gray-200" id="teamName">{team.name}</h2>
-		{#if user.team.role === 'owner'}
+		{#if user?.team?.role === 'owner'}
 			<button
 				class="flex items-center justify-center w-10 h-10 text-gray-200 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-full shadow hover:bg-opacity-10"
 				on:click={async (e) => {

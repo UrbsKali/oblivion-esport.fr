@@ -5,6 +5,7 @@
 	import { userdata } from '$lib/store';
 	import { supabase } from '$lib/supabaseClient';
 	import { goto } from '$app/navigation';
+	import { placements } from '@popperjs/core';
 
 	let user;
 
@@ -60,8 +61,14 @@
 			target: document.body,
 			props: {
 				fields: [
-					{ name: 'Nom', type: 'text', id: 'name', required: true },
-					{ name: 'TAG', type: 'text', required: true },
+					{
+						name: 'Nom',
+						type: 'text',
+						id: 'name',
+						required: true,
+						placeholder: 'Kentucky Fisting Corp'
+					},
+					{ name: 'TAG', type: 'text', required: true, placeholder: 'KFC' },
 					{ name: 'Logo', type: 'img', required: true, wide: true },
 					{
 						name: 'Description',
