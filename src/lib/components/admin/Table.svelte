@@ -16,6 +16,8 @@
 	export let parseItems = null;
 	export let size = 10;
 
+	export let can_load = true;
+
 	export let addNew = null;
 
 	let hash = hashCode(dbInfo);
@@ -51,6 +53,7 @@
 	 */
 	async function loadPage(page, filter = '', step = size) {
 		let items = [];
+		if (!can_load) return items;
 
 		let query = supabase.from(dbInfo.table).select(dbInfo.key, { count: 'estimated', head: false });
 

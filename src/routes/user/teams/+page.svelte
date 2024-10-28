@@ -8,10 +8,12 @@
 	let user;
 
 	let filters = [];
+	let can_load = false;
 
 	userdata.subscribe((value) => {
 		if (value) {
 			user = value;
+			can_load = true;
 			filters = [
 				{
 					category: 'hidden',
@@ -204,6 +206,15 @@
 	<div
 		class="w-full mt-0 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-lg shadow sm:w-9/12 backdrop-blur-sm md:w-6/12"
 	>
-		<Table {dbInfo} {parseItems} {headers} {filters} {addNew} type="Équipe" type_accord="une" />
+		<Table
+			{dbInfo}
+			{parseItems}
+			{headers}
+			{filters}
+			{addNew}
+			{can_load}
+			type="Équipe"
+			type_accord="une"
+		/>
 	</div>
 </div>
