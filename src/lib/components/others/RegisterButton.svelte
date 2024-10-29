@@ -74,9 +74,7 @@
 					let data = {};
 					for (let [key, value] of form_data.entries()) {
 						if (key == 'team') {
-							data[key.toLowerCase()] = document.querySelector(
-								`#${key}`
-							).previousElementSibling.dataset.utils;
+							data[key.toLowerCase()] = document.querySelector('label[for="team"]').dataset.utils;
 						} else {
 							data[key.toLowerCase()] = value;
 						}
@@ -91,6 +89,8 @@
 						console.error(error);
 						if (error.message.includes('duplicate key value violates unique constraint')) {
 							alert('Vous êtes déjà inscrit à ce tournoi.');
+						} else {
+							alert('Une erreur est survenue.');
 						}
 						return;
 					}
