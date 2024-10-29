@@ -180,7 +180,7 @@
 		</div>
 		<div id="teaser">
 			<video
-				src="/v2/Teaser.mkv"
+				src="/v2/Teaser.mp4"
 				class="absolute top-0 left-0 object-cover w-full h-full opacity-50 pointer-events-none -z-10"
 				autoplay
 				muted
