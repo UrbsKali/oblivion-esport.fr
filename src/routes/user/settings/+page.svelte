@@ -81,7 +81,7 @@
 						}
 					} else {
 						alert('Votre compte a bien été supprimé');
-						window.location.href = '/';
+						window.location.href = '/v2/';
 					}
 				}
 			}

@@ -231,7 +231,6 @@
 										placeholder={field.placeholder || field.name.toLowerCase()}
 										required={field.required}
 										value={field.value || ''}
-										data-utils=""
 										readonly={field.readonly || false}
 										name={field.id || field.name.toLowerCase()}
 										on:input={async (e) => {
@@ -247,7 +246,7 @@
 											<button
 												class=" w-full rounded-lg
 												flex items-center border-b border-gray-700 {c.image ? 'p-1' : ''} cursor-pointer"
-												on:click={(e) => {
+												on:click={async (e) => {
 													field.value = c.text;
 													field.data = c.value;
 													field.completion = [];
@@ -255,6 +254,11 @@
 													if (c.image) {
 														field.image = c.image;
 													}
+													// call onSelect function if exists
+													if (field.onSelect && field.onSelect.constructor.name == 'AsyncFunction')
+														await field.onSelect(c.value);
+													if (field.onSelect && field.onSelect.constructor.name == 'Function')
+														field.onSelect(c.value);
 												}}
 											>
 												{#if c.image}

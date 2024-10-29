@@ -1,7 +1,7 @@
 <script>
 	import Table from '$lib/components/admin/Table.svelte';
 	import CrudForm from '$lib/components/modals/CrudForm.svelte';
-	import SucessModal from '$lib/components/modals/SucessModal.svelte';
+	import SucessModal from '$lib/components/modals/InfoModal.svelte';
 	import { userdata } from '$lib/store';
 	import { supabase } from '$lib/supabaseClient';
 	import { goto } from '$app/navigation';
@@ -157,7 +157,6 @@
 			type: 'view',
 			handler: (e) => {
 				const id = e.target.closest('tr').firstChild.dataset.utils;
-				// do window.location.href += `${id}`; but in the svelte way
 				goto(`/v2/user/teams/${id}`, { replaceState: false });
 			}
 		}
