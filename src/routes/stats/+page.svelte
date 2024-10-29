@@ -95,9 +95,11 @@
 </svelte:head>
 
 <!-- Hero Search text input-->
-<div></div>
+<div class="p-10"></div>
 <div class="flex flex-col items-center justify-center w-screen">
-	<h1 class="text-4xl font-semibold text-gray-900 dark:text-white">Rechercher un joueur</h1>
+	<h1 class="text-4xl font-semibold text-gray-900 dark:text-white">
+		Rechercher un joueur - Statistiques TWC 5
+	</h1>
 	<div class="p-5 w-96">
 		<div class="relative w-full">
 			<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
