@@ -204,7 +204,7 @@
 								<p>{discord || 'Discord'}</p>
 							</button>
 							<button
-								class="min-w-28 text-white flex align-middle items-center justify-start bg-black focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-3 space-x-2 py-2.5 text-center {discord
+								class="min-w-28 text-white flex align-middle items-center justify-start bg-black focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-3 space-x-2 py-2.5 text-center {epic
 									? 'hover-x'
 									: ''}"
 								on:click={handleEpic}
