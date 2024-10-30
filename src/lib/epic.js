@@ -10,7 +10,7 @@ export function createOauthUrl(redirect_to = "https://oblivion-esport.fr/v2/logi
 }
 
 export async function getAccessToken(code) {
-    const response = await fetch(`https://oblivion-esport.fr/api/riot.php?authorization_code=${code}&secret=${secret}`);
+    const response = await fetch(`https://oblivion-esport.fr/api/epic.php?authorization_code=${code}&secret=${secret}`);
     return response.json();
 }
 
