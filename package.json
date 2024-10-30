@@ -44,6 +44,7 @@
 		"crypto-js": "^4.2.0",
 		"flowbite": "^2.5.1",
 		"flowbite-svelte": "^0.46.15",
+		"jwt-decode": "^4.0.0",
 		"marked": "^14.1.2",
 		"postcss": "^8.4.40",
 		"svelte-markdown": "^0.4.1",
