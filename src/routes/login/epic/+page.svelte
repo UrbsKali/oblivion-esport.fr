@@ -3,6 +3,7 @@
 	import { getAccessToken, getName } from '$lib/epic';
 	import { supabase } from '$lib/supabaseClient';
 	import { userdata } from '$lib/store';
+	import { goto } from '$app/navigation';
 
 	let user;
 
@@ -44,7 +45,9 @@
 			if (error) {
 				console.log(error);
 			}
-			console.log(data);
+
+			// redirect to profile
+			goto('/v2/user');
 		}
 	}
 </script>

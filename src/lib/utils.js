@@ -41,8 +41,15 @@ export async function loadUserdata() {
                 console.error(error);
                 return;
             }
+
+            const { data, error: err } = await supabase.from('other_providers').select('provider, info, display_name').eq('user_id', session.user.id);
+            if (err) {
+                console.error(err);
+                return;
+            }
+
             if (data) {
-                user.providers = dat.identities;
+                user.providers = [...dat.identities, ...data];
                 userdata.set(user);
             }
         }
