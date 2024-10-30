@@ -269,7 +269,7 @@
 										</g>
 									</g></svg
 								>
-								<p>{epic || 'Discord'}</p>
+								<p>{epic || 'Epic'}</p>
 							</button>
 						</div>
 					</div>
