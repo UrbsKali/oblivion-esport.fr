@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { getAccessToken, getUserInfo } from '$lib/epic';
+	import { getAccessToken, getName } from '$lib/epic';
 	import { supabase } from '$lib/supabaseClient';
 	import { userdata } from '$lib/store';
 
@@ -17,11 +17,16 @@
 		// get code from url params
 		const urlParams = new URLSearchParams(window.location.search);
 		const code = urlParams.get('code');
+
+		if (!code) {
+			return;
+		}
+
 		const token = await getAccessToken(code);
 		console.log(token);
 		if (token) {
-			const user = getUserInfo(token);
-			console.log(user);
+			const display_name = getName(token.access_token);
+			console.log(display_name);
 
 			// insert into other_providers
 			const { data, error } = await supabase
@@ -30,10 +35,16 @@
 					{
 						user_id: user.id,
 						provider: 'epic',
-						info: token
+						info: token,
+						display_name: display_name
 					}
 				])
 				.single();
+
+			if (error) {
+				console.log(error);
+			}
+			console.log(data);
 		}
 	}
 </script>
