@@ -136,7 +136,7 @@
 		Elles sont conservées par le responsable du traitement dans des conditions raisonnables de
 		sécurité, pour une durée de deux ans depuis la dernière connexion. La suppression des données
 		sera automatique et disposera d'un préavis de deux semaines. Les données personnelles collectées
-		ne sont ni cédées ni vendues à des tiers, sauf en cas de fusion ou de cession de l'entreprise.
+		ne sont ni cédées ni vendues à des tiers, sauf en cas de fusion ou de cession de l'association.
 	</p>
 	<p>
 		La société est susceptible de conserver certaines données à caractère personnel au-delà des
@@ -151,7 +151,7 @@
 	<h2>ARTICLE 4 : RESPONSABLE DU TRAITEMENT DES DONNÉES ET DÉLÉGUÉ À LA PROTECTION DES DONNÉES</h2>
 	<h3>Article 4.1 : Le responsable du traitement des données</h3>
 	<p>
-		Les données à caractère personnelles sont collectées par Oblivion, Association loi 1901, dont le
+		Les données à caractère personnelles sont collectées par Oblivion, association loi 1901, dont le
 		numéro RNA est le W943011530.
 	</p>
 	<p>
@@ -164,8 +164,8 @@
 	</p>
 
 	<h3>Article 4.2 : Le délégué à la protection des données</h3>
-	<p>Le délégué à la protection des données de l'entreprise ou du responsable est :</p>
-	<p>[Indiquez l'identité, l'adresse, le numéro de téléphone et/ou l'adresse email du DPO]</p>
+	<p>Le délégué à la protection des données de l'association ou du responsable est :</p>
+	<p>Urbain, joignable par mail : urbain.lantres@gmail.com</p>
 	<p>
 		Si vous estimez, après nous avoir contactés, que vos droits “Informatique et Libertés”, ne sont
 		pas respectés, vous pouvez adresser une information à la CNIL.
@@ -217,7 +217,7 @@
 		moment de l'achat et telle qu'acceptée par l'utilisateur lors de la validation de l'achat.
 		L'utilisateur est invité à prendre connaissance de cette Politique à chaque fois qu'il utilise
 		nos services, sans qu'il soit nécessaire de l'en prévenir formellement. La présente politique,
-		éditée le 27/10/2024, a été mise à jour le 27/10/2024.
+		éditée le 27/10/2024, a été mise à jour le 30/10/2024.
 	</p>
 </section>
 
