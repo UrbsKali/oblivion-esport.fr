@@ -22,24 +22,26 @@
 			title: 'Accueil',
 			uri: '/v2/admin',
 			icon: 'pie-chart',
-			allowed_roles: ['superadmin', 'admin', 'casteur']
+			permission: 'panel_admin'
 		},
 		{
 			title: 'Gestion des données',
 			icon: 'cube-outline',
-			allowed_roles: ['superadmin', 'admin'],
 			sub: [
 				{
 					title: 'Tournois',
-					uri: '/v2/admin/tournaments'
+					uri: '/v2/admin/tournaments',
+					permission: 'edit_tournament'
 				},
 				{
 					title: 'Teams',
-					uri: '/v2/admin/teams'
+					uri: '/v2/admin/teams',
+					permission: 'edit_team'
 				},
 				{
 					title: 'Matchs',
-					uri: '/v2/admin/matches'
+					uri: '/v2/admin/matches',
+					permission: 'edit_match'
 				}
 			]
 		},
@@ -47,37 +49,37 @@
 			title: 'Inscriptions',
 			uri: '/v2/admin/register',
 			icon: 'clipboard-outline',
-			allowed_roles: ['superadmin', 'admin', 'casteur']
+			permission: 'register'
 		},
 		{
 			title: 'Prédictions',
 			uri: '/v2/admin/predictions',
 			icon: 'analytics',
-			allowed_roles: ['superadmin', 'admin', 'casteur']
+			permission: 'make_prediction'
 		},
 		{
 			title: 'MatchID Finder',
 			uri: '/v2/admin/matchid',
 			icon: 'search-outline',
-			allowed_roles: ['superadmin', 'admin', 'casteur']
+			permission: 'matchid'
 		},
 		{
 			title: 'Ressources & Liens',
 			uri: '/v2/admin/ressources',
 			icon: 'link',
-			allowed_roles: ['superadmin', 'admin', 'casteur']
+			permission: 'panel_admin'
 		},
 		{
 			title: 'Edition des tournois',
 			uri: '/v2/admin/tournament-edition',
 			icon: 'pencil-outline',
-			allowed_roles: ['superadmin', 'admin']
+			permission: 'edit_tournament'
 		},
 		{
 			title: 'Blog',
 			uri: '/v2/admin/blog',
 			icon: 'document-text',
-			allowed_roles: ['superadmin', 'admin']
+			permission: 'edit_blog'
 		}
 	];
 
@@ -90,29 +92,39 @@
 
 	function checkPermission() {
 		// remove trailing slash if present
-		const uri = window.location.pathname.endsWith('/')
+		let uri = window.location.pathname.endsWith('/')
 			? window.location.pathname.slice(0, -1)
 			: window.location.pathname;
 
-		if (!menu.find((el) => el.uri == uri)?.allowed_roles.includes(user?.role)) {
-			// check if the uri is inside a sub menu
-			let found = false;
-			menu.forEach((el) => {
-				if (!el.sub) return;
-				if (el.sub.find((el) => el.uri == uri)) {
-					found = true;
-				}
-			});
-			if (!found) window.location.href = `/v2/`;
-			// else refer to allowed roles of the parent
-			else {
-				let parent = menu.find((el) => el.sub?.find((el) => el.uri == uri));
-				if (!parent.allowed_roles.includes(user?.role)) {
-					window.location.href = `/v2/`;
-				}
+		// check if user is allowed to acces admin pages
+		if (!user.permissions) {
+			// redirect to login page
+			window.location.href = '/v2/login';
+		}
+
+		// check if user has permission to access the page
+		let page = menu.find((item) => item.uri === uri);
+
+		if (!page) {
+			// check page parent
+			uri = uri.split('/').pop().join('/');
+			page = menu.find((item) => item.uri === uri);
+
+			if (!page) {
+				window.location.href = '/v2/';
 			}
 		}
-		__menu = menu.filter((el) => el.allowed_roles.includes(user?.role));
+
+		if (!user.permissions.includes(page.permission)) {
+			window.location.href = '/v2/';
+		}
+		__menu = menu.filter((item) => {
+			if (item.sub) {
+				item.sub = item.sub.filter((sub) => user.permissions.includes(sub.permission));
+				return item.sub.length > 0;
+			}
+			return user.permissions.includes(item.permission);
+		});
 	}
 </script>
 
