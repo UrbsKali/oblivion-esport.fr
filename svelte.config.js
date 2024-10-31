@@ -7,6 +7,7 @@ let extra_entries = [];
 // Add all the pages in the /user/teams/ directory
 for (let i = 1; i <= 100; i++) {
 	extra_entries.push(`/user/teams/${i}`);
+	extra_entries.push(`/admin/teams/${i}`);
 }
 
 
