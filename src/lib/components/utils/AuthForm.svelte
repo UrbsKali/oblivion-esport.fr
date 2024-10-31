@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
-	import { config } from '$lib/config';
 	import SucessModal from '../modals/InfoModal.svelte';
 
 	const AuthType = {
@@ -136,7 +135,7 @@
 		if (redirect) {
 			return redirect;
 		} else if (redirect_uri == '/') {
-			return window.location.origin + config.basePath;
+			return window.location.origin;
 		} else {
 			return redirect_uri;
 		}

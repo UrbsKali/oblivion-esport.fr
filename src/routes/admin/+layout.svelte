@@ -2,10 +2,10 @@
 	// @ts-nocheck
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
+	import { userdata } from '$lib/store';
+
 	import UserBadge from '$lib/components/share/UserBadge.svelte';
 	import SideBar from '$lib/components/admin/SideBar.svelte';
-	import { config, parseURI } from '$lib/config';
-	import { userdata } from '$lib/store';
 
 	let user;
 	let mount = false;
@@ -76,7 +76,6 @@
 	];
 
 	let __menu = [];
-	menu = parseURI(menu);
 
 	onMount(() => {
 		mount = true;
@@ -107,11 +106,7 @@
 				}
 			}
 		}
-
-		menu.forEach((el) => {
-			if (!el.allowed_roles.includes(user?.role)) return;
-			__menu = [...__menu, el];
-		});
+		__menu = menu.filter((el) => el.allowed_roles.includes(user?.role));
 	}
 </script>
 

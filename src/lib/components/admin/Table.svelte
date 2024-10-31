@@ -146,7 +146,9 @@
 		try {
 			document.body.removeChild(document.querySelector('#filterDropdown-' + hash));
 		} catch (e) {
-			console.error(e);
+			if (!(e instanceof ReferenceError)) {
+				console.error(e);
+			} // else the el is prerenred
 		}
 	});
 </script>

@@ -1,26 +1,17 @@
 <script>
-	// @ts-nocheck
-	import { onMount, afterUpdate } from 'svelte';
-	import { config } from '$lib/config';
 	import { navigating } from '$app/stores';
 
 	export let menu = [{ title: 'fill me', icon: 'timer', uri: '/admin' }];
-	let current_route = '';
 	let buttons_state = {};
 
-	onMount(() => {
-		loadSidebar();
-	});
-	afterUpdate(() => {
-		loadSidebar();
-	});
-
 	navigating.subscribe((value) => {
-		loadSidebar();
+		if (value) {
+			loadSidebar('/v2' + value.to.route.id);
+		}
 	});
 
-	function loadSidebar() {
-		current_route = config.basePath + window.location.pathname.slice(0, -1);
+	function loadSidebar(path) {
+		const current_route = path;
 		menu = menu.map((item) => {
 			if (item.uri === current_route) {
 				item.active = true;

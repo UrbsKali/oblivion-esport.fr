@@ -29,14 +29,14 @@
 		dropdown.style.left = 'calc(' + rect.left + 'px - 12.05rem)';
 	}
 
-	onresize = () => {
-		setupDropdown();
-	};
-
 	onMount(async () => {
 		const dropdown = document.querySelector('#dropdown');
 		setupDropdown();
 		document.body.appendChild(dropdown);
+
+		onresize = () => {
+			setupDropdown();
+		};
 
 		if (skip) return;
 		await loadUserdata();

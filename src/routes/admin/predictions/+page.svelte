@@ -237,7 +237,9 @@
 
 <section>
 	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">Prédictions</h1>
-	<Table {headers} {type} {type_accord} {actions} {dbInfo} {parseItems} {filters} {addNew} />
+	<div class="mt-2 bg-gray-800 rounded-lg sm:m-5">
+		<Table {headers} {type} {type_accord} {actions} {dbInfo} {parseItems} {filters} {addNew} />
+	</div>
 </section>
 
 <style></style>
