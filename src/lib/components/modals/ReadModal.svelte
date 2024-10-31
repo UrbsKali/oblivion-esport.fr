@@ -7,7 +7,7 @@
 	export let values = {
 		header: {
 			title: 'SKT vs T1',
-			date: '2024-05-17'
+			sub: '2024-05-17'
 		},
 		body: [
 			{
@@ -24,18 +24,16 @@
 			},
 			{
 				label: 'Utilisateur',
-				type: 'Mascode'
+				value: 'Mascode'
 			}
 		]
 	};
 	export let actions = [];
-	export let id = 'readModal';
-	export let open = false;
+	let id = 'readModal';
 
 	export let onClose = (e) => {};
 
 	let __onClose = (e) => {
-		open = false;
 		// remove componant from tree
 		current_component.$destroy();
 		onClose(e);
@@ -51,29 +49,27 @@
 	{id}
 	tabindex="-1"
 	aria-hidden="true"
-	class="{open
-		? ''
-		: 'hidden'} overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full backdrop-blur-sm"
+	class="fixed top-0 left-0 right-0 z-50 items-center justify-center w-full h-full overflow-x-hidden overflow-y-auto md:inset-0 backdrop-blur-sm"
 	data-toggle="true"
 >
 	<div class="relative flex w-full h-full p-4 m-auto">
 		<!-- Modal content -->
 		<div
-			class="relative p-4 m-auto bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5 min-w-96 popup"
+			class="relative p-4 m-auto bg-gray-800 rounded-lg sm:p-5 min-w-96 max-w-[75%] md:max-w-[70%] lg:max-w-[65%] xl:max-w-[60%] 2xl:max-w-[50%]"
 			id="popup-{id}"
 		>
 			<!-- Modal header -->
 			<div class="flex justify-between mb-4 rounded-t sm:mb-5">
-				<div class="flex w-full text-lg text-gray-900 md:text-xl dark:text-white">
+				<div class="flex w-full text-lg text-white md:text-xl">
 					<h3 class="mr-2 font-semibold">{values.header.title}</h3>
-					{#if values.header.date}
-						<p class="font-bold">- {values.header.date}</p>
+					{#if values.header.sub}
+						<p class="font-semibold text-gray-400">- {values.header.sub}</p>
 					{/if}
 				</div>
 				<div>
 					<button
 						type="button"
-						class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex dark:hover:bg-gray-600 dark:hover:text-white"
+						class="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 inline-flex hover:bg-gray-600 hover:text-white"
 						data-modal-toggle={id}
 						on:click={__onClose}
 						data-toggle="true"
@@ -97,8 +93,10 @@
 			</div>
 			<dl>
 				{#each values.body as { label, value }}
-					<dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{label}</dt>
-					<dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{value}</dd>
+					<dt class="mb-2 font-semibold leading-none text-white">{label}</dt>
+					<dd class="mb-4 font-light text-gray-400 transition-colors sm:mb-5 hover:text-gray-300">
+						{value}
+					</dd>
 				{/each}
 			</dl>
 			<div class="flex items-center justify-between">
@@ -106,7 +104,7 @@
 					{#if type == 'edit'}
 						<button
 							type="button"
-							class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+							class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
 							on:click={handler}
 						>
 							<svg
@@ -129,7 +127,7 @@
 					{#if type == 'validate'}
 						<button
 							type="button"
-							class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+							class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
 							on:click={handler}
 						>
 							<svg
@@ -150,7 +148,7 @@
 					{#if type == 'delete'}
 						<button
 							type="button"
-							class="inline-flex items-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+							class="inline-flex items-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-red-500 hover:bg-red-600 focus:ring-red-900"
 							on:click={handler}
 						>
 							<svg

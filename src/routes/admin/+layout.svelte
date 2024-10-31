@@ -44,6 +44,12 @@
 			]
 		},
 		{
+			title: 'Inscriptions',
+			uri: '/v2/admin/register',
+			icon: 'clipboard-outline',
+			allowed_roles: ['superadmin', 'admin', 'casteur']
+		},
+		{
 			title: 'Prédictions',
 			uri: '/v2/admin/predictions',
 			icon: 'analytics',
