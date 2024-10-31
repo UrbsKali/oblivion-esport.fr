@@ -5,7 +5,6 @@
 	import { userdata } from '$lib/store';
 	import { supabase } from '$lib/supabaseClient';
 	import { goto } from '$app/navigation';
-	import { placements } from '@popperjs/core';
 
 	let user;
 

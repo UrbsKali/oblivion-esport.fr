@@ -19,5 +19,4 @@ export function getName(accessToken) {
     const decodedToken = jwtDecode(accessToken);
     const displayName = decodedToken.dn;
     return displayName;
-
 }

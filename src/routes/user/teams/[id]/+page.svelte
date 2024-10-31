@@ -55,7 +55,7 @@
 		key: 'uid(id, username, avatar_url), team_id!inner(id), role'
 	};
 
-	const headers = ['Nom', 'Role', 'Actions'];
+	const headers = ['Nom', 'Role', 'Profil', 'Actions'];
 
 	let actions = [
 		{
@@ -66,7 +66,7 @@
 				console.log(p_id);
 				const { data, error } = await supabase
 					.from('member_of')
-					.select('uid(id, username, avatar_url), team_id, role')
+					.select('uid(id, username, avatar_url), team_id, role ')
 					.eq('uid', p_id)
 					.eq('team_id', id)
 					.single();
@@ -125,9 +125,20 @@
 	async function parseItems(data) {
 		let items = [];
 		for (let i = 0; i < data.length; i++) {
+			const { data: is_valid, error: error_ } = await supabase.rpc('check_user', {
+				u_id: data[i].uid.id
+			});
+			if (error_) {
+				console.error(error_);
+				return;
+			}
 			let el = data[i];
 			let avatar = el.uid.avatar_url || '/v2/oblivion.png';
-			let el_ = [{ value: el.uid.username, data: el.uid.id, avatar: avatar }, { value: el.role }];
+			let el_ = [
+				{ value: el.uid.username, data: el.uid.id, avatar: avatar },
+				{ value: el.role },
+				{ value: is_valid ? 'Valide' : 'Informations manquantes' }
+			];
 			items.push(el_);
 		}
 

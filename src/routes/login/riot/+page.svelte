@@ -1,4 +1,5 @@
 <script>
+	import { onMount } from 'svelte';
 	import { getAccessToken, getName } from '$lib/auth/epic';
 	import { supabase } from '$lib/supabaseClient';
 	import { userdata } from '$lib/store';

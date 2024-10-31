@@ -1,7 +1,7 @@
 <script>
 	import { supabase } from '$lib/supabaseClient';
 	import { userdata } from '$lib/store';
-	import { createOauthUrl } from '$lib/epic';
+	import { createOauthUrl } from '$lib/auth/epic';
 
 	let user;
 	let loading = false;
