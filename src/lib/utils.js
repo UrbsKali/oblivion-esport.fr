@@ -16,7 +16,7 @@ export async function loadUserdata() {
         // fetch user data
         const { data, error } = await supabase
             .from('profiles')
-            .select('username,avatar_url,role, tracker, permissions')
+            .select('username,avatar_url, tracker, perms!inner(permissions)')
             .eq('id', session.user.id)
             .single();
         if (error) {
@@ -30,11 +30,10 @@ export async function loadUserdata() {
         user.name = data.username || user.email.split('@')[0];
         user.avatar = data.avatar_url || user.avatar;
         user.id = session.user.id;
-        user.role = data.role || user.role;
         user.tracker = data.tracker || user.tracker;
 
-        if (data.permissions) {
-            user.permissions = data.permissions;
+        if (data.perms.permissions) {
+            user.permissions = data.perms.permissions;
         }
 
         console.log(user);

@@ -58,6 +58,12 @@
 			permission: 'make_prediction'
 		},
 		{
+			title: 'Utilisateurs',
+			uri: '/v2/admin/users',
+			icon: 'people-outline',
+			permission: 'edit_user'
+		},
+		{
 			title: 'MatchID Finder',
 			uri: '/v2/admin/matchid',
 			icon: 'search-outline',
@@ -107,7 +113,7 @@
 
 		if (!page) {
 			// check page parent
-			uri = uri.split('/').pop().join('/');
+			uri = uri.split('/').slice(0, -1).join('/');
 			page = menu.find((item) => item.uri === uri);
 
 			if (!page) {
