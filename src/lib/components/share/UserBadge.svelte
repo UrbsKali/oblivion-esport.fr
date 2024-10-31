@@ -125,7 +125,7 @@
 	<ul class="py-1 text-gray-300" aria-labelledby="dropdown">
 		<li>
 			<a
-				href="#top"
+				href="#"
 				class="block px-4 py-2 text-sm hover:bg-red-700 hover:text-white bg-opacity-80 hover:bg-opacity-50"
 				on:click={LogOut}>Déconnexion</a
 			>
