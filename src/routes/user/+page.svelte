@@ -85,7 +85,22 @@
 		const url = createOauthUrl();
 		window.location.href = url;
 	}
-	async function unlinkEpic() {}
+	async function unlinkEpic() {
+		// delete the record in the database
+		const { data, error } = await supabase
+			.from('other_providers')
+			.delete()
+			.eq('user_id', user.id)
+			.eq('provider', 'epic');
+
+		if (error) {
+			console.error(error);
+			alert('Une erreur est survenue lors de la suppression de la liaison de votre compte Epic');
+		}
+
+		epic = '';
+		window.location.reload();
+	}
 
 	async function linkDiscord() {
 		const { data, error } = await supabase.auth.linkIdentity({
