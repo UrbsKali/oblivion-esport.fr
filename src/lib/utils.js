@@ -36,7 +36,6 @@ export async function loadUserdata() {
             user.permissions = data.perms.permissions;
         }
 
-        console.log(user);
 
         userdata.set(user);
 
@@ -47,6 +46,8 @@ export async function loadUserdata() {
                 return;
             }
 
+            let providers = dat;
+
             const { data, error: err } = await supabase.from('other_providers').select('provider, info, display_name').eq('user_id', session.user.id);
             if (err) {
                 console.error(err);
@@ -54,6 +55,16 @@ export async function loadUserdata() {
             }
 
             if (data) {
+                // check for overlap
+                data.forEach((element) => {
+                    let i = providers.identities.findIndex((el) => el.provider === element.provider);
+                    if (i !== -1) {
+                        providers.identities.splice(i);
+                        element.saved = true;
+                    }
+
+                });
+
                 user.providers = [...dat.identities, ...data];
                 userdata.set(user);
             }

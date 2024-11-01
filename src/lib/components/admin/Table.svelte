@@ -313,7 +313,7 @@
 					<tbody>
 						{#each items as item, i}
 							<tr
-								class="border-b border-gray-700 {clickable ? 'cursor-pointer' : ''}"
+								class="border-b border-gray-700 {clickable ? 'cursor-pointer' : ''} max-w-52"
 								on:click={clickable
 									? (e) => {
 											e.preventDefault();

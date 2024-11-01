@@ -66,7 +66,9 @@
 				console.log(p_id);
 				const { data, error } = await supabase
 					.from('member_of')
-					.select('uid(id, username, avatar_url), team_id, role ')
+					.select(
+						'uid(id, username, avatar_url, other_providers(display_name, provider)), team_id, role'
+					)
 					.eq('uid', p_id)
 					.eq('team_id', id)
 					.single();
@@ -83,19 +85,30 @@
 						{
 							label: 'Role',
 							value: data.role || ''
+						},
+						{
+							label: 'Compte Epic Games',
+							value:
+								data.uid.other_providers?.find((el) => el.provider == 'epic')?.display_name ||
+								'Pas de compte lié'
+						},
+						{
+							label: 'Compte Discord',
+							value:
+								data.uid.other_providers?.find((el) => el.provider == 'discord')?.display_name ||
+								'Pas de compte lié'
 						}
 					]
 				};
 
 				let actions = [];
-
-				if ((user.id === data.uid.id || user.team.role === 'owner') && data.role !== 'owner') {
-					actions.push({
-						type: 'delete',
-						title: 'Supprimer',
-						handler: handleRemovePlayer
-					});
-				}
+				console.log(user);
+				console.log(data);
+				actions.push({
+					type: 'delete',
+					title: 'Supprimer',
+					handler: handleRemovePlayer
+				});
 
 				new ReadModal({
 					target: document.body,
@@ -250,9 +263,9 @@
 </script>
 
 <div class="flex flex-col items-center justify-center px-5 py-0 mx-auto sm:p-0">
-	<div class="flex items-center justify-start w-full mb-5 sm:w-9/12 md:w-6/12">
+	<div class="flex items-center justify-start w-full mb-5">
 		<button
-			class="flex items-center justify-center w-10 h-10 text-gray-200 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-full shadow hover:bg-opacity-10"
+			class="flex items-center justify-center w-10 h-10 text-gray-200 bg-gray-800 border border-gray-700 rounded-full shadow hover:bg-opacity-10"
 			on:click={() => window.history.back()}
 		>
 			<svg
@@ -270,44 +283,40 @@
 			</svg>
 		</button>
 		<h2 class="text-2xl font-bold text-center text-gray-200" id="teamName">{team.name}</h2>
-		{#if user?.team?.role === 'owner'}
-			<button
-				class="flex items-center justify-center w-10 h-10 text-gray-200 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-full shadow hover:bg-opacity-10"
-				on:click={async (e) => {
-					// delete team
-					const { data, error } = await supabase.from('Teams').delete().eq('id', id);
-					if (error) {
-						console.error(error);
-						alert("Une erreur est survenue lors de la suppression de l'équipe");
-						return;
-					}
-					goto('/v2/user/teams', { replaceState: true });
-				}}
+		<button
+			class="flex items-center justify-center w-10 h-10 text-gray-200 bg-gray-800 border border-gray-700 rounded-full shadow hover:bg-opacity-10"
+			on:click={async (e) => {
+				// delete team
+				const { data, error } = await supabase.from('Teams').delete().eq('id', id);
+				if (error) {
+					console.error(error);
+					alert("Une erreur est survenue lors de la suppression de l'équipe");
+					return;
+				}
+				//goto('/v2/user/teams', { replaceState: true });
+			}}
+		>
+			<!--Trash icon-->
+			<svg
+				class="w-5 h-5 dark:text-white hover:text-red-500"
+				aria-hidden="true"
+				xmlns="http://www.w3.org/2000/svg"
+				width="24"
+				height="24"
+				fill="none"
+				viewBox="0 0 24 24"
 			>
-				<!--Trash icon-->
-				<svg
-					class="w-5 h-5 dark:text-white hover:text-red-500"
-					aria-hidden="true"
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					fill="none"
-					viewBox="0 0 24 24"
-				>
-					<path
-						stroke="currentColor"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
-					/>
-				</svg>
-			</button>
-		{/if}
+				<path
+					stroke="currentColor"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+				/>
+			</svg>
+		</button>
 	</div>
-	<div
-		class="w-full mt-0 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-lg shadow sm:w-9/12 backdrop-blur-sm md:w-6/12"
-	>
+	<div class="w-full mt-0 bg-gray-800 border border-gray-700 rounded-lg shadow backdrop-blur-sm">
 		<Table
 			{dbInfo}
 			{parseItems}

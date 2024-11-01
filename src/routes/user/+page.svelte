@@ -13,7 +13,7 @@
 	let epic;
 	let tracker = '';
 
-	userdata.subscribe((value) => {
+	userdata.subscribe(async (value) => {
 		if (value) {
 			user = value;
 			new_username = user.name;
@@ -24,7 +24,20 @@
 			// check provider
 			if (user.providers?.find((el) => el.provider === 'discord')) {
 				const provider = user.providers.find((el) => el.provider === 'discord');
-				discord = provider.identity_data.custom_claims.global_name;
+
+				// check if provider is saved in the database
+				if (provider.saved) {
+					discord = provider.display_name;
+				} else {
+					discord = provider.identity_data.full_name;
+					// append the provider to the database
+					await supabase.from('other_providers').insert({
+						user_id: user.id,
+						provider: 'discord',
+						display_name: provider.identity_data.full_name,
+						info: provider.identity_data
+					});
+				}
 			}
 			if (user.providers?.find((el) => el.provider === 'epic')) {
 				const provider = user.providers.find((el) => el.provider === 'epic');

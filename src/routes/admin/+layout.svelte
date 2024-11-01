@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { userdata } from '$lib/store';
+	import { page } from '$app/stores';
 
 	import UserBadge from '$lib/components/share/UserBadge.svelte';
 	import SideBar from '$lib/components/admin/SideBar.svelte';
@@ -13,6 +14,12 @@
 	userdata.subscribe((value) => {
 		if (value) {
 			user = value;
+			if (mount) checkPermission();
+		}
+	});
+
+	page.subscribe((value) => {
+		if (value) {
 			if (mount) checkPermission();
 		}
 	});
@@ -109,17 +116,18 @@
 		}
 
 		// check if user has permission to access the page
-		let page = menu.find((item) => item.uri === uri);
+		let page = findURI(uri);
 
 		if (!page) {
 			// check page parent
 			uri = uri.split('/').slice(0, -1).join('/');
-			page = menu.find((item) => item.uri === uri);
+			page = findURI(uri);
 
 			if (!page) {
 				window.location.href = '/v2/';
 			}
 		}
+		console.log(page);
 
 		if (!user.permissions.includes(page.permission)) {
 			window.location.href = '/v2/';
@@ -131,6 +139,28 @@
 			}
 			return user.permissions.includes(item.permission);
 		});
+	}
+
+	function findURI(uri) {
+		// find the page in the menu, including sub uri
+		let page = menu.find((item) => item.uri === uri);
+		if (!page) {
+			page = menu.find((item) => {
+				if (item.sub) {
+					return item.sub.find((sub) => sub.uri === uri);
+				}
+			});
+		}
+		// return the page : {uri, permission}
+		try {
+			const perms = page?.sub
+				? page.sub.find((sub) => sub.uri === uri).permission
+				: page.permission;
+			return { uri: uri, permission: perms };
+		} catch (e) {
+			console.log(e);
+			return null;
+		}
 	}
 </script>
 
