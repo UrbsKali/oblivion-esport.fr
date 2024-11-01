@@ -69,7 +69,7 @@
 		gltfLoader.setDRACOLoader(draco);
 
 		let car = null;
-		gltfLoader.load('/v2/3d/TWC.glb', (gltf) => {
+		gltfLoader.load('/3d/TWC.glb', (gltf) => {
 			scene.add(gltf.scene);
 			// scale it
 			gltf.scene.scale.set(8, 8, 8);
@@ -127,7 +127,7 @@
 		draco.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
 		gltfLoader.setDRACOLoader(draco);
 		let car = null;
-		gltfLoader.load('/v2/3d/EWC.glb', (gltf) => {
+		gltfLoader.load('/3d/EWC.glb', (gltf) => {
 			scene.add(gltf.scene);
 			// scale it
 			gltf.scene.scale.set(10, 10, 10);
@@ -180,7 +180,7 @@
 		</div>
 		<div id="teaser">
 			<video
-				src="/v2/Teaser.mp4"
+				src="/Teaser.mp4"
 				class="absolute top-0 left-0 object-cover w-full h-full opacity-50 pointer-events-none -z-10"
 				autoplay
 				muted
@@ -203,7 +203,7 @@
 						<div>
 							<a
 								class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
-								href="/v2/tournaments/eleon-world-cup">En savoir +</a
+								href="/tournaments/eleon-world-cup">En savoir +</a
 							>
 							<RegisterButton tournament_id={13} />
 						</div>
@@ -221,11 +221,11 @@
 						<div class="p-8">
 							<a
 								class="px-4 py-3 mt-5 text-white border rounded-md border-primary-500"
-								href="/v2/tournaments/trankil-world-cup5">En savoir +</a
+								href="/tournaments/trankil-world-cup5">En savoir +</a
 							>
 							<a
 								class="px-4 py-3 mt-5 text-white rounded-md bg-primary-500"
-								href="/v2/tournaments/trankil-world-cup5">Voir les résultats</a
+								href="/tournaments/trankil-world-cup5">Voir les résultats</a
 							>
 						</div>
 					</div>
@@ -246,9 +246,7 @@
 			</div>
 		</div>
 		<div class="flex flex-col items-center justify-center w-full p-5">
-			<a
-				href="/v2/"
-				class="flex flex-row items-center text-center align-middle hover:text-primary-50"
+			<a href="/" class="flex flex-row items-center text-center align-middle hover:text-primary-50"
 				>Voir plus d'article
 				<svg
 					aria-hidden="true"

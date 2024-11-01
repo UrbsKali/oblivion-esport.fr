@@ -47,7 +47,7 @@
 			}
 
 			// redirect to profile
-			goto('/v2/user');
+			goto('/user');
 		}
 	}
 </script>

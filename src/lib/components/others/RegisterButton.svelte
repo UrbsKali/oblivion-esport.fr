@@ -36,14 +36,14 @@
 						{
 							text: 'Se connecter',
 							callback: () => {
-								goto('/v2/login');
+								goto('/login');
 							},
 							is_main: false
 						},
 						{
 							text: 'Créer un compte',
 							callback: () => {
-								goto('/v2/register');
+								goto('/register');
 							},
 							is_main: true
 						}
@@ -75,7 +75,7 @@
 						{
 							text: 'Créer une équipe',
 							callback: () => {
-								goto('/v2/user/teams');
+								goto('/user/teams');
 							},
 							is_main: true
 						}
@@ -172,7 +172,7 @@
 											// remove the CrudForm
 											document.querySelector('#CrudModal').remove();
 											// go to team page
-											goto(`/v2/user/teams/${data.team}`);
+											goto(`/user/teams/${data.team}`);
 										},
 										is_main: true
 									}

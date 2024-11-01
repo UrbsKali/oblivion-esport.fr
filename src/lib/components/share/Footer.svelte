@@ -8,7 +8,7 @@
 >
 	<div class="flex flex-col items-start gap-2 align-middle sm:px-5">
 		<div>
-			<img src="/v2/oblivion.png" alt="" class="w-20" />
+			<img src="/oblivion.png" alt="" class="w-20" />
 		</div>
 		<div class="flex gap-2 py-2">
 			<a href="https://www.instagram.com/trankil_world_cup/" target="_blank">
@@ -86,15 +86,15 @@
 	<div class="grid w-full h-auto text-gray-300" id="sitemap">
 		<div class="flex flex-col items-center justify-center h-auto gap-2 align-middle sm:px-5">
 			<p class="font-bold text-white">Légal</p>
-			<a href="/v2/policies/privacy" class=""> Données personnelles </a>
-			<a href="/v2/policies/cgu"> CGU </a>
-			<a href="/v2/policies/legal"> Mentions légales </a>
+			<a href="/policies/privacy" class=""> Données personnelles </a>
+			<a href="/policies/cgu"> CGU </a>
+			<a href="/policies/legal"> Mentions légales </a>
 		</div>
 		<div class="flex flex-col items-center justify-center h-auto gap-2 align-middle sm:px-5">
 			<p class="font-bold text-white">Association</p>
-			<a href="/v2/tournaments" class=""> Tournois </a>
-			<a href="/v2/staff"> Notre équipe </a>
-			<a href="/v2/blog"> Le blog </a>
+			<a href="/tournaments" class=""> Tournois </a>
+			<a href="/staff"> Notre équipe </a>
+			<a href="/blog"> Le blog </a>
 		</div>
 	</div>
 </footer>

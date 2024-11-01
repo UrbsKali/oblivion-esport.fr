@@ -9,7 +9,7 @@
 		reset: 'Mot de passe oublié'
 	};
 
-	export let redirect_uri = '/v2/';
+	export let redirect_uri = '/';
 	/**
 	 * {'login' | 'register' | 'reset'}
 	 */
@@ -40,7 +40,7 @@
 		}
 		if (error && auth_type === AuthType.reset) {
 			console.error(error);
-			window.location.href = '/v2/login';
+			window.location.href = '/login';
 		}
 		email = user?.email || '';
 	});
@@ -115,7 +115,7 @@
 						message: 'Un email de confirmation vous a été envoyé.',
 
 						onClose: () => {
-							window.location.href = '/v2/';
+							window.location.href = '/';
 						}
 					}
 				});
@@ -186,10 +186,7 @@
 								class="w-4 h-4 border border-gray-300 rounded text-primary-600 focus:ring-primary-600 focus:border-primary-600"
 							/>
 							<label for="privacy" class="ml-2 text-sm text-white"
-								>J'accepte la <a
-									href="/v2/policies/privacy"
-									class="text-primary-100"
-									target="_blank"
+								>J'accepte la <a href="/policies/privacy" class="text-primary-100" target="_blank"
 									>Politique de confidentialité
 								</a></label
 							>

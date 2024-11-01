@@ -55,10 +55,10 @@
 	</p>
 	<p>
 		Pour plus d'informations, se reporter aux CGU du site oblivion-esport.fr accessibles depuis la
-		rubrique <a href="/v2/policies/cgu">CGU</a> . Pour plus d'informations en matière de protection
-		des données à caractère personnel, se reporter à la Charte en matière de protection des données
-		à caractère personnel du site oblivion-esport.fr accessible depuis la rubrique
-		<a href="/v2/policies/privacy">Données personnelles</a>.
+		rubrique <a href="/policies/cgu">CGU</a> . Pour plus d'informations en matière de protection des
+		données à caractère personnel, se reporter à la Charte en matière de protection des données à
+		caractère personnel du site oblivion-esport.fr accessible depuis la rubrique
+		<a href="/policies/privacy">Données personnelles</a>.
 	</p>
 </section>
 

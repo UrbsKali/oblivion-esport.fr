@@ -13,7 +13,7 @@
 				e.preventDefault();
 				const tr = e.target.closest('tr');
 				const id = tr.children[0].dataset.utils;
-				goto(`/v2/admin/teams/${id}`);
+				goto(`/admin/teams/${id}`);
 				e.stopPropagation();
 			}
 		}
@@ -22,7 +22,7 @@
 	function parseItems(data) {
 		let items = [];
 		data?.forEach((element) => {
-			const avatar = element.logo_url || '/v2/oblivion.png';
+			const avatar = element.logo_url || '/oblivion.png';
 			let el = [
 				{ value: element.name, data: element.id, avatar: avatar },
 				{ value: element.tag },

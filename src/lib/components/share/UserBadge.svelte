@@ -44,7 +44,7 @@
 
 	const LogOut = () => {
 		supabase.auth.signOut().then(() => {
-			window.location.href = `/v2/`;
+			window.location.href = `/`;
 		});
 	};
 </script>
@@ -78,20 +78,20 @@
 	<ul class="py-1 text-gray-300" aria-labelledby="dropdown">
 		<li>
 			<a
-				href="/v2/user/"
+				href="/user/"
 				class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80">Profil</a
 			>
 		</li>
 		<li>
 			<a
-				href="/v2/user/notifications"
+				href="/user/notifications"
 				class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80"
 				>Notifications</a
 			>
 		</li>
 		<li>
 			<a
-				href="/v2/user/settings"
+				href="/user/settings"
 				class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80"
 				>Paramètres</a
 			>
@@ -101,7 +101,7 @@
 		{#if user?.permissions?.includes('panel_admin')}
 			<li>
 				<a
-					href="/v2/admin/"
+					href="/admin/"
 					class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80"
 					>Pannel Admin</a
 				>
@@ -109,14 +109,14 @@
 		{/if}
 		<li>
 			<a
-				href="/v2/user/teams"
+				href="/user/teams"
 				class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80"
 				>Mes équipes</a
 			>
 		</li>
 		<li>
 			<a
-				href="/v2/user/tournaments"
+				href="/user/tournaments"
 				class="block px-4 py-2 text-sm hover:bg-gray-700 hover:text-white bg-opacity-80"
 				>Mes Tournois</a
 			>

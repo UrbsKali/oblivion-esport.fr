@@ -118,7 +118,7 @@
 	async function linkDiscord() {
 		const { data, error } = await supabase.auth.linkIdentity({
 			provider: 'discord',
-			options: { redirectTo: 'https://oblivion-esport.fr/v2/user' }
+			options: { redirectTo: 'https://oblivion-esport.fr/user' }
 		});
 
 		if (error) {

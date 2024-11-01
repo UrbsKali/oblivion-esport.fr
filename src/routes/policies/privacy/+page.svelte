@@ -20,8 +20,8 @@
 	</ul>
 	<p>
 		Cette politique complète les mentions légales et les Conditions Générales d'Utilisation
-		consultables par les utilisateurs via ces liens : <a href="/v2/policies/cgu">CGU</a>,
-		<a href="/v2/policies/legal">Mentions légales</a>
+		consultables par les utilisateurs via ces liens : <a href="/policies/cgu">CGU</a>,
+		<a href="/policies/legal">Mentions légales</a>
 		.
 	</p>
 

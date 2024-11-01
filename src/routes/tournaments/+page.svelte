@@ -116,7 +116,7 @@
 	}
 </script>
 
-<img id="oblivion" class="absolute z-20 hidden sm:block" src="/v2/oblivion.png" />
+<img id="oblivion" class="absolute z-20 hidden sm:block" src="/oblivion.png" />
 <Cursor />
 <div class="enable-cursor">
 	<div class="container py-8 mx-auto">
@@ -147,14 +147,14 @@
 									<div class="mt-5">
 										<a
 											class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
-											href="/v2/tournaments/{item.slug.slug}">En savoir +</a
+											href="/tournaments/{item.slug.slug}">En savoir +</a
 										>
 										{#if item.can_register}
 											<RegisterButton tournament_id={13} />
 										{:else}
 											<a
 												class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
-												href="/v2/tournaments/{item.slug.slug}">Voir les résultats</a
+												href="/tournaments/{item.slug.slug}">Voir les résultats</a
 											>
 										{/if}
 									</div>
@@ -188,14 +188,14 @@
 									<div class="mt-5">
 										<a
 											class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
-											href="/v2/tournaments/{item.slug.slug}">En savoir +</a
+											href="/tournaments/{item.slug.slug}">En savoir +</a
 										>
 										{#if item.can_register}
 											<RegisterButton tournament_id={1} />
 										{:else}
 											<a
 												class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"
-												href="/v2/tournaments/{item.slug.slug}">Voir les résultats</a
+												href="/tournaments/{item.slug.slug}">Voir les résultats</a
 											>
 										{/if}
 									</div>

@@ -133,7 +133,7 @@
 				return;
 			}
 			let el = data[i];
-			let avatar = el.uid.avatar_url || '/v2/oblivion.png';
+			let avatar = el.uid.avatar_url || '/oblivion.png';
 			let el_ = [
 				{ value: el.uid.username, data: el.uid.id, avatar: avatar },
 				{ value: el.role },
@@ -178,7 +178,7 @@
 							let options = [];
 							for (let i = 0; i < data.length; i++) {
 								let el = data[i];
-								let avatar = el.avatar_url || '/v2/oblivion.png';
+								let avatar = el.avatar_url || '/oblivion.png';
 								options.push({ value: el.id, text: el.username, image: avatar });
 							}
 							return options;
@@ -281,7 +281,7 @@
 						alert("Une erreur est survenue lors de la suppression de l'équipe");
 						return;
 					}
-					goto('/v2/user/teams', { replaceState: true });
+					goto('/user/teams', { replaceState: true });
 				}}
 			>
 				<!--Trash icon-->

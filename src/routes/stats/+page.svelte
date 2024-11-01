@@ -89,8 +89,8 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 	<meta name="og:title" content="Statistiques" />
 	<meta name="og:description" content="Statistiques des joueurs - Oblivion Esport" />
-	<meta name="og:image" content="/v2/oblivion.png" />
-	<meta name="og:url" content="https://oblivion-esport.fr/v2/stats" />
+	<meta name="og:image" content="/oblivion.png" />
+	<meta name="og:url" content="https://oblivion-esport.fr/stats" />
 	<meta name="og:site_name" content="Oblivion Esport" />
 </svelte:head>
 

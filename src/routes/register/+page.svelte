@@ -4,7 +4,7 @@
 
 <section class="min-h-screen overflow-hidden min-w-screen">
 	<div class="pt-16 cross md:pt-0">
-		<AuthForm auth_type="register" redirect_uri="/v2/" />
+		<AuthForm auth_type="register" redirect_uri="/" />
 	</div>
 </section>
 

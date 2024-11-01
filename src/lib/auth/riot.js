@@ -5,7 +5,7 @@ export const DeploymentID = "c4ccbce82d1443b99bd31b25c0385dac";
 
 const secret = "oF8Hz9pNp9fDQoaYarAe";
 
-export function createOauthUrl(redirect_to = "https://oblivion-esport.fr/v2/login/epic") {
+export function createOauthUrl(redirect_to = "https://oblivion-esport.fr/login/epic") {
     return `https://www.epicgames.com/id/authorize?client_id=${ClientID}&redirect_uri=${redirect_to}&response_type=code&scope=basic_profile `;
 }
 

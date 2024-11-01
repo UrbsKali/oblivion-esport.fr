@@ -156,7 +156,7 @@
 			type: 'view',
 			handler: (e) => {
 				const id = e.target.closest('tr').firstChild.dataset.utils;
-				goto(`/v2/user/teams/${id}`, { replaceState: false });
+				goto(`/user/teams/${id}`, { replaceState: false });
 			}
 		}
 	];

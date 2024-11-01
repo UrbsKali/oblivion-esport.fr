@@ -28,7 +28,7 @@
 	let menu = [
 		{
 			title: 'Accueil',
-			uri: '/v2/admin',
+			uri: '/admin',
 			icon: 'pie-chart',
 			permission: 'panel_admin'
 		},
@@ -38,60 +38,60 @@
 			sub: [
 				{
 					title: 'Tournois',
-					uri: '/v2/admin/tournaments',
+					uri: '/admin/tournaments',
 					permission: 'edit_tournament'
 				},
 				{
 					title: 'Teams',
-					uri: '/v2/admin/teams',
+					uri: '/admin/teams',
 					permission: 'edit_team'
 				},
 				{
 					title: 'Matchs',
-					uri: '/v2/admin/matches',
+					uri: '/admin/matches',
 					permission: 'edit_match'
 				}
 			]
 		},
 		{
 			title: 'Inscriptions',
-			uri: '/v2/admin/register',
+			uri: '/admin/register',
 			icon: 'clipboard-outline',
 			permission: 'register'
 		},
 		{
 			title: 'Prédictions',
-			uri: '/v2/admin/predictions',
+			uri: '/admin/predictions',
 			icon: 'analytics',
 			permission: 'make_prediction'
 		},
 		{
 			title: 'Utilisateurs',
-			uri: '/v2/admin/users',
+			uri: '/admin/users',
 			icon: 'people-outline',
 			permission: 'edit_user'
 		},
 		{
 			title: 'MatchID Finder',
-			uri: '/v2/admin/matchid',
+			uri: '/admin/matchid',
 			icon: 'search-outline',
 			permission: 'matchid'
 		},
 		{
 			title: 'Ressources & Liens',
-			uri: '/v2/admin/ressources',
+			uri: '/admin/ressources',
 			icon: 'link',
 			permission: 'panel_admin'
 		},
 		{
 			title: 'Edition des tournois',
-			uri: '/v2/admin/tournament-edition',
+			uri: '/admin/tournament-edition',
 			icon: 'pencil-outline',
 			permission: 'edit_tournament'
 		},
 		{
 			title: 'Blog',
-			uri: '/v2/admin/blog',
+			uri: '/admin/blog',
 			icon: 'document-text',
 			permission: 'edit_blog'
 		}
@@ -113,7 +113,7 @@
 		// check if user is allowed to acces admin pages
 		if (!user.permissions) {
 			// redirect to login page
-			window.location.href = '/v2/login';
+			window.location.href = '/login';
 		}
 
 		// check if user has permission to access the page
@@ -125,13 +125,13 @@
 			page = findURI(uri);
 
 			if (!page) {
-				window.location.href = '/v2/';
+				window.location.href = '/';
 			}
 		}
 		console.log(page);
 
 		if (!user.permissions.includes(page.permission)) {
-			window.location.href = '/v2/';
+			window.location.href = '/';
 		}
 		__menu = menu.filter((item) => {
 			if (item.sub) {
@@ -206,8 +206,8 @@
 					</svg>
 					<span class="sr-only">Toggle sidebar</span>
 				</button>
-				<a href="/v2/admin" class="flex items-center justify-between mr-4">
-					<img src="/v2/oblivion.png" class="h-8 mr-3" alt="Oblivion Logo" />
+				<a href="/admin" class="flex items-center justify-between mr-4">
+					<img src="/oblivion.png" class="h-8 mr-3" alt="Oblivion Logo" />
 					<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
 						>Oblivion</span
 					>

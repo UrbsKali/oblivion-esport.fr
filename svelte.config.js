@@ -25,9 +25,6 @@ const config = {
 			precompress: false,
 			strict: true
 		}),
-		paths: {
-			base: '/v2'
-		},
 		prerender: {
 			entries: ['*', ...extra_entries],
 		},

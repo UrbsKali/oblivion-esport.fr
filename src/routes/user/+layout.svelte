@@ -86,22 +86,22 @@
 				</div>
 			</div>
 		</div>
-		<!--{#if path.includes('notifications') || path.includes('settings') || path === '/v2/user/'}-->
+		<!--{#if path.includes('notifications') || path.includes('settings') || path === '/user/'}-->
 		<div class="flex flex-col items-center justify-center w-full px-5 my-5 sm:p-0">
 			<div class="flex flex-row items-center justify-center w-full gap-5 sm:w-9/12 md:w-6/12">
 				<a
-					href="/v2/user/"
+					href="/user/"
 					class="w-full p-2 text-sm text-center text-gray-400 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-lg shadow hover:text-white sm:max-w-md backdrop-blur-sm"
 					>Profil</a
 				>
 
 				<a
-					href="/v2/user/notifications"
+					href="/user/notifications"
 					class="w-full p-2 text-sm text-center text-gray-400 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-lg shadow hover:text-white sm:max-w-md backdrop-blur-sm"
 					>Notifications</a
 				>
 				<a
-					href="/v2/user/settings"
+					href="/user/settings"
 					class="w-full p-2 text-sm text-center text-gray-400 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-lg shadow hover:text-white sm:max-w-md backdrop-blur-sm"
 				>
 					Paramètres

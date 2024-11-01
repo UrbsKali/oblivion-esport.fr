@@ -1,7 +1,7 @@
 <script>
 	// @ts-nocheck
 
-	export let href = '/v2/';
+	export let href = '/';
 	export let target = '_blank';
 	export let text = 'Voir le match';
 	export let color = 'primary';
