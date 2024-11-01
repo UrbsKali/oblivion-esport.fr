@@ -10,6 +10,7 @@
 
 	let user;
 	let mount = false;
+	let sidebar = false;
 
 	userdata.subscribe((value) => {
 		if (value) {
@@ -174,6 +175,7 @@
 					data-drawer-target="drawer-navigation"
 					data-drawer-toggle="drawer-navigation"
 					aria-controls="drawer-navigation"
+					on:click={() => (sidebar = !sidebar)}
 					class="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
 				>
 					<svg
@@ -218,7 +220,7 @@
 	</nav>
 
 	<!-- Sidebar -->
-	<SideBar menu={__menu} />
+	<SideBar menu={__menu} open={sidebar} />
 
 	<main class="min-h-screen p-4 pt-20 md:ml-64">
 		<slot />

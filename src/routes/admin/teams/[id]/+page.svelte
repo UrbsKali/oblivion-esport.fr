@@ -95,8 +95,9 @@
 						{
 							label: 'Compte Discord',
 							value:
-								data.uid.other_providers?.find((el) => el.provider == 'discord')?.display_name ||
-								'Pas de compte lié'
+								'@' +
+								(data.uid.other_providers?.find((el) => el.provider == 'discord')?.display_name ||
+									'Pas de compte lié')
 						}
 					]
 				};
