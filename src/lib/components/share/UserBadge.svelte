@@ -98,7 +98,7 @@
 		</li>
 	</ul>
 	<ul class="py-1 text-gray-300" aria-labelledby="dropdown">
-		{#if ['admin', 'superadmin', 'casteur'].includes(user.role)}
+		{#if user?.permissions?.includes('panel_admin')}
 			<li>
 				<a
 					href="/v2/admin/"
