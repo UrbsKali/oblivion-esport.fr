@@ -1,0 +1,182 @@
+<script>
+	import Table from '$lib/components/admin/Table.svelte';
+	import CrudForm from '$lib/components/modals/CrudForm.svelte';
+	import SucessModal from '$lib/components/modals/InfoModal.svelte';
+	import { userdata } from '$lib/store';
+	import { supabase } from '$lib/supabaseClient';
+	import { goto } from '$app/navigation';
+
+	let user;
+
+	let filters = [];
+	let can_load = false;
+
+	userdata.subscribe((value) => {
+		if (value) {
+			user = value;
+			can_load = true;
+			filters = [
+				{
+					category: 'hidden',
+					value: 'member_of.uid.id',
+					options: [{ value: user.id, active: true }]
+				}
+			];
+		}
+	});
+
+	const dbInfo = {
+		table: 'Teams',
+		key: 'id, name, tag, member_of!inner(uid!inner(id, username, avatar_url)), logo_url'
+	};
+
+	const headers = ['Nom', 'Tag', 'Membres', 'Actions'];
+
+	async function parseItems(data) {
+		let items = [];
+		for (let i = 0; i < data.length; i++) {
+			let el = data[i];
+			const { data: dat, error } = await supabase
+				.from('member_of')
+				.select('uid(username)')
+				.eq('team_id', el.id);
+			if (error) {
+				console.error(error);
+				return;
+			}
+			let el_ = [
+				{ value: el.name, data: el.id, avatar: el.logo_url },
+				{ value: el.tag },
+				{ value: dat.map((el) => el.uid.username).join(', ') || '-' }
+			];
+			items.push(el_);
+		}
+
+		return items;
+	}
+
+	async function addNew() {
+		new CrudForm({
+			target: document.body,
+			props: {
+				fields: [
+					{
+						name: 'Nom',
+						type: 'text',
+						id: 'name',
+						required: true,
+						placeholder: 'Kentucky Fisting Corp'
+					},
+					{ name: 'TAG', type: 'text', required: true, placeholder: 'KFC' },
+					{ name: 'Logo', type: 'img', required: true, wide: true },
+					{
+						name: 'Description',
+						type: 'textarea',
+						id: 'description',
+						required: true,
+						wide: true
+					}
+				],
+				type_accord: 'une',
+				type: 'Équipe',
+				onSubmit: async (e) => {
+					// get forms data
+					e.preventDefault();
+					const form_data = new FormData(e.target.closest('form'));
+					let data = {};
+					for (let [key, value] of form_data.entries()) {
+						data[key.toLowerCase()] = value;
+					}
+
+					// create a hash for the team
+					data.hash =
+						Math.random().toString(36).substring(2, 15) +
+						Math.random().toString(36).substring(2, 15);
+
+					// upload logo
+					const logoFile = form_data.get('logo');
+					let extension = logoFile.name.split('.').pop();
+					const { data: _, error: err } = await supabase.storage
+						.from('avatars')
+						.upload(`${user.id}/teams_${data.hash}.${extension}`, logoFile, {
+							cacheControl: '3600',
+							upsert: true
+						});
+					if (err) {
+						console.error(err);
+						alert("Une erreur est survenue lors de l'envoi du logo");
+						return;
+					}
+					// get logo url
+					const { data: data_ } = supabase.storage
+						.from('avatars')
+						.getPublicUrl(`${user.id}/teams_${data.hash}.${extension}`);
+					data.logo_url = data_.publicUrl;
+
+					// create team
+					const team_data = {
+						name: data.name,
+						tag: data.tag,
+						logo_url: data.logo_url,
+						description: data.description
+					};
+					const { data: data__, error } = await supabase
+						.from('Teams')
+						.insert(team_data)
+						.select('id')
+						.single();
+					if (error) {
+						console.error(error);
+						alert("Une erreur est survenue lors de la création de l'équipe");
+						return;
+					}
+					console.log(data__);
+					// add user to team
+					const { data: data___, error: error__ } = await supabase
+						.from('member_of')
+						.insert({ team_id: data__.id, uid: user.id, role: 'owner' });
+					if (error__) {
+						console.error(error__);
+						alert("Une erreur est survenue lors de l'ajout d'un membre à l'équipe");
+						return;
+					}
+					new SucessModal({
+						target: document.body,
+						props: {
+							message: "L'équipe a bien été créée"
+						}
+					});
+				}
+			}
+		});
+	}
+
+	let actions = [
+		{
+			type: 'view',
+			handler: (e) => {
+				const id = e.target.closest('tr').firstChild.dataset.utils;
+				goto(`/user/teams/${id}`, { replaceState: false });
+			}
+		}
+	];
+</script>
+
+<div class="flex flex-col items-center justify-center px-5 py-0 mx-auto sm:p-0">
+	<div
+		class="w-full mt-0 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-lg shadow sm:w-9/12 backdrop-blur-sm md:w-6/12"
+	>
+		<Table
+			{dbInfo}
+			{parseItems}
+			{headers}
+			{filters}
+			{addNew}
+			{can_load}
+			{actions}
+			clickable={true}
+			type="équipe"
+			type_accord="une"
+		/>
+	</div>
+</div>
