@@ -69,7 +69,7 @@
 		gltfLoader.setDRACOLoader(draco);
 
 		let car = null;
-		gltfLoader.load('/3d/TWC.glb', (gltf) => {
+		gltfLoader.load('/assets/3d/TWC.glb', (gltf) => {
 			scene.add(gltf.scene);
 			// scale it
 			gltf.scene.scale.set(8, 8, 8);
@@ -127,7 +127,7 @@
 		draco.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
 		gltfLoader.setDRACOLoader(draco);
 		let car = null;
-		gltfLoader.load('/3d/EWC.glb', (gltf) => {
+		gltfLoader.load('/assets/3d/EWC.glb', (gltf) => {
 			scene.add(gltf.scene);
 			// scale it
 			gltf.scene.scale.set(10, 10, 10);
@@ -180,7 +180,7 @@
 		</div>
 		<div id="teaser">
 			<video
-				src="/Teaser.mp4"
+				src="/assets/Teaser.mp4"
 				class="absolute top-0 left-0 object-cover w-full h-full opacity-50 pointer-events-none -z-10"
 				autoplay
 				muted
@@ -285,7 +285,7 @@
 		top: -50%;
 		left: -50%;
 		z-index: 5;
-		background-image: url('/plus-pattern-center.webp');
+		background-image: url('/assets/plus-pattern-center.webp');
 		background-size: 5%;
 		background-repeat: repeat;
 		opacity: 0.1;

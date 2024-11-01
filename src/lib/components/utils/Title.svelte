@@ -15,7 +15,7 @@
 <div class="flex items-center transition-all align-center" id="title-{size}">
 	<h1 class="text-6xl font-bold text-white">OBLIVI</h1>
 	<div class="h-[60px] pt-[12px]">
-		<img src="/oblivion.png" alt="" class="h-[43px]" />
+		<img src="/assets/oblivion.png" alt="" class="h-[43px]" />
 	</div>
 	<h1 class="text-6xl font-bold text-white">N</h1>
 </div>

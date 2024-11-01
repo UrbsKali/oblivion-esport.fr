@@ -2,6 +2,7 @@
 	import { userdata } from '$lib/store';
 	import { supabase } from '$lib/supabaseClient';
 	import { page } from '$app/stores';
+	import Footer from '$lib/components/share/Footer.svelte';
 
 	let user;
 	let path = '';
@@ -113,7 +114,11 @@
 		{/if}-->
 	</div>
 </section>
-<slot />
+<div class="min-h-screen">
+	<slot />
+</div>
+
+<Footer />
 
 <style>
 	.cross::before {

@@ -207,7 +207,7 @@
 					<span class="sr-only">Toggle sidebar</span>
 				</button>
 				<a href="/admin" class="flex items-center justify-between mr-4">
-					<img src="/oblivion.png" class="h-8 mr-3" alt="Oblivion Logo" />
+					<img src="/assets/oblivion.png" class="h-8 mr-3" alt="Oblivion Logo" />
 					<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
 						>Oblivion</span
 					>

@@ -8,6 +8,7 @@
 	import SvelteMarkdown from 'svelte-markdown';
 	import { renderers } from '$lib/renderers';
 	import RegisterButton from '$lib/components/others/RegisterButton.svelte';
+	import Footer from '$lib/components/share/Footer.svelte';
 
 	let slug = '';
 	let tournament = {};
@@ -63,4 +64,7 @@
 			</span>
 		</div>
 	</div>
+</div>
+<div class="mt-10">
+	<Footer />
 </div>

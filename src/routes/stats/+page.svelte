@@ -79,7 +79,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="theme-color" content="#000000" />
 	<meta name="msapplication-TileColor" content="#000000" />
-	<meta name="msapplication-TileImage" content="https://oblivion-esport.fr/oblivion.png" />
+	<meta name="msapplication-TileImage" content="https://oblivion-esport.fr/assets/oblivion.png" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-title" content="Statistiques" />
@@ -89,7 +89,7 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 	<meta name="og:title" content="Statistiques" />
 	<meta name="og:description" content="Statistiques des joueurs - Oblivion Esport" />
-	<meta name="og:image" content="/oblivion.png" />
+	<meta name="og:image" content="/assets/oblivion.png" />
 	<meta name="og:url" content="https://oblivion-esport.fr/stats" />
 	<meta name="og:site_name" content="Oblivion Esport" />
 </svelte:head>

@@ -9,7 +9,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"postbuild": "npx svelte-sitemap --domain https://oblivion-esport.fr --ignore '**/admin/**' --ignore '/login/epic' --ignore '/login/riot' --ignore '/user/**' -i '/debug'"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
@@ -26,6 +27,7 @@
 		"sass": "^1.80.4",
 		"svelte": "^4.2.7",
 		"svelte-check": "^3.6.0",
+		"svelte-sitemap": "^2.6.0",
 		"tailwindcss": "^3.4.7",
 		"typescript": "^5.0.0",
 		"vite": "^5.0.3"

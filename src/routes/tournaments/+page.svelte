@@ -116,7 +116,12 @@
 	}
 </script>
 
-<img id="oblivion" class="absolute z-20 hidden sm:block" src="/oblivion.png" />
+<img
+	id="oblivion"
+	class="absolute z-20 hidden sm:block"
+	src="/assets/oblivion.png"
+	alt="moving logo following the scroll on the timeline"
+/>
 <Cursor />
 <div class="enable-cursor">
 	<div class="container py-8 mx-auto">
