@@ -122,7 +122,7 @@
 		let items = [];
 		data?.forEach((element) => {
 			for (let i = 0; i < element.part_of.length; i++) {
-				const avatar = element.logo_url || '/oblivion.png';
+				const avatar = element.logo_url || '/assets/oblivion.png';
 				const el = [
 					{ value: element.name, data: element.id, avatar: avatar },
 					{

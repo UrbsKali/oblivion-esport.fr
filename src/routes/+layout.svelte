@@ -18,12 +18,12 @@
 	<!--SEO & Twiter OGG-->
 	<meta property="og:title" content="Oblivion Esport" />
 	<meta property="og:description" content="Vivez l'expérience e-sport" />
-	<meta property="og:image" content="/assets/oblivion.png" />
+	<meta property="og:image" content="/assets/card_main.avif" />
 	<meta property="og:url" content="https://oblivion-esport.fr" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Oblivion Esport" />
 	<meta name="twitter:description" content="Vivez l'expérience e-sport" />
-	<meta name="twitter:image" content="/assets/oblivion.png" />
+	<meta name="twitter:image" content="/assets/card_main.avif" />
 </svelte:head>
 
 <div class="min-h-screen antialiased text-white bg-gray-900 min-w-screen bg-opacity-80">
