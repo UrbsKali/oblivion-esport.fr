@@ -8,7 +8,6 @@
 	import { supabase } from '$lib/supabaseClient';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
 
 	let user;
 	let id;
@@ -34,19 +33,6 @@
 	userdata.subscribe(async (value) => {
 		if (value) {
 			user = value;
-
-			// add team role to user data
-			const { data: data_, error: error_ } = await supabase
-				.from('member_of')
-				.select('role')
-				.eq('uid', user.id)
-				.eq('team_id', id)
-				.single();
-			if (error_) {
-				console.error(error_);
-				return;
-			}
-			user.team = { role: data_.role };
 		}
 	});
 
@@ -95,9 +81,8 @@
 						{
 							label: 'Compte Discord',
 							value:
-								'@' +
-								(data.uid.other_providers?.find((el) => el.provider == 'discord')?.display_name ||
-									'Pas de compte lié')
+								data.uid.other_providers?.find((el) => el.provider == 'discord')?.display_name ||
+								'Pas de compte lié'
 						}
 					]
 				};
@@ -115,7 +100,7 @@
 					target: document.body,
 					props: {
 						open: true,
-						id: 'readModal-' + p_id,
+						id: 'readModal_' + p_id,
 						values,
 						actions: actions
 					}
@@ -126,14 +111,14 @@
 
 	async function handleRemovePlayer(e) {
 		e.preventDefault();
-		const id = e.target.closest('.modal').id.split('-')[1];
-		const { data, error } = await supabase.from('member_of').delete().eq('id', id);
+		const id = e.target.closest('.modal').id.split('_')[1];
+		const { data, error } = await supabase.from('member_of').delete().eq('uid', id);
 		if (error) {
 			console.error(error);
 			alert("Une erreur est survenue lors de la suppression du membre de l'équipe");
 			return;
 		}
-		document.getElementById('readModal-' + id).remove();
+		document.getElementById('popup-readModal_' + id).remove();
 	}
 
 	async function parseItems(data) {

@@ -1,9 +1,6 @@
 <script>
-	import { supabase } from '$lib/supabaseClient';
-
-	import CrudForm from '$lib/components/modals/CrudForm.svelte';
-	import ReadModal from '$lib/components/modals/ReadModal.svelte';
 	import Table from '$lib/components/admin/Table.svelte';
+	import { goto } from '$app/navigation';
 
 	const headers = ['Nom', 'TAG', 'Description', 'Actions'];
 	const type = 'Teams';
@@ -14,11 +11,9 @@
 			type: 'view',
 			handler: async (e) => {
 				e.preventDefault();
-				let tr = e.target.closest('tr');
-				let name = tr.children[0].innerText;
+				const tr = e.target.closest('tr');
 				const id = tr.children[0].dataset.utils;
-				let tournament = tr.children[1].innerText;
-
+				goto(`/v2/admin/teams/${id}`);
 				e.stopPropagation();
 			}
 		}

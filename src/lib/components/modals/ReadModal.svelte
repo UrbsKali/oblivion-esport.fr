@@ -29,7 +29,7 @@
 		]
 	};
 	export let actions = [];
-	let id = 'readModal';
+	export let id = 'readModal';
 
 	export let onClose = (e) => {};
 
@@ -55,7 +55,7 @@
 	<div class="relative flex w-full h-full p-4 m-auto">
 		<!-- Modal content -->
 		<div
-			class="relative p-4 m-auto bg-gray-800 rounded-lg sm:p-5 min-w-96 max-w-[75%] md:max-w-[70%] lg:max-w-[65%] xl:max-w-[60%] 2xl:max-w-[50%]"
+			class="relative p-4 m-auto bg-gray-800 rounded-lg sm:p-5 min-w-96 max-w-[75%] md:max-w-[70%] lg:max-w-[65%] xl:max-w-[60%] 2xl:max-w-[50%] modal"
 			id="popup-{id}"
 		>
 			<!-- Modal header -->

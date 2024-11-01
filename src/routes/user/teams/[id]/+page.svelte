@@ -101,7 +101,7 @@
 					target: document.body,
 					props: {
 						open: true,
-						id: 'readModal-' + p_id,
+						id: 'readModal_' + p_id,
 						values,
 						actions: actions
 					}
@@ -112,14 +112,14 @@
 
 	async function handleRemovePlayer(e) {
 		e.preventDefault();
-		const id = e.target.closest('.modal').id.split('-')[1];
-		const { data, error } = await supabase.from('member_of').delete().eq('id', id);
+		const id = e.target.closest('.modal').id.split('_')[1];
+		const { data, error } = await supabase.from('member_of').delete().eq('uid', id);
 		if (error) {
 			console.error(error);
 			alert("Une erreur est survenue lors de la suppression du membre de l'équipe");
 			return;
 		}
-		document.getElementById('readModal-' + id).remove();
+		document.getElementById('popup-readModal_' + id).remove();
 	}
 
 	async function parseItems(data) {
