@@ -8,7 +8,7 @@
 >
 	<div class="flex flex-col items-start gap-2 align-middle sm:px-5">
 		<div>
-			<img src="/assets/oblivion.png" alt="" class="w-20" />
+			<img src="/assets/oblivion.webp" alt="" class="w-20" />
 		</div>
 		<div class="flex gap-2 py-2">
 			<a href="https://www.instagram.com/trankil_world_cup/" target="_blank">

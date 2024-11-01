@@ -119,7 +119,7 @@
 <img
 	id="oblivion"
 	class="absolute z-20 hidden sm:block"
-	src="/assets/oblivion.png"
+	src="/assets/oblivion.webp"
 	alt="moving logo following the scroll on the timeline"
 />
 <Cursor />

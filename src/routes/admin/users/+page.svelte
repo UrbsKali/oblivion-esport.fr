@@ -21,7 +21,7 @@
 	function parseItems(data) {
 		let items = [];
 		data.forEach((el) => {
-			const avatar = el.avatar_url || '/assets/oblivion.png';
+			const avatar = el.avatar_url || '/assets/oblivion.webp';
 			items.push([
 				{ value: el.username, data: el.id, avatar: avatar },
 				{ value: el.perms.permissions }

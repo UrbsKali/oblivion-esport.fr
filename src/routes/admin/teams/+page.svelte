@@ -22,7 +22,7 @@
 	function parseItems(data) {
 		let items = [];
 		data?.forEach((element) => {
-			const avatar = element.logo_url || '/assets/oblivion.png';
+			const avatar = element.logo_url || '/assets/oblivion.webp';
 			let el = [
 				{ value: element.name, data: element.id, avatar: avatar },
 				{ value: element.tag },

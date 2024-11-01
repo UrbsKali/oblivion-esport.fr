@@ -133,7 +133,7 @@
 				return;
 			}
 			let el = data[i];
-			let avatar = el.uid.avatar_url || '/assets/oblivion.png';
+			let avatar = el.uid.avatar_url || '/assets/oblivion.webp';
 			let el_ = [
 				{ value: el.uid.username, data: el.uid.id, avatar: avatar },
 				{ value: el.role },
@@ -178,7 +178,7 @@
 							let options = [];
 							for (let i = 0; i < data.length; i++) {
 								let el = data[i];
-								let avatar = el.avatar_url || '/assets/oblivion.png';
+								let avatar = el.avatar_url || '/assets/oblivion.webp';
 								options.push({ value: el.id, text: el.username, image: avatar });
 							}
 							return options;
