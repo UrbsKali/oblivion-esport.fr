@@ -1,13 +1,13 @@
 on:
   push:
     branches:
-    - dev-svelte
+    - dev
   workflow_dispatch:
 
 jobs:
   compile:
     runs-on: ubuntu-latest
-    name: 🤖 Compile Svelte v2 version
+    name: 🤖 Compile Svelte dev version
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v4
@@ -27,7 +27,7 @@ jobs:
         username: oblivig
         password: ${{ secrets.ftp_password }}
         local-dir: './build/'
-        server-dir: '/www/v2/'
+        server-dir: '/www/dev/'
     
     
     
