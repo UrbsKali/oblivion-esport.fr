@@ -39,7 +39,7 @@
 				let id = tr.children[0].dataset.utils;
 				let name = tr.children[0].innerText;
 
-				let perms = tr.children[1].innerText;
+				let perms = tr.children[1].innerText.split(',');
 
 				new ReadModal({
 					target: document.body,
@@ -51,7 +51,7 @@
 							body: [
 								{
 									label: 'Permissions',
-									value: perms
+									value: perms.join(', ')
 								}
 							]
 						},
@@ -63,41 +63,83 @@
 									new CrudForm({
 										target: document.body,
 										props: {
-											title: "Modifier l'utilisateur",
+											title: 'Modifier les permissions',
 											fields: [
 												{
-													name: 'Rôle',
-													id: 'role',
-													type: 'select',
-													options: [
-														{ value: 'panel_admin', text: 'Accès au panel admin' },
-														{ value: 'register', text: 'Accès au inscription' },
-														{ value: 'matchid', text: 'Accès au MatchID' },
-														{ value: 'edit_tournament', text: 'Modification des tournois' },
-														{ value: 'edit_blog', text: 'Modification du blog' },
-														{ value: 'edit_team', text: 'Modification des équipes' },
-														{ value: 'edit_match', text: 'Modifications des matchs' },
-														{ value: 'make_prediction', text: 'Réaliser des prédictions' },
-														{ value: 'edit_user', text: 'Modifier les membres' }
-													],
-													required: true
+													name: 'Accès au panel admin',
+													type: 'checkbox',
+													required: true,
+													checked: perms.includes('panel_admin'),
+													value: 'panel_admin'
+												},
+												{
+													name: 'Accès au inscription',
+													type: 'checkbox',
+													required: true,
+													checked: perms.includes('register'),
+													value: 'register'
+												},
+												{
+													name: 'Accès au MatchID',
+													type: 'checkbox',
+													required: true,
+													checked: perms.includes('matchid'),
+													value: 'matchid'
+												},
+												{
+													name: 'Modification des tournois',
+													type: 'checkbox',
+													required: true,
+													checked: perms.includes('edit_tournament'),
+													value: 'edit_tournament'
+												},
+												{
+													name: 'Modification du blog',
+													type: 'checkbox',
+													required: true,
+													checked: perms.includes('edit_blog'),
+													value: 'edit_blog'
+												},
+												{
+													name: 'Modification des équipes',
+													type: 'checkbox',
+													required: true,
+													checked: perms.includes('edit_team'),
+													value: 'edit_team'
+												},
+												{
+													name: 'Modifications des matchs',
+													type: 'checkbox',
+													required: true,
+													checked: perms.includes('edit_match'),
+													value: 'edit_match'
+												},
+												{
+													name: 'Réaliser des prédictions',
+													type: 'checkbox',
+													required: true,
+													checked: perms.includes('make_prediction'),
+													value: 'make_prediction'
+												},
+												{
+													name: 'Modifier les membres',
+													type: 'checkbox',
+													required: true,
+													checked: perms.includes('edit_user'),
+													value: 'edit_user'
 												}
 											],
 											onSubmit: async (e) => {
 												e.preventDefault();
-												const role = document.querySelector('#role').value;
-												if (role === '') {
-													alert('No role provided');
-													return;
-												}
-
-												// append the role to the user current roles
 												let new_perms = [];
-												if (perms != 'null') {
-													new_perms = [...perms, role];
-												} else {
-													new_perms = [role];
-												}
+												e.target
+													.closest('form')
+													.querySelectorAll('input[type="checkbox"]')
+													.forEach((el) => {
+														if (el.checked) {
+															new_perms.push(el.value);
+														}
+													});
 
 												const { data, error } = await supabase
 													.from('perms')
