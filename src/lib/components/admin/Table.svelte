@@ -329,7 +329,7 @@
 											data-utils={key.data || ''}
 										>
 											{#if key.avatar}
-												<div class="flex items-center mr-2 space-x-2">
+												<div class="flex items-center w-8 h-8 mr-2 space-x-2">
 													<img src={key.avatar} class="w-8 h-8 rounded-full" alt="user face" />
 												</div>
 											{/if}
