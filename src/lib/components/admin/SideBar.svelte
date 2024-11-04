@@ -7,14 +7,13 @@
 
 	navigating.subscribe((value) => {
 		if (value) {
-			loadSidebar('/v2' + value.to.route.id);
+			loadSidebar(value.to.route.id);
 		}
 	});
 
 	function loadSidebar(path) {
-		const current_route = path;
 		menu = menu.map((item) => {
-			if (item.uri === current_route) {
+			if (item.uri === path) {
 				item.active = true;
 			} else {
 				item.active = false;

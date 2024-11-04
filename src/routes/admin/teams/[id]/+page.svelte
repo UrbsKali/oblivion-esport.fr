@@ -8,6 +8,7 @@
 	import { supabase } from '$lib/supabaseClient';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	let user;
 	let id;
@@ -242,7 +243,6 @@
 				console.error(error);
 				return;
 			}
-			document.title = `Oblivion Esport - ${data.name} Team`;
 			team = data;
 		}
 	});
@@ -279,7 +279,7 @@
 					alert("Une erreur est survenue lors de la suppression de l'équipe");
 					return;
 				}
-				//goto('/user/teams', { replaceState: true });
+				goto('/admin/teams', { replaceState: true });
 			}}
 		>
 			<!--Trash icon-->
