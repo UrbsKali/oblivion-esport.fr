@@ -128,7 +128,6 @@
 				window.location.href = '/';
 			}
 		}
-		console.log(page);
 
 		if (!user.permissions.includes(page.permission)) {
 			window.location.href = '/';

@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { supabase, supabaseUrl } from '$lib/supabaseClient';
 	import { createClient } from '@supabase/supabase-js';
+	import { formatText } from '$lib/utils';
 
 	import CrudForm from '$lib/components/modals/CrudForm.svelte';
 	import SucessModal from '$lib/components/modals/InfoModal.svelte';
@@ -24,7 +25,7 @@
 			const avatar = el.avatar_url || '/assets/oblivion.webp';
 			items.push([
 				{ value: el.username, data: el.id, avatar: avatar },
-				{ value: el.perms.permissions }
+				{ value: formatText(el.perms.permissions) || 'Aucune permission' }
 			]);
 		});
 		return items;

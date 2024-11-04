@@ -93,6 +93,20 @@ export function saveSettings(key, settings) {
     }
 }
 
+export function formatText(text) {
+    // to text
+    if (text === null || text === undefined) {
+        return '';
+    }
+    if (typeof text !== 'string') {
+        text = text.toString();
+    }
+    if (text?.length > 50) {
+        return text.slice(0, 50) + '...';
+    }
+    return text;
+}
+
 export function hashCode(obj) {
     let str = JSON.stringify(obj);
     let hash = 0;

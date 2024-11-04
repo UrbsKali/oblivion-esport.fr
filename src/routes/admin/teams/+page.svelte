@@ -1,6 +1,7 @@
 <script>
 	import Table from '$lib/components/admin/Table.svelte';
 	import { goto } from '$app/navigation';
+	import { formatText } from '$lib/utils';
 
 	const headers = ['Nom', 'TAG', 'Description', 'Actions'];
 	const type = 'Teams';
@@ -26,7 +27,7 @@
 			let el = [
 				{ value: element.name, data: element.id, avatar: avatar },
 				{ value: element.tag },
-				{ value: element.description || 'Aucune description' }
+				{ value: formatText(element.description) || 'Aucune description' }
 			];
 			items = [...items, el];
 		});
