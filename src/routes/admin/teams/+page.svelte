@@ -29,6 +29,7 @@
 				{ value: element.tag },
 				{ value: formatText(element.description) || 'Aucune description' }
 			];
+			console.log(el);
 			items = [...items, el];
 		});
 		return items;

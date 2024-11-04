@@ -321,8 +321,8 @@
 										}
 									: null}
 							>
-								{#each item as key}
-									{#if key.value === item[0].value && item[0].avatar}
+								{#each item as key, i}
+									{#if i == 0}
 										<th
 											scope="row"
 											class="flex items-center px-4 py-3 font-medium text-white whitespace-nowrap"
