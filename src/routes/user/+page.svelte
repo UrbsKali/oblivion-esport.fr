@@ -26,7 +26,7 @@
 				const provider = user.providers.find((el) => el.provider === 'discord');
 
 				// check if provider is saved in the database
-				if (provider.saved) {
+				if (provider.save) {
 					discord = provider.display_name;
 				} else {
 					discord = provider.identity_data.full_name;

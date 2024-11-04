@@ -60,12 +60,13 @@ export async function loadUserdata() {
                     let i = providers.identities.findIndex((el) => el.provider === element.provider);
                     if (i !== -1) {
                         providers.identities.splice(i);
-                        element.saved = true;
+                        element.save = true;
                     }
-
                 });
 
+
                 user.providers = [...dat.identities, ...data];
+                console.log(user.providers);
                 userdata.set(user);
             }
         }
