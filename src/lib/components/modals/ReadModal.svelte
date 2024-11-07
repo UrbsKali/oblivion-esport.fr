@@ -92,11 +92,21 @@
 				</div>
 			</div>
 			<dl>
-				{#each values.body as { label, value }}
+				{#each values.body as { label, value, href }}
 					<dt class="mb-2 font-semibold leading-none text-white">{label}</dt>
-					<dd class="mb-4 font-light text-gray-400 transition-colors sm:mb-5 hover:text-gray-300">
-						{value}
-					</dd>
+					{#if href}
+						<a
+							{href}
+							class="mb-4 font-light text-gray-400 transition-colors sm:mb-5 hover:text-gray-300"
+							target="_blank"
+						>
+							{value}
+						</a>
+					{:else}
+						<dd class="mb-4 font-light text-gray-400 transition-colors sm:mb-5 hover:text-gray-300">
+							{value}
+						</dd>
+					{/if}
 				{/each}
 			</dl>
 			<div class="flex items-center justify-between">

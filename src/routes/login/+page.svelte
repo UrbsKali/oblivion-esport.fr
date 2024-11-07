@@ -17,7 +17,7 @@
 		top: 0%;
 		left: 0%;
 		z-index: 0;
-		background-image: url('/plus-pattern-center.webp');
+		background-image: url('/assets/plus-pattern-center.webp');
 		background-size: 5%;
 		background-repeat: repeat;
 		opacity: 0.1;

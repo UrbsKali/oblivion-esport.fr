@@ -8,6 +8,7 @@ let extra_entries = [];
 for (let i = 1; i <= 100; i++) {
 	extra_entries.push(`/user/teams/${i}`);
 	extra_entries.push(`/admin/teams/${i}`);
+	extra_entries.push(`/admin/register/${i}`);
 }
 
 

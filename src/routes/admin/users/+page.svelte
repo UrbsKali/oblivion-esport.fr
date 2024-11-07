@@ -58,7 +58,7 @@
 						},
 						actions: [
 							{
-								type: 'validate',
+								type: 'edit',
 								title: 'Modifier',
 								handler: () => {
 									new CrudForm({

@@ -1,14 +1,11 @@
 <script>
 	import Table from '$lib/components/admin/Table.svelte';
-	import CrudForm from '$lib/components/modals/CrudForm.svelte';
-	import SucessModal from '$lib/components/modals/InfoModal.svelte';
 	import ReadModal from '$lib/components/modals/ReadModal.svelte';
 
 	import { userdata } from '$lib/store';
 	import { supabase } from '$lib/supabaseClient';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
 
 	let user;
 	let id;
@@ -106,18 +103,6 @@
 		}
 	];
 
-	async function handleRemovePlayer(e) {
-		e.preventDefault();
-		const id = e.target.closest('.modal').id.split('_')[1];
-		const { data, error } = await supabase.from('member_of').delete().eq('uid', id);
-		if (error) {
-			console.error(error);
-			alert("Une erreur est survenue lors de la suppression du membre de l'équipe");
-			return;
-		}
-		document.getElementById('popup-readModal_' + id).remove();
-	}
-
 	async function parseItems(data) {
 		let items = [];
 		for (let i = 0; i < data.length; i++) {
@@ -139,97 +124,6 @@
 		}
 
 		return items;
-	}
-
-	async function addNew() {
-		new CrudForm({
-			target: document.body,
-			props: {
-				fields: [
-					{
-						type: 'info',
-						text: "Ajouter un membre à l'équipe",
-						wide: true
-					},
-					{
-						name: 'Membre',
-						id: 'member',
-						type: 'autocomplete',
-						value: '',
-						data: '',
-						required: true,
-						wide: true,
-						onChange: async (e) => {
-							// search through users
-							const { data, error } = await supabase
-								.from('profiles')
-								.select('id, username, avatar_url')
-								.ilike('username', `${e.target.value}*`)
-								.range(0, 4);
-							if (error) {
-								console.error(error);
-								return;
-							}
-							// create options
-							let options = [];
-							for (let i = 0; i < data.length; i++) {
-								let el = data[i];
-								let avatar = el.avatar_url || '/assets/oblivion.webp';
-								options.push({ value: el.id, text: el.username, image: avatar });
-							}
-							return options;
-						}
-					},
-					{
-						name: 'Rôle',
-						type: 'select',
-						id: 'role',
-						required: true,
-						options: [
-							{ value: 'player', text: 'Joueur' },
-							{ value: 'substitute', text: 'Remplaçant' }
-						],
-						wide: true
-					}
-				],
-				type_accord: 'un',
-				type: 'joueur',
-				onSubmit: async (e) => {
-					// get forms data
-					e.preventDefault();
-					const form_data = new FormData(e.target.closest('form'));
-					let data = {};
-					for (let [key, value] of form_data.entries()) {
-						if (key.startsWith('member')) {
-							const uid = document.querySelector('label[for="member"]').dataset.utils;
-							let role_slug = 'role';
-							data.member = { uid: uid, role: form_data.get(role_slug) };
-						} else if (key.startsWith('role')) {
-							continue;
-						} else {
-							data[key.toLowerCase()] = value;
-						}
-					}
-
-					// add user to team
-					console.log(data.member);
-					const { data: data___, error: error__ } = await supabase
-						.from('member_of')
-						.insert({ team_id: id, uid: data.member.uid, role: data.member.role });
-					if (error__) {
-						console.error(error__);
-						alert("Une erreur est survenue lors de l'ajout du membre à l'équipe");
-						return;
-					}
-					new SucessModal({
-						target: document.body,
-						props: {
-							message: 'Le joueur a bien été ajouté'
-						}
-					});
-				}
-			}
-		});
 	}
 
 	onMount(async () => {
@@ -265,38 +159,6 @@
 			</svg>
 		</button>
 		<h2 class="text-2xl font-bold text-center text-gray-200" id="teamName">{team.name}</h2>
-		<button
-			class="flex items-center justify-center w-10 h-10 text-gray-200 bg-gray-800 border border-gray-700 rounded-full shadow hover:bg-opacity-10"
-			on:click={async (e) => {
-				// delete team
-				const { data, error } = await supabase.from('Teams').delete().eq('id', id);
-				if (error) {
-					console.error(error);
-					alert("Une erreur est survenue lors de la suppression de l'équipe");
-					return;
-				}
-				goto('/admin/teams', { replaceState: true });
-			}}
-		>
-			<!--Trash icon-->
-			<svg
-				class="w-5 h-5 dark:text-white hover:text-red-500"
-				aria-hidden="true"
-				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
-				fill="none"
-				viewBox="0 0 24 24"
-			>
-				<path
-					stroke="currentColor"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
-				/>
-			</svg>
-		</button>
 	</div>
 	<div class="w-full mt-0 bg-gray-800 border border-gray-700 rounded-lg shadow backdrop-blur-sm">
 		<Table
@@ -304,7 +166,6 @@
 			{parseItems}
 			{headers}
 			{filters}
-			{addNew}
 			{actions}
 			{can_load}
 			type="joueur"

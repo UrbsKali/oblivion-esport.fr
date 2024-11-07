@@ -128,7 +128,7 @@
 		display: block;
 		z-index: 0;
 		position: relative;
-		background-image: url('/plus-pattern-center.webp');
+		background-image: url('/assets/plus-pattern-center.webp');
 		background-size: 5%;
 		background-repeat: repeat;
 		opacity: 0.1;

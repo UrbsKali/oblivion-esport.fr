@@ -1,5 +1,6 @@
 <script>
 	import { supabase } from '$lib/supabaseClient';
+	import { goto } from '$app/navigation';
 
 	import ReadModal from '$lib/components/modals/ReadModal.svelte';
 	import Table from '$lib/components/admin/Table.svelte';
@@ -70,6 +71,15 @@
 									}
 
 									window.location.reload();
+								}
+							},
+							{
+								type: 'edit',
+								title: 'Voir équipe',
+								handler: async () => {
+									// delete modal
+									document.querySelector('#readModal').remove();
+									goto(`/admin/register/${id}`);
 								}
 							},
 							{
