@@ -144,6 +144,18 @@
 			alert('Une erreur est survenue lors de la suppression de la liaison de votre compte Discord');
 		}
 
+		// delete the record in the database
+		const { error: error2 } = await supabase
+			.from('other_providers')
+			.delete()
+			.eq('user_id', user.id)
+			.eq('provider', 'discord');
+
+		if (error2) {
+			console.error(error2);
+			alert('Une erreur est survenue lors de la suppression de la liaison de votre compte Discord');
+		}
+
 		discord = '';
 		window.location.reload();
 	}
