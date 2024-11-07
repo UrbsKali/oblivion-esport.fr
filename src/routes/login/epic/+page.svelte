@@ -28,24 +28,25 @@
 			const display_name = getName(token.access_token);
 			console.log(display_name);
 
+			const info = {
+				user_id: user.id,
+				provider: 'epic',
+				info: token,
+				display_name: display_name
+			};
+
 			// insert into other_providers
-			const { data, error } = await supabase
-				.from('other_providers')
-				.insert([
-					{
-						user_id: user.id,
-						provider: 'epic',
-						info: token,
-						display_name: display_name
-					}
-				])
-				.single();
+			const { data, error } = await supabase.from('other_providers').insert(info).single();
 
 			if (error) {
 				console.log(error);
+				alert('Error adding provider');
+				goto('/');
+				return;
 			}
 
 			// redirect to profile
+			user.other_providers = [...user.other_providers, info];
 			goto('/user');
 		}
 	}

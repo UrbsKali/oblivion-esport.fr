@@ -17,6 +17,6 @@ export async function getAccessToken(code) {
 export function getName(accessToken) {
     // get user display name directly from the JWT token
     const decodedToken = jwtDecode(accessToken);
-    const displayName = decodedToken.dn;
+    const displayName = decodedToken?.dn;
     return displayName;
 }
