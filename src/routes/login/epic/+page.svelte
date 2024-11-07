@@ -46,7 +46,8 @@
 			}
 
 			// redirect to profile
-			user.other_providers = [...user.other_providers, info];
+			user.providers.push(info);
+			userdata.set(user);
 			goto('/user');
 		}
 	}
