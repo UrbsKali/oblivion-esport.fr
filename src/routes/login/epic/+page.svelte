@@ -10,7 +10,7 @@
 		if (value) {
 			user = value;
 			// check if a trailing slash is present
-			if (window.location.href.slice(-1) === '/') await SetupEpic();
+			if (window.location.pathname.slice(-1) === '/') await SetupEpic();
 		}
 	});
 
