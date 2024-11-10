@@ -9,7 +9,8 @@
 	userdata.subscribe(async (value) => {
 		if (value) {
 			user = value;
-			await SetupEpic();
+			// check if a trailing slash is present
+			if (window.location.href.slice(-1) === '/') await SetupEpic();
 		}
 	});
 
