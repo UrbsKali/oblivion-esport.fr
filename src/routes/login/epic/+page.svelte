@@ -24,6 +24,12 @@
 		}
 
 		const token = await getAccessToken(code);
+		if (token.error) {
+			console.log(token);
+			alert(error.message);
+			goto('/');
+			return;
+		}
 		console.log(token);
 		if (token) {
 			const display_name = getName(token.access_token);
