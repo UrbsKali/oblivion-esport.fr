@@ -26,7 +26,7 @@
 		const token = await getAccessToken(code);
 		if (token.error) {
 			console.log(token);
-			alert(error.message);
+			alert(token.message);
 			goto('/');
 			return;
 		}
