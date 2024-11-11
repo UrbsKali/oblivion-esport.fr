@@ -5,6 +5,7 @@
 	import { goto } from '$app/navigation';
 
 	let user;
+	let sending = false;
 
 	userdata.subscribe(async (value) => {
 		if (value) {
@@ -15,6 +16,8 @@
 	});
 
 	async function SetupEpic() {
+		if (sending) return;
+		sending = true;
 		// get code from url params
 		const urlParams = new URLSearchParams(window.location.search);
 		const code = urlParams.get('code');
@@ -57,5 +60,6 @@
 			userdata.set(user);
 			goto('/user');
 		}
+		sending = false;
 	}
 </script>
