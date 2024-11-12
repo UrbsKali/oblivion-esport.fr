@@ -10,7 +10,16 @@ export function createOauthUrl(redirect_to = "https://oblivion-esport.fr/login/e
 }
 
 export async function getAccessToken(code) {
-    const response = await fetch(`https://oblivion-esport.fr/api/epic.php?authorization_code=${code}&secret=${secret}`);
+    // post request with authorization_code
+    const response = await fetch('https://idlcqblimgotmibuednf.supabase.co/functions/v1/auth-epic', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: {
+            authorization_code: code,
+        }
+    });
     return response.json();
 }
 
