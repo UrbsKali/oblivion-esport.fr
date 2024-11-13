@@ -248,6 +248,26 @@
 				<div class="w-6/12 aspect-square min-w-96" id="twc"></div>
 			</div>
 		</div>
+		<div class="flex flex-col items-center justify-center w-full p-5">
+			<a
+				href="/tournaments"
+				class="flex flex-row items-center text-center align-middle hover:text-primary-50"
+				>Découvrir tous nos tournois
+				<svg
+					aria-hidden="true"
+					class="w-5 h-5 gap-2 ml-2"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 20 20"
+					fill="currentColor"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+			</a>
+		</div>
 	</div>
 	<div class="border-b border-gray-700 lol">
 		<div class="flex flex-col items-center justify-center w-full p-5">
