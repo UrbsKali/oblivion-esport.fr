@@ -3,16 +3,27 @@
 
 	export let size = 100;
 
-	onMount(() => {
-		const title = document.getElementById(`title-${size}`);
+	let loaded = false;
 
+	onMount(() => {
+		loaded = true;
+		init(size);
+	});
+
+	$: {
+		init(size);
+	}
+
+	function init(size) {
+		if (!loaded) return;
+		const title = document.getElementById(`title`);
 		// scale it, and add margin
 		title.style.transform = `scale(${size / 100})`;
 		title.style.margin = `${size / 4}px 0`;
-	});
+	}
 </script>
 
-<div class="flex items-center transition-all align-center" id="title-{size}">
+<div class="flex items-center transition-all align-center" id="title">
 	<h1 class="text-6xl font-bold text-white">OBLIVI</h1>
 	<div class="h-[60px] pt-[12px]">
 		<img src="/assets/oblivion.webp" alt="" class="h-[43px]" />

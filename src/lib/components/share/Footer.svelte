@@ -78,7 +78,7 @@
 			</a>
 		</div>
 		<div class="text-left max-w-80">
-			<p>We do not sell or share your personal information</p>
+			<p class="text-gray-300">Vos données personnelles ne sont ni vendues ni partagées</p>
 			<br />
 			<p>© {current_year} Oblivion Esport</p>
 		</div>

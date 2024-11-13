@@ -2,12 +2,15 @@
 	import { userdata } from '$lib/store';
 	import { loadUserdata } from '$lib/utils';
 	import { onMount } from 'svelte';
-	import UserBadge from './UserBadge.svelte';
 	import { page } from '$app/stores';
+	import { hideOnClickOutside } from '$lib/utils';
+
+	import UserBadge from './UserBadge.svelte';
 
 	let user;
 	let skip = false;
 	let enable_cursor = true;
+	let sidebar = false;
 
 	userdata.subscribe((value) => {
 		if (value) {
@@ -36,6 +39,11 @@
 				enable_cursor = document.querySelector('.cursor') != null;
 			});
 		}
+
+		hideOnClickOutside(document.querySelector('#sidebar'), () => {
+			sidebar = false;
+			console.log('hide');
+		});
 	});
 </script>
 
@@ -45,25 +53,134 @@
 	>
 		<div class="flex flex-wrap items-center justify-between">
 			<div class="flex items-center justify-start">
+				<a href="/" class="flex items-center justify-between mr-4">
+					<img src="/assets/oblivion.webp" class="h-12 mr-3" alt="Oblivion Logo" />
+					<span class="self-center text-2xl font-semibold text-white whitespace-nowrap"></span>
+				</a>
+			</div>
+			<div class="items-center hidden md:flex">
+				<ul class="flex gap-10">
+					<li>
+						<a href="/" class="text-gray-400 hover:text-white">Actus</a>
+					</li>
+					<li>
+						<a href="/tournaments" class="text-gray-400 hover:text-white">Tournois</a>
+					</li>
+					<li>
+						<a href="/" class="text-gray-400 hover:text-white">Staff</a>
+					</li>
+
+					<li>
+						<a href="/" class="text-gray-400 hover:text-white">Contact</a>
+					</li>
+				</ul>
+			</div>
+			<!--mobile sidebar-->
+			<aside
+				id="sidebar"
+				class="fixed left-0 z-10 w-64 h-screen transition-transform {sidebar
+					? 'translate-x-0'
+					: '-translate-x-full'} md:hidden top-[68.8px] bg-gray-900 border-r border-gray-700 backdrop-blur-lg"
+				aria-label="Sidebar"
+			>
+				<div class="h-full px-3 py-4 overflow-y-auto">
+					<ul class="space-y-2 font-medium">
+						<li>
+							<a
+								href="/"
+								class="flex items-center p-2 border-gray-700 group focus:border-b hover:border-b"
+							>
+								<span class="ms-3">Blog</span>
+							</a>
+						</li>
+						<li>
+							<a
+								href="/tournaments"
+								class="flex items-center p-2 border-gray-700 group focus:border-b hover:border-b"
+							>
+								<span class="ms-3">Tournaments</span>
+							</a>
+						</li>
+						<li>
+							<a
+								href="/"
+								class="flex items-center p-2 border-gray-700 group focus:border-b hover:border-b"
+							>
+								<span class="ms-3">Staff</span>
+							</a>
+						</li>
+						<li>
+							<a
+								href="/"
+								class="flex items-center p-2 border-gray-700 group focus:border-b hover:border-b"
+							>
+								<span class="ms-3">Contact</span>
+							</a>
+						</li>
+					</ul>
+					<div class="flex items-center justify-between p-4 mt-2 border-t border-gray-700">
+						{#if user}
+							<UserBadge />
+						{:else}
+							<a
+								class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white border border-white rounded-lg focus:ring-4 focus:ring-white focus:outline-none bg-opacity-10 hover:bg-gray-900"
+								href="/register"
+							>
+								Register
+							</a>
+							<a
+								class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
+								href="/login"
+							>
+								Login
+							</a>
+						{/if}
+					</div>
+				</div>
+			</aside>
+			<div class="gap-5">
+				<div class="hidden md:block">
+					{#if user}
+						<UserBadge />
+					{:else}
+						<a
+							class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white border border-white rounded-lg focus:ring-4 focus:ring-white focus:outline-none bg-opacity-10 hover:bg-gray-900"
+							href="/register"
+						>
+							Register
+						</a>
+						<a
+							class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
+							href="/login"
+						>
+							Login
+						</a>
+					{/if}
+				</div>
 				<button
-					class="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+					class="p-2 mr-2 text-gray-400 rounded-lg cursor-pointer md:hidden ring-1 ring-gray-700 hover:text-white"
+					aria-label="Toggle sidebar"
+					aria-expanded={sidebar}
+					on:click={() => {
+						sidebar = !sidebar;
+					}}
 				>
 					<svg
-						aria-hidden="true"
-						class="w-6 h-6"
-						fill="currentColor"
-						viewBox="0 0 20 20"
 						xmlns="http://www.w3.org/2000/svg"
+						class="{sidebar ? 'hidden' : ''} w-6 h-6"
+						fill="currentColor"
+						stroke="currentColor"
+						stroke-linecap="round"
+						transform="scale(-1,1)"
+						stroke-linejoin="round"
+						stroke-width="2"
+						viewBox="0 0 24 24"
 					>
-						<path
-							fill-rule="evenodd"
-							d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-							clip-rule="evenodd"
-						></path>
+						<path d="M21 6H3M15 12H3M17 18H3" />
 					</svg>
 					<svg
 						aria-hidden="true"
-						class="hidden w-6 h-6"
+						class="{sidebar ? '' : 'hidden'} w-6 h-6"
 						fill="currentColor"
 						viewBox="0 0 20 20"
 						xmlns="http://www.w3.org/2000/svg"
@@ -76,61 +193,6 @@
 					</svg>
 					<span class="sr-only">Toggle sidebar</span>
 				</button>
-				<a href="/" class="flex items-center justify-between mr-4">
-					<img src="/assets/oblivion.webp" class="h-12 mr-3" alt="Oblivion Logo" />
-					<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
-				</a>
-			</div>
-			<div class="items-center hidden md:flex">
-				<ul class="flex gap-10">
-					<li>
-						<a
-							href="/"
-							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-							>Actus</a
-						>
-					</li>
-					<li>
-						<a
-							href="/tournaments"
-							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-							>Tournois</a
-						>
-					</li>
-					<li>
-						<a
-							href="/"
-							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-							>Staff</a
-						>
-					</li>
-
-					<li>
-						<a
-							href="/"
-							class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-							>Contact</a
-						>
-					</li>
-				</ul>
-			</div>
-			<div class="gap-5">
-				{#if user}
-					<UserBadge />
-				{:else}
-					<a
-						class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white border border-white rounded-lg focus:ring-4 focus:ring-white focus:outline-none bg-opacity-10 hover:bg-gray-900"
-						href="/register"
-					>
-						Register
-					</a>
-					<a
-						class="inline-flex items-center px-3 py-2 m-auto text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-						href="/login"
-					>
-						Login
-					</a>
-				{/if}
 			</div>
 		</div>
 	</nav>

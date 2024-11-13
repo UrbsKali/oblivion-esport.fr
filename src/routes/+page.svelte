@@ -42,12 +42,23 @@
 		}
 	];
 
+	let size = 100;
+
 	onMount(() => {
 		const rl = document.querySelector('#rl');
 		const twc = document.querySelector('#twc');
 
 		initRL3D(rl);
 		initTWC3D(twc);
+
+		if (window.innerWidth > 1150) {
+			size = 200;
+		} else if (window.innerWidth > 768) {
+			size = window.innerWidth / 6;
+		} else {
+			size = 100;
+		}
+		console.log(size);
 	});
 
 	function initTWC3D(renderElement) {
@@ -102,12 +113,13 @@
 
 		const animate = () => {
 			if (car) {
-				car.rotation.y -= 0.001;
+				car.rotation.y -= 0.002;
 			}
 			renderer.render(scene, camera);
-			requestAnimationFrame(animate);
 		};
-		requestAnimationFrame(animate);
+		setInterval(() => {
+			requestAnimationFrame(animate);
+		}, 1000 / 30);
 	}
 
 	function initRL3D(renderElement) {
@@ -159,21 +171,23 @@
 
 		const animate = () => {
 			if (car) {
-				car.rotation.y += 0.001;
+				car.rotation.y += 0.002;
 			}
 			renderer.render(scene, camera);
-			requestAnimationFrame(animate);
 		};
-		requestAnimationFrame(animate);
+
+		setInterval(() => {
+			requestAnimationFrame(animate);
+		}, 1000 / 30);
 	}
 </script>
 
 <div class="enable-cursor">
 	<div class="border-b border-gray-700 landing">
 		<div class="relative z-10 h-screen">
-			<div class="flex items-center justify-center w-6/12 h-full">
-				<div class="text-center">
-					<Title size={200} />
+			<div class="flex items-end justify-center w-full h-full md:items-center md:w-6/12">
+				<div class="mb-12 text-center md:mb-0">
+					<Title {size} />
 					<p class="text-lg text-gray-300">Vivez l'expérience e-sport</p>
 				</div>
 			</div>
@@ -321,6 +335,26 @@
 		}
 		100% {
 			opacity: 1;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.landing::after {
+			background-size: 15%;
+			transform: rotate(0deg);
+			top: 70%;
+			left: 0;
+		}
+		#teaser::after {
+			background-image: linear-gradient(
+				0deg,
+				rgba(17, 24, 39, 0.9) 20%,
+				rgba(17, 24, 39, 0.5) 40%,
+				rgba(17, 24, 39, 0) 50%
+			);
+		}
+		.landing {
+			transform: translateY(-40px);
 		}
 	}
 </style>
