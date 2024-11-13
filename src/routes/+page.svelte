@@ -205,10 +205,11 @@
 		<div class="flex flex-col items-center justify-center w-full p-5">
 			<h1 class="text-4xl font-bold text-white">Nos Tournois</h1>
 		</div>
-
-		<!-- ELEON WOLRD CUP -->
-		<div class="flex flex-col justify-center gap-5 sm:flex-row">
-			<div class="w-6/12 aspect-square min-w-96" id="rl"></div>
+		<div class="grid grid-cols-1 gap-5 md:grid-cols-2" id="tournois">
+			<!-- ELEON WOLRD CUP -->
+			<div class="flex items-center justify-center w-full">
+				<div class="w-6/12 aspect-square min-w-96" id="rl"></div>
+			</div>
 			<div class="flex flex-col items-center justify-center">
 				<div class="flex flex-col items-center justify-center w-9/12 h-full">
 					<div class="text-center">
@@ -224,9 +225,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- TWC 5 -->
-		<div class="flex flex-col justify-center gap-5 sm:flex-row">
+			<!-- TWC 5 -->
 			<div class="flex flex-col items-center justify-center">
 				<div class="flex flex-col items-center justify-center w-9/12 h-full">
 					<div class="text-center">
@@ -245,7 +244,9 @@
 					</div>
 				</div>
 			</div>
-			<div class="w-6/12 aspect-square min-w-96" id="twc"></div>
+			<div class="flex items-center justify-center w-full">
+				<div class="w-6/12 aspect-square min-w-96" id="twc"></div>
+			</div>
 		</div>
 	</div>
 	<div class="border-b border-gray-700 lol">
@@ -354,7 +355,19 @@
 			);
 		}
 		.landing {
-			transform: translateY(-40px);
+			transform: translateY(-7.5%);
+		}
+		#tournois > div:nth-child(1) {
+			order: 1;
+		}
+		#tournois > div:nth-child(2) {
+			order: 2;
+		}
+		#tournois > div:nth-child(3) {
+			order: 4;
+		}
+		#tournois > div:nth-child(4) {
+			order: 3;
 		}
 	}
 </style>
