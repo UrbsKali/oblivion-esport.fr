@@ -14,6 +14,10 @@
 	let tournament = {};
 	let user;
 
+	let current_body = '';
+	let buttons = ['Infos', 'Inscriptions', 'Règlement'];
+	let current_button = 'Infos';
+
 	userdata.subscribe((value) => {
 		if (value) {
 			user = value;
@@ -32,11 +36,16 @@
 			.eq('slug', slug)
 			.single();
 
-		console.log(data);
 		if (error) {
 			console.error('error', error);
 		} else {
 			tournament = data;
+
+			buttons = Object.keys(tournament?.slug?.body).map((key) => {
+				return key;
+			});
+
+			current_body = tournament?.slug?.body.Infos;
 		}
 	}
 </script>
@@ -48,18 +57,46 @@
 			?.slug?.image});"
 		class="relative h-screen bg-center bg-no-repeat bg-cover"
 	></div>
-	<div class="container flex items-center justify-center px-4 align-middle sm:mx-auto">
-		<div class="w-10/12 p-5 mt-[-60vh] border border-gray-700 rounded-lg backdrop-blur-lg">
+
+	<div
+		class="container flex flex-col mt-[-60vh] items-center justify-center px-4 align-middle md:mx-auto relative w-full md:w-10/12"
+	>
+		<div class="w-full py-5">
 			<h1 class="text-4xl font-bold">{tournament?.title || slug}</h1>
-			<p class="text-lg text-gray-500">// {tournament?.start || ''} - {tournament?.end || ''}</p>
-			<SvelteMarkdown source={tournament?.slug?.body} {renderers} />
-			<span>
-				{#if tournament?.can_register}
-					<RegisterButton tournament_id={tournament?.id} />
-				{:else}
-					<button class="px-4 py-2 mt-5 text-white bg-gray-500 rounded-md"
-						>Inscription fermée</button
+			<p class="text-lg text-gray-400">// {tournament?.start || ''} - {tournament?.end || ''}</p>
+		</div>
+		<div class="items-start w-full">
+			<!-- tab system for the glassmorphism card below -->
+			<div class="flex justify-start">
+				{#each buttons as button, index}
+					<button
+						class="px-4 py-2 text-white transition-all border border-gray-700 {index == 0
+							? 'rounded-ss-lg'
+							: ''}
+							{index == buttons.length - 1
+							? 'rounded-se-lg'
+							: ' '} bg-opacity-10 backdrop-blur-lg hover:bg-gray-700"
+						on:click={() => {
+							current_body = tournament?.slug?.body[button];
+							current_button = button;
+						}}
 					>
+						{button}
+					</button>
+				{/each}
+			</div>
+		</div>
+		<div class="w-full p-5 border border-gray-700 rounded-b-lg rounded-e-lg backdrop-blur-lg">
+			<SvelteMarkdown source={current_body} {renderers} />
+			<span>
+				{#if current_button == 'Inscriptions'}
+					{#if tournament?.can_register}
+						<RegisterButton tournament_id={tournament?.id} />
+					{:else}
+						<button class="px-4 py-2 mt-5 text-white bg-gray-500 rounded-md"
+							>Inscription fermée</button
+						>
+					{/if}
 				{/if}
 			</span>
 		</div>

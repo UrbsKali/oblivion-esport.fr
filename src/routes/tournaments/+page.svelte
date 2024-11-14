@@ -69,6 +69,25 @@
 		}, 1000 / FPS);
 	});
 
+	/**
+	 * Bezier curve function
+	 * @param {Array} points - Array of control points that define the curve
+	 * @param {Number} t - Time
+	 * @returns {Number} - the x coordinate on the curve at a given time t
+	 */
+	function bezierCurve(points, t) {
+		if (points.length === 1) {
+			return points[0];
+		}
+		let newPoints = [];
+		for (let i = 0; i < points.length - 1; i++) {
+			newPoints.push(points[i] + (points[i + 1] - points[i]) * t);
+		}
+		return bezierCurve(newPoints, t);
+	}
+
+	const bezierCurvePoints = [0, 0.25, 0.5, 0.75, 1];
+
 	function animateOblivon() {
 		currentPercentage += (scrollPercentage - currentPercentage) * 0.1;
 		lastPercentage = currentPercentage;
@@ -83,7 +102,7 @@
 		const closest = cups_positions.reduce((prev, curr) => {
 			return Math.abs(curr - currentY) < Math.abs(prev - currentY) ? curr : prev;
 		});
-		if (Math.abs(closest - currentY) < 30) {
+		if (Math.abs(closest - currentY) < 50) {
 			currentY = closest;
 			can_hover = false;
 			oblivion.classList.add('animate-spin');
