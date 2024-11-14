@@ -263,7 +263,7 @@
 </script>
 
 <section>
-	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">Matchs</h1>
+	<h1 class="text-3xl font-semibold text-white">Matchs</h1>
 	<div class="mt-2 bg-gray-800 rounded-lg sm:m-5">
 		<Table {headers} {items} {type} {actions} {parseItems} {dbInfo} {filters} />
 	</div>

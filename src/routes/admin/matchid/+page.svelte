@@ -34,66 +34,61 @@
 </script>
 
 <section>
-	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">MatchID Finder</h1>
+	<h1 class="text-3xl font-semibold text-white">MatchID Finder</h1>
 
 	<div
 		id="defaultModal"
 		tabindex="-1"
 		aria-hidden="true"
-		class="overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-modal md:h-full"
+		class="items-center justify-center w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full"
 	>
-		<div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+		<div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
 			<!-- Modal content -->
-			<div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+			<div class="relative p-4 bg-gray-800 rounded-lg shadow sm:p-5">
 				<!-- Modal header -->
 				<div
-					class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600"
+					class="flex items-center justify-between pb-4 mb-4 border-b border-gray-600 rounded-t sm:mb-5"
 				>
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Find ID</h3>
+					<h3 class="text-lg font-semibold text-white">Find ID</h3>
 				</div>
 				<!-- Modal body -->
 				<form action="#">
 					<div class="grid gap-4 mb-4 sm:grid-cols-2">
 						<div>
-							<label
-								for="Username"
-								class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label
+							<label for="Username" class="block mb-2 text-sm font-medium text-white"
+								>Username</label
 							>
 							<input
 								type="text"
 								name="Username"
 								id="Username"
-								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								class=" border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
 								placeholder="KcKitt_"
 								required=""
 								bind:value={username}
 							/>
 						</div>
 						<div>
-							<label for="tag" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-								>TAG</label
-							>
+							<label for="tag" class="block mb-2 text-sm font-medium text-white">TAG</label>
 							<input
 								type="text"
 								name="tag"
 								id="tag"
-								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								class=" border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
 								placeholder="EUW"
 								required=""
 								bind:value={tag}
 							/>
 						</div>
 						<div class="col-span-2">
-							<label
-								for="tournamentCode"
-								class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+							<label for="tournamentCode" class="block mb-2 text-sm font-medium text-white"
 								>Tournament Code</label
 							>
 							<input
 								type="text"
 								name="tournamentCode"
 								id="tournamentCode"
-								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								class=" border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
 								placeholder="EUW04df1-8b8f139f-9867-4808-b437-b752c2f93012"
 								required=""
 								bind:value={tournamentCode}
@@ -102,7 +97,7 @@
 						<div>
 							<button
 								type="submit"
-								class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+								class="text-white inline-flex items-center bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
 								on:click={onSubmit}
 							>
 								<svg
@@ -122,15 +117,13 @@
 							</button>
 						</div>
 						<div>
-							<label
-								for="MatchID"
-								class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Match ID</label
+							<label for="MatchID" class="block mb-2 text-sm font-medium text-white">Match ID</label
 							>
 							<input
 								type="text"
 								name="MatchID"
 								id="MatchID"
-								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								class="bg-gray-700 border border-gray-600 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-400 text-white"
 								placeholder="No Match Found"
 								disabled="true"
 								bind:value={MatchID}

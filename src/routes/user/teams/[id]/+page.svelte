@@ -286,7 +286,7 @@
 			>
 				<!--Trash icon-->
 				<svg
-					class="w-5 h-5 dark:text-white hover:text-red-500"
+					class="w-5 h-5 text-white hover:text-red-500"
 					aria-hidden="true"
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"

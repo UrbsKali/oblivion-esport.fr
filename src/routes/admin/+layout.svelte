@@ -164,10 +164,8 @@
 	}
 </script>
 
-<div class="antialiased bg-gray-50 dark:bg-gray-900">
-	<nav
-		class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50"
-	>
+<div class="antialiased bg-gray-900">
+	<nav class=" border-b px-4 py-2.5 bg-gray-800 border-gray-700 fixed left-0 right-0 top-0 z-50">
 		<div class="flex flex-wrap items-center justify-between">
 			<div class="flex items-center justify-start">
 				<button
@@ -175,7 +173,7 @@
 					data-drawer-toggle="drawer-navigation"
 					aria-controls="drawer-navigation"
 					on:click={() => (sidebar = !sidebar)}
-					class="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+					class="p-2 mr-2 text-gray-400 rounded-lg cursor-pointer md:hidden focus:bg-gray-700 focus:ring-2 focus:ring-gray-700 hover:bg-gray-700 hover:text-white"
 				>
 					<svg
 						aria-hidden="true"
@@ -207,7 +205,7 @@
 				</button>
 				<a href="/admin" class="flex items-center justify-between mr-4">
 					<img src="/assets/oblivion.webp" class="h-8 mr-3" alt="Oblivion Logo" />
-					<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
+					<span class="self-center text-2xl font-semibold text-white whitespace-nowrap"
 						>Oblivion</span
 					>
 				</a>

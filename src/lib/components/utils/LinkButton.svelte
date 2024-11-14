@@ -13,7 +13,7 @@
 	{href}
 	{target}
 	on:click={onClick}
-	class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-{color}-700 rounded-lg hover:bg-{color}-800 focus:ring-4 focus:outline-none focus:ring-{color}-300 dark:bg-{color}-600 dark:hover:bg-{color}-700 dark:focus:ring-{color}-800 m-auto"
+	class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg focus:ring-4 focus:outline-none bg-{color}-600 hover:bg-{color}-700 focus:ring-{color}-800 m-auto"
 >
 	{!revert ? text : ''}
 	<svg

@@ -142,7 +142,7 @@
 </script>
 
 <section>
-	<h1 class="text-3xl font-semibold text-gray-900 dark:text-white">Tournois</h1>
+	<h1 class="text-3xl font-semibold text-white">Tournois</h1>
 	<div class="mt-2 bg-gray-800 rounded-lg sm:m-5">
 		<Table {headers} {parseItems} {addNew} {type} {actions} {dbInfo} />
 	</div>
