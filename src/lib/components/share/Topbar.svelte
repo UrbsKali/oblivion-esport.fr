@@ -12,6 +12,8 @@
 	let enable_cursor = true;
 	let sidebar = false;
 
+	let is_mobile;
+
 	userdata.subscribe((value) => {
 		if (value) {
 			user = value;
@@ -39,6 +41,8 @@
 				enable_cursor = document.querySelector('.cursor') != null;
 			});
 		}
+
+		is_mobile = window.innerWidth < 768;
 
 		hideOnClickOutside(document.querySelector('#sidebar'), () => {
 			sidebar = false;
@@ -119,7 +123,7 @@
 						</li>
 					</ul>
 					<div class="flex items-center justify-between p-4 mt-2 border-t border-gray-700">
-						{#if user}
+						{#if user && is_mobile}
 							<UserBadge />
 						{:else}
 							<a
@@ -140,7 +144,7 @@
 			</aside>
 			<div class="gap-5">
 				<div class="hidden md:block">
-					{#if user}
+					{#if user && !is_mobile}
 						<UserBadge />
 					{:else}
 						<a

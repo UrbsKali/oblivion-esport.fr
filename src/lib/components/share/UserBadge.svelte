@@ -13,6 +13,7 @@
 	export let fixed = true;
 
 	let skip = false;
+	let is_mobile = false;
 
 	userdata.subscribe((value) => {
 		if (value) {
@@ -26,10 +27,13 @@
 		const dropdown = document.querySelector('#dropdown');
 		const rect = document.querySelector('#user-menu-button').getBoundingClientRect();
 		dropdown.style.top = 'calc(' + rect.bottom + 'px - 0.25rem)';
-		dropdown.style.left = 'calc(' + rect.left + 'px - 12.05rem)';
+		let left = rect.left;
+		if (is_mobile) left = window.innerWidth / 2 + 16;
+		dropdown.style.left = 'calc(' + left + 'px - 12.05rem)';
 	}
 
 	onMount(async () => {
+		is_mobile = window.innerWidth < 768;
 		const dropdown = document.querySelector('#dropdown');
 		setupDropdown();
 		document.body.appendChild(dropdown);
@@ -51,9 +55,8 @@
 
 <button
 	type="button"
-	class="flex mx-3 text-sm bg-gray-800 rounded-full focus:ring-3 focus:ring-gray-700 md:mr-0"
+	class="flex mx-3 text-sm bg-gray-800 rounded-full focus:ring-3 focus:ring-gray-700 md:mr-0 test-btn"
 	id="user-menu-button"
-	aria-expanded="false"
 	on:click={(e) => {
 		const dropdown = document.querySelector('#dropdown');
 		dropdown.classList.toggle('hidden');

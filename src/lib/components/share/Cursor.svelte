@@ -10,11 +10,17 @@
 	let dampening = 0.1;
 	let hover = false;
 
+	let is_mobile = false;
+
 	onMount(() => {
+		is_mobile = window.innerWidth < 768;
+		if (is_mobile) return;
+
 		document.addEventListener('mousemove', (e) => {
 			mouseX = e.clientX;
 			mouseY = e.clientY;
 		});
+
 		const buttons = document.querySelectorAll('button, a, .cursor-hover');
 
 		buttons.forEach((button) => {
