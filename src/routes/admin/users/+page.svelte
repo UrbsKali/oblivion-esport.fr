@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { supabase, supabaseUrl } from '$lib/supabaseClient';
+	import { createAdminClient, supabase, supabaseUrl } from '$lib/supabaseClient';
 	import { createClient } from '@supabase/supabase-js';
 	import { formatText } from '$lib/utils';
 
@@ -166,6 +166,27 @@
 											}
 										}
 									});
+								}
+							},
+							{
+								type: 'edit',
+								title: "Renvoyer l'email de confirmation",
+								handler: async () => {
+									const adminSupa = await createAdminClient();
+									const { data, error } = await adminSupa.auth.admin.getUserById(id);
+
+									if (error) {
+										console.error(error);
+										alert('An error occured while resending the email');
+										return;
+									}
+
+									const { error: error_ } = await supabase.auth.resend({
+										type: 'signup',
+										email: data.user.email
+									});
+									console.log(error_);
+									window.location.reload();
 								}
 							}
 						]

@@ -10,6 +10,7 @@
 	export let headers = ['Nom', 'Email', 'Rôle', 'Actions'];
 	export let filters = [];
 	export let dbInfo = {}; // { table: 'users', key: 'id, email, role'}
+	export let searchable = 'username';
 
 	export let type = 'utilisateur';
 	export let type_accord = 'un';
@@ -35,6 +36,7 @@
 	let current_page = 0;
 	let total_items = 0;
 	let page = [];
+	let search = '';
 
 	$: {
 		page = [];
@@ -42,6 +44,13 @@
 			for (let i = 0; i <= total_items / size; i++) {
 				page = [...page, i + 1];
 			}
+		}
+	}
+
+	$: {
+		if (search.length > 0) {
+			current_page = 0;
+			filtersStore.set(filters);
 		}
 	}
 
@@ -90,14 +99,17 @@
 		// copy array
 		let tmp = JSON.parse(JSON.stringify(filters));
 		tmp.forEach((el) => {
-			el.options = el.options.filter((option) => option.active);
+			el.options = el.options?.filter((option) => option.active);
 		});
 		// create string
 		tmp.forEach((el) => {
-			if (el.options.length > 0) {
+			if (el.options?.length > 0) {
 				filtersString += `${el.value}:in:("${el.options.map((option) => option.value).join('","')}")&`;
 			}
 		});
+		if (search) {
+			filtersString += `${searchable}:ilike:%${search}%&`;
+		}
 		return filtersString.slice(0, -1);
 	}
 
@@ -184,6 +196,7 @@
 								class="block w-full p-2 pl-10 text-sm text-white placeholder-gray-400 bg-gray-700 border border-gray-600 rounded-lg focus:border-primary-500"
 								placeholder="Search"
 								required=""
+								bind:value={search}
 							/>
 						</div>
 					</form>

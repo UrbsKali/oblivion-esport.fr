@@ -43,7 +43,7 @@
 <section>
 	<h1 class="text-3xl font-semibold text-white sm:px-5">Toutes les équipes</h1>
 	<div class="mt-2 bg-gray-800 rounded-lg sm:m-5">
-		<Table {headers} {type} {type_accord} {parseItems} {dbInfo} {actions} />
+		<Table {headers} {type} {type_accord} {parseItems} {dbInfo} {actions} searchable="name" />
 	</div>
 </section>
 

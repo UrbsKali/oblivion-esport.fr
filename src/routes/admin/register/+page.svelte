@@ -155,7 +155,16 @@
 <section>
 	<h1 class="text-3xl font-semibold text-white sm:px-5">Inscriptions</h1>
 	<div class="mt-2 bg-gray-800 rounded-lg sm:m-5">
-		<Table {headers} {type} {type_accord} {parseItems} {dbInfo} {actions} {filters} />
+		<Table
+			{headers}
+			{type}
+			{type_accord}
+			{parseItems}
+			{dbInfo}
+			{actions}
+			{filters}
+			searchable="name"
+		/>
 	</div>
 </section>
 

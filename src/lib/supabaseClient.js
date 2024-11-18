@@ -6,3 +6,20 @@ const supabaseKey = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 // @ts-ignore
 export const supabase = createClient(supabaseUrl, supabaseKey);
+
+export async function createAdminClient() {
+    const { data, error } = await supabase.rpc("get_service_key")
+    if (error) {
+        throw error
+    }
+    const serviceKey = data;
+    if (!serviceKey) {
+        throw new Error("Service key not found")
+    }
+    return createClient(supabaseUrl, serviceKey, {
+        auth: {
+            autoRefreshToken: false,
+            persistSession: false
+        }
+    })
+}
