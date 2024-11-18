@@ -1,6 +1,6 @@
 <script>
-	import { onMount } from 'svelte';
-	import { onDestroy } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/environment';
 
 	let cursor;
 	let cursorInner;
@@ -17,6 +17,7 @@
 	onMount(() => {
 		is_mobile = window.innerWidth < 768;
 		if (is_mobile) return;
+		if (!document) return;
 
 		document.addEventListener('mousemove', (e) => {
 			mouseX = e.clientX;
@@ -39,12 +40,14 @@
 	});
 
 	onDestroy(() => {
-		document.removeEventListener('mousemove', (e) => {
-			mouseX = e.clientX;
-			mouseY = e.clientY;
-		});
+		if (browser) {
+			document.removeEventListener('mousemove', (e) => {
+				mouseX = e.clientX;
+				mouseY = e.clientY;
+			});
 
-		clearInterval(interval);
+			clearInterval(interval);
+		}
 	});
 
 	function animateCursor() {
