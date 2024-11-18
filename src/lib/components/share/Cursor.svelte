@@ -33,7 +33,7 @@
 			});
 		});
 
-		requestAnimationFrame(animateCursor);
+		setInterval(animateCursor, 1000 / 60);
 	});
 
 	function animateCursor() {
@@ -42,8 +42,6 @@
 
 		cursor.style.transform = `translate3d(${cursorX + 4 - 24}px, ${cursorY + 4 - 24}px, 0) scale(${hover ? 1.5 : 1})`;
 		cursorInner.style.transform = `translate3d(${mouseX + 20 - 24}px, ${mouseY + 20 - 24}px, 0) scale(${hover ? 1 : 1})`;
-
-		requestAnimationFrame(animateCursor);
 	}
 </script>
 
