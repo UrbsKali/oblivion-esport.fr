@@ -14,6 +14,9 @@
 
 	let value = '';
 	let description = '';
+	let full_body = {};
+
+	let currentTab = '';
 
 	let selectedTournament = null;
 
@@ -45,9 +48,11 @@
 		if (error) {
 			console.error(error);
 		} else {
-			value = data.slug.body;
+			full_body = data.slug.body;
+			value = full_body[Object.keys(full_body)[0]];
 			description = data.slug.description;
 			selectedTournament = data;
+			currentTab = Object.keys(full_body)[0];
 		}
 	}
 
@@ -99,17 +104,45 @@
 			class="w-full p-2 mb-4 bg-gray-900 border-2 border-gray-700 rounded-md"
 		></textarea>
 
+		<!-- Tab for select the right body part -->
+		<ul class="flex justify-center my-2">
+			{#each Object.keys(full_body) as key}
+				<li
+					class="p-2 mx-2 text-white rounded-md cursor-pointer bg-primary-500"
+					on:click={() => {
+						full_body[currentTab] = value;
+						value = full_body[key];
+						currentTab = key;
+					}}
+				>
+					{key}
+				</li>
+			{/each}
+			<li
+				class="p-2 mx-2 text-white rounded-md cursor-pointer bg-primary-500"
+				on:click={() => {
+					let name = prompt('Nom du nouvel onglet');
+					const newTab = name.replace(/\s/g, '_').toLowerCase();
+					full_body[newTab] = '';
+					value = '';
+					currentTab = newTab;
+				}}
+			>
+				+
+			</li>
+		</ul>
 		<!--Markdown editor-->
-		<MarkdownEditor bind:value mode="tabs" theme="github" {carta} />
+		<MarkdownEditor mode="tabs" theme="github" {carta} bind:value />
 
 		<!--Save button-->
 		<button
-			class="p-2 mt-4 text-white bg-blue-500 rounded-md"
+			class="p-2 mt-4 text-white rounded-md bg-primary-500"
 			on:click={async () => {
 				// update the body of the selected tournament
+				full_body[currentTab] = value;
 				const { error } = await supabase
 					.from('tournaments_info')
-					.update({ body: value, description: description })
+					.update({ body: full_body, description: description })
 					.eq('slug', selectedTournament.slug.slug);
 				if (error) {
 					console.error(error);
