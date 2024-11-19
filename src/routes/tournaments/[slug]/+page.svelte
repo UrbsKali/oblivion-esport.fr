@@ -10,6 +10,7 @@
 	import RegisterButton from '$lib/components/others/RegisterButton.svelte';
 	import Footer from '$lib/components/share/Footer.svelte';
 	import Bracket from '$lib/components/others/Bracket.svelte';
+	import Pool from '$lib/components/others/Pool.svelte';
 
 	let slug = '';
 	let tournament = {};
@@ -45,7 +46,7 @@
 			buttons = Object.keys(tournament?.slug?.body).map((key) => {
 				return key;
 			});
-
+			// buttons = [...buttons, 'Play-offs', 'Matchs'];
 			current_body = tournament?.slug?.body[buttons[0]] || '';
 			current_button = buttons[0];
 		}
@@ -132,23 +133,29 @@
 			</div>
 		</div>
 		<div class="w-full p-5 border border-gray-700 rounded-b-lg rounded-e-lg backdrop-blur-lg">
-			<SvelteMarkdown source={current_body} {renderers} />
-			{#if current_button == 'Bracket'}
+			{#if current_button == 'Play-offs'}
 				<div class="flex">
 					<Bracket {bracket} />
 				</div>
-			{/if}
-			<span>
-				{#if current_button == 'Inscriptions'}
-					{#if tournament?.can_register}
-						<RegisterButton tournament_id={tournament?.id} />
-					{:else}
-						<button class="px-4 py-2 mt-5 text-white bg-gray-500 rounded-md"
-							>Inscription fermée</button
-						>
-					{/if}
+			{:else if current_button == 'Inscriptions'}
+				<SvelteMarkdown source={current_body} {renderers} />
+
+				{#if tournament?.can_register}
+					<RegisterButton tournament_id={tournament?.id} />
+				{:else}
+					<button class="px-4 py-2 mt-5 text-white bg-gray-500 rounded-md"
+						>Inscription fermée</button
+					>
 				{/if}
-			</span>
+			{:else if current_button == 'Matchs'}
+				<h1>WIP</h1>
+			{:else if current_button == 'Phase de groupe'}
+				<div class="flex w-full gap-5 justify-evenly">
+					{#each current_body as pool}
+						<Pool {pool} />
+					{/each}
+				</div>
+			{/if}
 		</div>
 	</div>
 </div>
