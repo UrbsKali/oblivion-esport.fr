@@ -150,7 +150,7 @@
 			{:else if current_button == 'Matchs'}
 				<h1>WIP</h1>
 			{:else if current_button == 'Phase de groupe'}
-				<div class="flex w-full gap-5 justify-evenly">
+				<div class="flex flex-col w-full gap-5 justify-evenly md:flex-row">
 					{#each current_body as pool}
 						<Pool {pool} />
 					{/each}
