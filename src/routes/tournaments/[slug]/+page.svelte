@@ -155,6 +155,8 @@
 						<Pool {pool} />
 					{/each}
 				</div>
+			{:else}
+				<SvelteMarkdown source={current_body} {renderers} />
 			{/if}
 		</div>
 	</div>
