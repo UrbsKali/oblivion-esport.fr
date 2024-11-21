@@ -27,7 +27,7 @@ const config = {
 			strict: true
 		}),
 		prerender: {
-			entries: ['*', ...extra_entries],
+			entries: ['*', '/admin/tournaments/eleon-world-cup', '/admin/tournaments/trankil-world-cup5', ...extra_entries],
 		},
 	},
 
