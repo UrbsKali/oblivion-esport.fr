@@ -72,7 +72,7 @@
 		}
 	};
 
-	let handleSubmit = async (e) => {
+	async function handleSubmit(e) {
 		e.preventDefault();
 		const form = e.target.closest('form');
 		const data = new FormData(form);
@@ -97,7 +97,21 @@
 		} else {
 			window.location.reload();
 		}
-	};
+	}
+
+	async function addNew() {
+		new CrudForm({
+			target: document.body,
+			props: {
+				type: 'Match',
+				type_accord: 'un',
+				action: 'Ajouter',
+				fields: fields,
+				changeArgs: 2,
+				onSubmit: handleSubmit
+			}
+		});
+	}
 
 	let handleEdit = async (e) => {
 		e.preventDefault();
@@ -132,21 +146,34 @@
 		}
 	};
 
-	let handleSelectUpdate = async (e) => {
+	let handleSelectUpdate = async (e, c_fields) => {
+		if (!c_fields) {
+			c_fields = fields;
+			console.log('parent field');
+		}
 		// fetch teams options for the select field
 		if (e.target.id == 'tournament_id') {
+			console.log(e.target.value);
 			t_id = e.target.value;
-			fields[1].options = teams_options.filter((el) => el.data == t_id);
-			fields[2].options = teams_options.filter((el) => el.data == t_id);
+			c_fields[1].options = teams_options.filter((el) => el.data == t_id);
+			c_fields[2].options = teams_options.filter((el) => el.data == t_id);
+			c_fields[5].options = [{ text: 'Aucun', value: 'NULL' }];
 		}
 		if (e.target.id == 'team_one') {
-			fields[5].options[0] = { text: e.target.selectedOptions[0].innerText, value: e.target.value };
-			fields[2].options = teams_options.filter((el) => el.data == t_id);
-			fields[2].options = fields[2].options.filter((el) => el.value != e.target.value);
+			c_fields[5].options[0] = {
+				text: e.target.selectedOptions[0].innerText,
+				value: e.target.value
+			};
+			c_fields[2].options = teams_options.filter((el) => el.data == t_id);
+			c_fields[2].options = c_fields[2].options.filter((el) => el.value != e.target.value);
 		}
 		if (e.target.id == 'team_two') {
-			fields[5].options[1] = { text: e.target.selectedOptions[0].innerText, value: e.target.value };
+			c_fields[5].options[1] = {
+				text: e.target.selectedOptions[0].innerText,
+				value: e.target.value
+			};
 		}
+		return c_fields;
 	};
 
 	let actions = [
@@ -206,7 +233,7 @@
 			id: 'tournament_id',
 			type: 'select',
 			required: true,
-			options: [],
+			options: [{ text: 'Chargement...', value: 0 }],
 			wide: true,
 			onChange: handleSelectUpdate
 		},
@@ -296,13 +323,25 @@
 		teams_options = data.map((el) => {
 			return { text: el.name, value: el.id, data: el.part_of[0].tournament_id };
 		});
+		console.log(teams_options);
+		const { data: tournaments, error: error_t } = await supabase
+			.from('Tournaments')
+			.select('title, id');
+		if (error_t) {
+			console.error(error_t);
+			alert('Une erreur est survenue lors de la récupération des données');
+			return;
+		}
+		fields[0].options = tournaments.map((el) => {
+			return { text: el.title, value: el.id };
+		});
 	});
 </script>
 
 <section>
 	<h1 class="text-3xl font-semibold text-white">Matchs</h1>
 	<div class="mt-2 bg-gray-800 rounded-lg sm:m-5">
-		<Table {headers} {type} {actions} {parseItems} {dbInfo} {filters} />
+		<Table {headers} {type} {actions} {parseItems} {addNew} {dbInfo} {filters} />
 	</div>
 </section>
 

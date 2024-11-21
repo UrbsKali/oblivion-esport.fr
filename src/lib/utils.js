@@ -66,7 +66,6 @@ export async function loadUserdata() {
 
 
                 user.providers = [...dat.identities, ...data];
-                console.log(user.providers);
                 userdata.set(user);
             }
         }

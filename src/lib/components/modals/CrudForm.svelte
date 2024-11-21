@@ -10,6 +10,7 @@
 	export let action = 'Ajouter';
 	export let fields = [];
 	export let id = 'CrudModal';
+	export let changeArgs = 1;
 
 	export let title = `${action} ${type_accord} ${type}`;
 
@@ -84,7 +85,17 @@
 									id={field.id || field.name.toLowerCase()}
 									name={field.id || field.name.toLowerCase()}
 									class=" border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:border-primary-500"
-									on:change={field.onChange || null}
+									on:change={async (e) => {
+										if (field.onChange) {
+											if (field.onChange.constructor.name == 'AsyncFunction') {
+												if (changeArgs == 1) await field.onChange(e);
+												else fields = await field.onChange(e, fields);
+											} else {
+												if (changeArgs == 1) field.onChange(e);
+												else fields = field.onChange(e, fields);
+											}
+										}
+									}}
 									readonly={field.readonly || false}
 								>
 									{#if (field.readonly || false) == false}<option
