@@ -94,6 +94,12 @@
 			uri: '/admin/blog',
 			icon: 'document-text',
 			permission: 'edit_blog'
+		},
+		{
+			title: 'Voir les prédictions',
+			uri: '/admin/view-predi',
+			icon: 'settings',
+			permission: 'edit_user'
 		}
 	];
 
