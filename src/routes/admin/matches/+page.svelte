@@ -2,6 +2,8 @@
 	// @ts-nocheck
 
 	import Table from '$lib/components/admin/Table.svelte';
+	import CrudForm from '$lib/components/modals/CrudForm.svelte';
+	import ReadModal from '$lib/components/modals/ReadModal.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { onMount } from 'svelte';
 
@@ -15,20 +17,24 @@
 	const type = 'Match';
 
 	let editLoad = async (e) => {
-		let tr = e.target.closest('tr');
-		let id = tr.children[0].dataset.utils;
-		const response = await supabase
+		const id = e.target.closest('.modal').id.split('-')[1];
+		const { data, error } = await supabase
 			.from('Matchs')
 			.select(
 				'id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score'
 			)
-			.eq('id', id);
-		if (response.error) {
-			console.error(response.error);
+			.eq('id', id)
+			.single();
+		if (error) {
+			console.error(error);
+			alert('Une erreur est survenue lors de la récupération des données');
+			return;
 		} else {
-			let data = response.data[0];
 			fields[0].value = data.tournament_id.id;
 			fields[0].data = data.id;
+			fields[0].options = [
+				{ text: data.tournament_id.title, value: data.tournament_id.id, autoselect: true }
+			];
 			await handleSelectUpdate({ target: { id: 'tournament_id', value: data.tournament_id.id } });
 			fields[1].value = data.team_one.id;
 			fields[2].value = data.team_two.id;
@@ -46,15 +52,23 @@
 					selectedOptions: [{ innerText: data.team_two.name }]
 				}
 			});
-
 			let local_date = new Date(data.date).toLocaleString();
 			fields[3].value = local_date.split(' ')[0].split('/').reverse().join('-');
 			fields[4].value = local_date.split(' ')[1];
 			fields[5].value = data.winner?.id;
 			fields[6].value = data.score;
 
-			const modal = FlowbiteInstances.getInstance('Modal', 'CrudModal');
-			modal.show();
+			new CrudForm({
+				target: document.body,
+				props: {
+					id: id,
+					type: 'Match',
+					type_accord: 'le',
+					action: 'Modifier',
+					fields: fields,
+					onSubmit: handleEdit
+				}
+			});
 		}
 	};
 
@@ -67,7 +81,7 @@
 			if (key == 'winner' && value == 'NULL') continue;
 			payload[key] = value;
 		}
-		payload.date += ` ${payload.time}+02`;
+		payload.date += ` ${payload.time}+01`;
 		delete payload.time;
 		// parse score to always be in the form of '0-0' and the bigger number is the first
 		if (payload.score) {
@@ -79,27 +93,9 @@
 		const { ret, error } = await supabase.from('Matchs').insert([payload]);
 		if (error) {
 			console.error(error);
+			alert("Une erreur est survenue lors de l'ajout du match");
 		} else {
-			const { data, error } = await supabase
-				.from('Matchs')
-				.select(
-					`id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score`
-				)
-				.eq('team_one', payload.team_one)
-				.eq('team_two', payload.team_two)
-				.eq('tournament_id', payload.tournament_id)
-				.eq('date', payload.date);
-
-			const element = data[0];
-			let el = [
-				{ value: `${element.team_one.name} vs ${element.team_two.name}`, data: element.id },
-				{ value: element.tournament_id.title, data: element.tournament_id.id },
-				{ value: element.winner?.name || '-', data: element.winner?.id || '' },
-				{ value: element.score || '-' }
-			];
-			items = [...items, el];
-			const modal = FlowbiteInstances.getInstance('Modal', 'CrudModal');
-			modal.hide();
+			window.location.reload();
 		}
 	};
 
@@ -114,44 +110,25 @@
 			if (key == 'winner' && value == 'NULL') continue;
 			payload[key] = value;
 		}
-		payload.date += ` ${payload.time}+02`;
+		payload.date += ` ${payload.time}+01`;
 		delete payload.time;
 		console.log(payload);
 		const { ret, error } = await supabase.from('Matchs').update([payload]).eq('id', id);
 		if (error) {
 			console.error(error);
 		} else {
-			let el = [
-				{
-					value: `${document.querySelector('select#team_one').selectedOptions[0].innerText} vs ${document.querySelector('select#team_two').selectedOptions[0].innerText}`,
-					data: id
-				},
-				{
-					value: document.querySelector('select#tournament_id').selectedOptions[0].innerText,
-					data: payload.tournament_id
-				},
-				{
-					value: document.querySelector('select#winner').selectedOptions[0]?.innerText || '-',
-					data: payload.winner || ''
-				},
-				{ value: payload.score || '-' }
-			];
-			items = [...items.filter((el) => el[0].data != id), el];
-
-			const modal = FlowbiteInstances.getInstance('Modal', 'CrudModal');
-			modal.hide();
+			window.location.reload();
 		}
 	};
 
 	let handleDelete = async (e) => {
 		e.preventDefault();
-		let tr = e.target.closest('tr');
-		let id = tr.children[0].dataset.utils;
+		const id = e.target.closest('.modal').id.split('-')[1];
 		const response = await supabase.from('Matchs').delete().eq('id', id);
 		if (response.error) {
 			console.error(response.error);
 		} else {
-			items = items.filter((el) => el[0].data != id);
+			window.location.reload();
 		}
 	};
 
@@ -163,19 +140,63 @@
 			fields[2].options = teams_options.filter((el) => el.data == t_id);
 		}
 		if (e.target.id == 'team_one') {
-			fields[5].options[0] = { name: e.target.selectedOptions[0].innerText, value: e.target.value };
+			fields[5].options[0] = { text: e.target.selectedOptions[0].innerText, value: e.target.value };
 			fields[2].options = teams_options.filter((el) => el.data == t_id);
 			fields[2].options = fields[2].options.filter((el) => el.value != e.target.value);
 		}
 		if (e.target.id == 'team_two') {
-			fields[5].options[1] = { name: e.target.selectedOptions[0].innerText, value: e.target.value };
+			fields[5].options[1] = { text: e.target.selectedOptions[0].innerText, value: e.target.value };
 		}
 	};
 
 	let actions = [
 		{
 			type: 'view',
-			handler: () => {}
+			handler: async (e) => {
+				e.stopPropagation();
+				const id = e.target.closest('tr').children[0].dataset.utils;
+				const { data, error } = await supabase
+					.from('Matchs')
+					.select(
+						'id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score'
+					)
+					.eq('id', id)
+					.single();
+				if (error) {
+					console.error(error);
+					alert('Une erreur est survenue lors de la récupération des données');
+					return;
+				}
+				new ReadModal({
+					target: document.body,
+					props: {
+						id,
+						values: {
+							header: {
+								title: `${data.team_one.name} vs ${data.team_two.name}`,
+								sub: data.date.split('T')[0] + ' ' + data.date.split('T')[1].split('+')[0]
+							},
+							body: [
+								{ label: 'Tournoi', value: data.tournament_id.title },
+								{ label: 'Gagnant', value: data.winner?.name || '-' },
+								{ label: 'Score', value: data.score || '-' }
+							]
+						},
+						actions: [
+							{
+								type: 'edit',
+								title: 'Modifier',
+								handler: editLoad
+							},
+							{
+								type: 'delete',
+								title: 'Supprimer',
+								handler: handleDelete
+							}
+						]
+					}
+				});
+			}
 		}
 	];
 
@@ -260,12 +281,28 @@
 		table: 'Matchs',
 		key: 'id, team_one(name, id), team_two(name, id), tournament_id!inner(title, id), winner(name, id), date, score'
 	};
+
+	onMount(async () => {
+		const { data, error } = await supabase
+			.from('Teams')
+			.select('name, id, part_of!inner(tournament_id)')
+			.eq('part_of.status', 'accepted')
+			.order('name');
+		if (error) {
+			console.error(error);
+			alert('Une erreur est survenue lors de la récupération des données');
+			return;
+		}
+		teams_options = data.map((el) => {
+			return { text: el.name, value: el.id, data: el.part_of[0].tournament_id };
+		});
+	});
 </script>
 
 <section>
 	<h1 class="text-3xl font-semibold text-white">Matchs</h1>
 	<div class="mt-2 bg-gray-800 rounded-lg sm:m-5">
-		<Table {headers} {items} {type} {actions} {parseItems} {dbInfo} {filters} />
+		<Table {headers} {type} {actions} {parseItems} {dbInfo} {filters} />
 	</div>
 </section>
 
