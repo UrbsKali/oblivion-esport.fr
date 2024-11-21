@@ -40,7 +40,9 @@
 		{
 			const { data, error } = await supabase
 				.from('Predictions')
-				.select(`id, match, team(name, logo_url), score, made_by(username), result`)
+				.select(
+					`id, match, team(name, logo_url), score, made_by(username, predict_accuracy), result`
+				)
 				.in(
 					'match',
 					matchs.map((el) => el.id)
