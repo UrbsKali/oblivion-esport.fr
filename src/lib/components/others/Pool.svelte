@@ -56,6 +56,11 @@
 				>
 					Win
 				</th>
+				<th
+					class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-300 uppercase bg-gray-900 bg-opacity-50"
+				>
+					Lose
+				</th>
 			</tr>
 		</thead>
 		<tbody class="bg-gray-800 bg-opacity-50 divide-y divide-gray-700">
@@ -76,6 +81,9 @@
 					</td>
 					<td class="px-6 py-4 whitespace-no-wrap">
 						<div class="text-sm leading-5 text-gray-300">{team.win}</div>
+					</td>
+					<td class="px-6 py-4 whitespace-no-wrap">
+						<div class="text-sm leading-5 text-gray-300">{team.match - team.win}</div>
 					</td>
 				</tr>
 			{/each}
