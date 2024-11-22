@@ -125,6 +125,30 @@
 	];
 </script>
 
+<svelte:head>
+	<title>{tournament?.title || slug} - Obivion Esport</title>
+	<meta name="description" content="Tournoi {tournament?.title || slug} sur Obivion Esport" />
+	<meta property="og:title" content="{tournament?.title || slug} - Obivion Esport" />
+	<meta
+		property="og:description"
+		content="Tournoi {tournament?.title || slug} sur Obivion Esport"
+	/>
+	<meta property="og:image" content={tournament?.slug?.image} />
+	<meta property="og:url" content={`https://obivion.gg/tournaments/${slug}`} />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Obivion Esport" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:site" content="@ObivionEsport" />
+	<meta name="twitter:creator" content="@ObivionEsport" />
+	<meta name="twitter:title" content="{tournament?.title || slug} - Obivion Esport" />
+	<meta
+		name="twitter:description"
+		content="Tournoi {tournament?.title || slug} sur Obivion Esport"
+	/>
+	<meta name="twitter:image" content={tournament?.slug?.image} />
+	<meta name="twitter:url" content={`https://obivion.gg/tournaments/${slug}`} />
+</svelte:head>
+
 <div class="min-h-screen">
 	<div
 		id="hero"
