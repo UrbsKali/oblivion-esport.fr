@@ -22,7 +22,7 @@
         .carta-input,
         .carta-renderer {
             min-height: 120px;
-            max-height: 160px;
+            // max-height: 160px;
             overflow: auto;
         }
 
@@ -37,6 +37,10 @@
 
             background-color: $background-light;
 
+
+            // sicky on top when scrolling
+            position: sticky;
+            top: 50px;
             border-top-left-radius: 0.5rem;
             border-top-right-radius: 0.5rem;
 

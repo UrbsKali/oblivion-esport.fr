@@ -84,12 +84,6 @@
 			permission: 'panel_admin'
 		},
 		{
-			title: 'Edition des tournois',
-			uri: '/admin/tournament-edition',
-			icon: 'pencil-outline',
-			permission: 'edit_tournament'
-		},
-		{
 			title: 'Blog',
 			uri: '/admin/blog',
 			icon: 'document-text',

@@ -11,10 +11,13 @@
 	import Footer from '$lib/components/share/Footer.svelte';
 	import Bracket from '$lib/components/others/Bracket.svelte';
 	import Pool from '$lib/components/others/Pool.svelte';
+	import MatchCard from '$lib/components/others/MatchCard.svelte';
 
 	let slug = '';
 	let tournament = {};
 	let user;
+	let matchs = [];
+	let match_by_day = {};
 
 	let current_body = '';
 	let buttons = ['Infos', 'Inscriptions', 'Règlement'];
@@ -46,9 +49,35 @@
 			buttons = Object.keys(tournament?.slug?.body).map((key) => {
 				return key;
 			});
-			// buttons = [...buttons, 'Play-offs', 'Matchs'];
+			buttons = [...buttons, 'Play-offs', 'Matchs'];
 			current_body = tournament?.slug?.body[buttons[0]] || '';
 			current_button = buttons[0];
+		}
+	}
+
+	async function loadMatchs(batch = 0) {
+		const { data, error } = await supabase
+			.from('Matchs')
+			.select(
+				'id, team_one(logo_url, name, tag), team_two(logo_url, name, tag), winner(tag), date, score'
+			)
+			.eq('tournament_id', tournament?.id)
+			.order('date', { ascending: true })
+			.range(batch * 10, (batch + 1) * 10);
+
+		if (error) {
+			console.error('error', error);
+		} else {
+			matchs = [...matchs, ...data];
+			match_by_day = matchs.reduce((acc, match) => {
+				const date = new Date(match.date).toDateString();
+				if (!acc[date]) {
+					acc[date] = [];
+				}
+				acc[date].push(match);
+				return acc;
+			}, {});
+			console.log(match_by_day);
 		}
 	}
 
@@ -125,6 +154,10 @@
 						on:click={() => {
 							current_body = tournament?.slug?.body[button];
 							current_button = button;
+							if (button == 'Matchs') {
+								matchs = [];
+								loadMatchs();
+							}
 						}}
 					>
 						{button}
@@ -148,7 +181,37 @@
 					>
 				{/if}
 			{:else if current_button == 'Matchs'}
-				<h1>WIP</h1>
+				<div class="flex flex-col gap-8">
+					{#each Object.keys(match_by_day) as date}
+						{@const matchs = match_by_day[date]}
+						{@const dt = new Date(date)}
+
+						<h1 class="text-2xl font-extrabold capitalize">
+							{dt.toLocaleDateString('fr-FR', {
+								weekday: 'long',
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric'
+							})}
+						</h1>
+						<div class="grid grid-cols-1 gap-5 lg:grid-cols-3 md:grid-cols-2">
+							{#each matchs as m}
+								<MatchCard
+									name={[m.team_one.name, m.team_two.name]}
+									logo={[m.team_one.logo_url, m.team_two.logo_url]}
+									match={m}
+								/>
+							{/each}
+						</div>
+					{/each}
+					<!-- Charger plus -->
+					<button
+						class="px-4 py-2 text-white bg-gray-700 rounded-md"
+						on:click={() => loadMatchs(matchs.length / 10)}
+					>
+						Charger plus
+					</button>
+				</div>
 			{:else if current_button == 'Phase de groupe'}
 				<div class="flex flex-col w-full gap-5 justify-evenly md:flex-row">
 					{#each current_body as pool}

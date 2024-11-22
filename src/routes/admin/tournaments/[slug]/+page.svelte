@@ -1,18 +1,24 @@
 <script>
-	import Table from '$lib/components/admin/Table.svelte';
-	import CrudForm from '$lib/components/modals/CrudForm.svelte';
-	import SucessModal from '$lib/components/modals/InfoModal.svelte';
-	import ReadModal from '$lib/components/modals/ReadModal.svelte';
-
-	import { userdata } from '$lib/store';
 	import { supabase } from '$lib/supabaseClient';
 	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+
+	import { Carta, MarkdownEditor } from 'carta-md';
+	import { attachment } from '@cartamd/plugin-attachment';
+	import { emoji } from '@cartamd/plugin-emoji';
+	import { slash } from '@cartamd/plugin-slash';
+	import { code } from '@cartamd/plugin-code';
+
+	import '$lib/styles/github.scss';
 
 	let slug;
 
 	let tournament = {};
+
+	let value = '';
+	let description = '';
+	let full_body = {};
+	let currentTab = '';
 
 	page.subscribe(async (value) => {
 		if (value) {
@@ -21,17 +27,37 @@
 		}
 	});
 
+	const carta = new Carta({
+		sanitizer: false,
+		theme: 'github-dark',
+		extensions: [
+			attachment({
+				async upload() {
+					return 'some-url-from-server.xyz';
+				}
+			}),
+			emoji(),
+			slash(),
+			code()
+		]
+	});
+
 	async function loadPage() {
 		const { data, error } = await supabase
 			.from('Tournaments')
-			.select('id, start, end, title, slug(*), can_register')
+			.select('slug(slug, body, description, image), can_register, title, start, end')
 			.eq('slug', slug)
 			.single();
+
 		if (error) {
 			console.error(error);
-			return;
+		} else {
+			full_body = data.slug.body;
+			value = full_body[Object.keys(full_body)[0]];
+			description = data.slug.description;
+			tournament = data;
+			currentTab = Object.keys(full_body)[0];
 		}
-		tournament = data;
 	}
 </script>
 
@@ -93,9 +119,62 @@
 			</svg>
 		</button>
 	</div>
-	<div
-		class="w-full mt-0 bg-gray-800 border border-gray-700 rounded-lg shadow backdrop-blur-sm"
-	></div>
+	<div class="w-full pt-2 border-t border-gray-700">
+		<label for="description">Description</label>
+		<textarea
+			bind:value={description}
+			class="w-full p-2 mb-4 bg-gray-900 border-2 border-gray-700 rounded-md"
+		></textarea>
+
+		<!-- Tab for select the right body part -->
+		<ul class="flex justify-center my-2">
+			{#each Object.keys(full_body) as key}
+				<li
+					class="p-2 mx-2 text-white rounded-md cursor-pointer bg-primary-500"
+					on:click={() => {
+						full_body[currentTab] = value;
+						value = full_body[key];
+						currentTab = key;
+					}}
+				>
+					{key}
+				</li>
+			{/each}
+			<li
+				class="p-2 mx-2 text-white rounded-md cursor-pointer bg-primary-500"
+				on:click={() => {
+					let name = prompt('Nom du nouvel onglet');
+					const newTab = name.replace(/\s/g, '_').toLowerCase();
+					full_body[newTab] = '';
+					value = '';
+					currentTab = newTab;
+				}}
+			>
+				+
+			</li>
+		</ul>
+		<!--Markdown editor-->
+		<MarkdownEditor mode="tabs" theme="github" {carta} bind:value />
+
+		<!--Save button-->
+		<button
+			class="p-2 mt-4 text-white rounded-md bg-primary-500"
+			on:click={async () => {
+				// update the body of the selected tournament
+				full_body[currentTab] = value;
+				const { error } = await supabase
+					.from('tournaments_info')
+					.update({ body: full_body, description: description })
+					.eq('slug', selectedTournament.slug.slug);
+				if (error) {
+					console.error(error);
+				} else {
+					console.log('Tournament updated');
+					alert('Tournoi mis à jour');
+				}
+			}}>Enregistrer</button
+		>
+	</div>
 </div>
 
 <style>
