@@ -151,9 +151,9 @@
 							</div>
 						</td>
 						{#each casteur as cast, index}
-							<td class="h-56">
+							<td class="h-auto">
 								{#if predictions.find((el) => el.made_by.username == cast.username && el.match == match.id)}
-									<div class="flex flex-col items-center h-56 align-middle">
+									<div class="flex flex-col items-center align-middle h-36">
 										<img
 											src={predictions.find(
 												(el) => el.made_by.username == cast.username && el.match == match.id
@@ -168,7 +168,7 @@
 									</div>
 									{#if use_score}
 										<div
-											class="flex flex-col items-center align-middle h-56 {predictions.find(
+											class="flex flex-col items-center align-middle h-12 {predictions.find(
 												(el) => el.made_by.username == cast.username && el.match == match.id
 											).result == 'FULL'
 												? 'text-green-500'
