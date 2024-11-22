@@ -29,7 +29,12 @@
 		// fetch teams options for the select field
 		if (e.target.id == 'match') {
 			let ids = e.target.selectedOptions[0].dataset.utils.split('#');
-			const { data, error } = await supabase.from('Teams').select('name, id').in('id', ids);
+			// match of the day only
+			const { data, error } = await supabase
+				.from('Teams')
+				.select('name, id')
+				.in('id', ids)
+				.order('name');
 			const teams_select = document.querySelector('#team');
 			data?.forEach((el) => {
 				fields[1].options = [...fields[1].options, { name: el.name, value: el.id }];
@@ -72,7 +77,10 @@
 		const { data, error } = await supabase
 			.from('Matchs')
 			.select(`id, team_one(name, id), team_two(name, id), tournament_id(title)`)
-			.gte('date', new Date().toISOString());
+			.gte('date', new Date().toISOString())
+			.lte('date', new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString())
+			.order('date');
+
 		data?.forEach((element) => {
 			let el = {
 				text: `${element.team_one.name} vs ${element.team_two.name} - ${element.tournament_id.title}`,
@@ -197,11 +205,11 @@
 						id: 'readModal-' + id,
 						values,
 						actions: [
-							{
-								type: 'delete',
-								title: 'Supprimer',
-								handler: handleDelete
-							}
+							// {
+							// 	type: 'delete',
+							// 	title: 'Supprimer',
+							// 	handler: handleDelete
+							// }
 						]
 					}
 				});
