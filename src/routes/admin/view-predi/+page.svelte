@@ -34,7 +34,8 @@
 					`id, team_one(name, logo_url), team_two(name, logo_url), tournament_id(title), date`
 				)
 				.lte('date', `${dateStr}T23:59:59`)
-				.gte('date', `${dateStr}T00:00:00`);
+				.gte('date', `${dateStr}T00:00:00`)
+				.order('date');
 			matchs = data;
 		}
 		{
