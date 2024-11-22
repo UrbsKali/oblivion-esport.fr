@@ -49,7 +49,7 @@
 			buttons = Object.keys(tournament?.slug?.body).map((key) => {
 				return key;
 			});
-			buttons = [...buttons, 'Play-offs', 'Matchs'];
+			// buttons = [...buttons, 'Play-offs', 'Matchs'];
 			current_body = tournament?.slug?.body[buttons[0]] || '';
 			current_button = buttons[0];
 		}
