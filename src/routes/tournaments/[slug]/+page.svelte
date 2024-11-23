@@ -87,33 +87,25 @@
 	async function loadPool() {
 		const { data, error } = await supabase
 			.from('Matchs')
-			.select(
-				'id, team_one(id,tag,logo_url), team_two(id,tag,logo_url), winner!inner(id,tag), date, score'
-			)
+			.select('id, team_one(id,tag), team_two(id,tag), winner!inner(id,tag), date, score')
 			.eq('tournament_id', tournament?.id)
 			.eq('phase', 'group');
 		if (error) {
 			console.error('error', error);
 		} else {
-			console.log(data);
-
 			// get teams win and nb matchs
 			let teams = {};
 			data.forEach((el) => {
 				if (!teams[el.team_one.tag]) {
 					teams[el.team_one.tag] = {
 						win: 0,
-						match: 0,
-						logo: el.team_one.logo_url,
-						name: el.team_one.tag
+						match: 0
 					};
 				}
 				if (!teams[el.team_two.tag]) {
 					teams[el.team_two.tag] = {
 						win: 0,
-						match: 0,
-						logo: el.team_two.logo_url,
-						name: el.team_two.tag
+						match: 0
 					};
 				}
 
@@ -123,12 +115,15 @@
 				teams[el.winner.tag].win++;
 			});
 
-			current_body.forEach((element) => {
-				element.teams.map((team) => {
-					team = teams[team];
+			current_body.forEach((el) => {
+				el.teams.map((team) => {
+					team.win = teams[team.name]?.win || 0;
+					team.match = teams[team.name]?.match || 0;
 				});
 			});
+
 			pools = current_body;
+			console.log(pools);
 		}
 	}
 

@@ -69,21 +69,21 @@
 					<td class="px-6 py-4 whitespace-no-wrap">
 						<div class="flex items-center">
 							<div class="flex-shrink-0 w-10 h-10">
-								<img class="w-10 h-10 rounded-full" src={team.logo} alt="" />
+								<img class="w-10 h-10 rounded-full" src={team?.logo} alt="" />
 							</div>
 							<div class="ml-4">
-								<div class="text-sm font-medium leading-5 text-gray-300">{team.name}</div>
+								<div class="text-sm font-medium leading-5 text-gray-300">{team?.name}</div>
 							</div>
 						</div>
 					</td>
 					<td class="px-6 py-4 whitespace-no-wrap">
-						<div class="text-sm leading-5 text-gray-300">{team.match}</div>
+						<div class="text-sm leading-5 text-gray-300">{team?.match}</div>
 					</td>
 					<td class="px-6 py-4 whitespace-no-wrap">
-						<div class="text-sm leading-5 text-gray-300">{team.win}</div>
+						<div class="text-sm leading-5 text-gray-300">{team?.win}</div>
 					</td>
 					<td class="px-6 py-4 whitespace-no-wrap">
-						<div class="text-sm leading-5 text-gray-300">{team.match - team.win}</div>
+						<div class="text-sm leading-5 text-gray-300">{team?.match - team?.win}</div>
 					</td>
 				</tr>
 			{/each}
