@@ -16,8 +16,11 @@
 	let slug = '';
 	let tournament = {};
 	let user;
+
 	let matchs = [];
 	let match_by_day = {};
+
+	let pools = [];
 
 	let current_body = '';
 	let buttons = ['Infos', 'Inscriptions', 'Règlement'];
@@ -78,6 +81,54 @@
 				return acc;
 			}, {});
 			console.log(match_by_day);
+		}
+	}
+
+	async function loadPool() {
+		const { data, error } = await supabase
+			.from('Matchs')
+			.select(
+				'id, team_one(id,tag,logo_url), team_two(id,tag,logo_url), winner!inner(id,tag), date, score'
+			)
+			.eq('tournament_id', tournament?.id)
+			.eq('phase', 'group');
+		if (error) {
+			console.error('error', error);
+		} else {
+			console.log(data);
+
+			// get teams win and nb matchs
+			let teams = {};
+			data.forEach((el) => {
+				if (!teams[el.team_one.tag]) {
+					teams[el.team_one.tag] = {
+						win: 0,
+						match: 0,
+						logo: el.team_one.logo_url,
+						name: el.team_one.tag
+					};
+				}
+				if (!teams[el.team_two.tag]) {
+					teams[el.team_two.tag] = {
+						win: 0,
+						match: 0,
+						logo: el.team_two.logo_url,
+						name: el.team_two.tag
+					};
+				}
+
+				teams[el.team_one.tag].match++;
+				teams[el.team_two.tag].match++;
+
+				teams[el.winner.tag].win++;
+			});
+
+			current_body.forEach((element) => {
+				element.teams.map((team) => {
+					team = teams[team];
+				});
+			});
+			pools = current_body;
 		}
 	}
 
@@ -182,6 +233,10 @@
 								matchs = [];
 								loadMatchs();
 							}
+							if (button == 'Phase de groupe') {
+								pools = [];
+								loadPool();
+							}
 						}}
 					>
 						{button}
@@ -238,7 +293,7 @@
 				</div>
 			{:else if current_button == 'Phase de groupe'}
 				<div class="flex flex-col w-full gap-5 justify-evenly md:flex-row">
-					{#each current_body as pool}
+					{#each pools as pool}
 						<Pool {pool} />
 					{/each}
 				</div>
