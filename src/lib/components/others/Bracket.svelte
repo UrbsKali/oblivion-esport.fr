@@ -81,7 +81,8 @@
 		transform: translate(-100%, -50%);
 	}
 	ul li:after {
-		width: 2px;
+		width: 2.5px;
+		border-radius: 0 0.625rem 0.625rem 0;
 		height: 100%;
 	}
 	ul:nth-of-type(n) li:nth-of-type(odd):after {

@@ -9,7 +9,7 @@
 	import { renderers } from '$lib/renderers';
 	import RegisterButton from '$lib/components/others/RegisterButton.svelte';
 	import Footer from '$lib/components/share/Footer.svelte';
-	import Bracket from '$lib/components/others/Bracket.svelte';
+	import DoubleBracket from '$lib/components/others/DoubleBracket.svelte';
 	import Pool from '$lib/components/others/Pool.svelte';
 	import MatchCard from '$lib/components/others/MatchCard.svelte';
 
@@ -52,7 +52,7 @@
 			buttons = Object.keys(tournament?.slug?.body).map((key) => {
 				return key;
 			});
-			// buttons = [...buttons, 'Play-offs', 'Matchs'];
+			// buttons = [...buttons, 'Play-offs'];
 			current_body = tournament?.slug?.body[buttons[0]] || '';
 			current_button = buttons[0];
 		}
@@ -123,52 +123,51 @@
 			});
 
 			pools = current_body;
-			console.log(pools);
 		}
 	}
 
-	let bracket = [
-		{
-			id: 1,
-			name: 'KMF',
-			logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/1846c911-521b-4338-85c5-835132e1765e/teams_r9dcj7llev9q1ynlttyxd.png'
-		},
-		{
-			id: 2,
-			name: 'NSE',
-			logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/3799ee3f-255b-4aa8-8a86-cbc1bd66ee71/teams_1f6mfk5vkshix6qwqwgme.png'
-		},
-		{
-			id: 3,
-			name: 'FAS',
-			logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/e7c2b0e7-f866-4e98-8c15-1e84918fe668/teams_mt27ui9z6hqs8sa1le7lf8.png'
-		},
-		{
-			id: 4,
-			name: 'GST',
-			logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/5ba7937a-1670-49c1-ae18-7dc4c2f588de/teams_ys0vjs1mu8jjz87h9q38.png'
-		},
-		{
-			id: 5,
-			name: 'BZZ',
-			logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/29342981-2bc0-4980-9b12-71fd5487c0b3/teams_jwmdgnihx6o1rchvqpzcv5.png'
-		},
-		{
-			id: 6,
-			name: 'WDE',
-			logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/1850792e-7425-462d-9c14-0cc8e73cf73a/teams_w4irqztd5is726f7n6tun9.png'
-		},
-		{
-			id: 7,
-			name: 'NMS',
-			logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/97e6631d-cef9-4614-9b3c-27f6674a59b5/teams_3bsy4jg8cn2wvvi1549gu.png'
-		},
-		{
-			id: 8,
-			name: 'ICA',
-			logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/edff3703-0ac5-4af5-bfa4-216750cc2b2c/teams_671gl7tdzuhsoqytfztbp.jpg'
-		}
-	];
+	// let bracket = [
+	// 	{
+	// 		id: 1,
+	// 		name: 'KMF',
+	// 		logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/1846c911-521b-4338-85c5-835132e1765e/teams_r9dcj7llev9q1ynlttyxd.png'
+	// 	},
+	// 	{
+	// 		id: 2,
+	// 		name: 'NSE',
+	// 		logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/3799ee3f-255b-4aa8-8a86-cbc1bd66ee71/teams_1f6mfk5vkshix6qwqwgme.png'
+	// 	},
+	// 	{
+	// 		id: 3,
+	// 		name: 'FAS',
+	// 		logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/e7c2b0e7-f866-4e98-8c15-1e84918fe668/teams_mt27ui9z6hqs8sa1le7lf8.png'
+	// 	},
+	// 	{
+	// 		id: 4,
+	// 		name: 'GST',
+	// 		logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/5ba7937a-1670-49c1-ae18-7dc4c2f588de/teams_ys0vjs1mu8jjz87h9q38.png'
+	// 	},
+	// 	{
+	// 		id: 5,
+	// 		name: 'BZZ',
+	// 		logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/29342981-2bc0-4980-9b12-71fd5487c0b3/teams_jwmdgnihx6o1rchvqpzcv5.png'
+	// 	},
+	// 	{
+	// 		id: 6,
+	// 		name: 'WDE',
+	// 		logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/1850792e-7425-462d-9c14-0cc8e73cf73a/teams_w4irqztd5is726f7n6tun9.png'
+	// 	},
+	// 	{
+	// 		id: 7,
+	// 		name: 'NMS',
+	// 		logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/97e6631d-cef9-4614-9b3c-27f6674a59b5/teams_3bsy4jg8cn2wvvi1549gu.png'
+	// 	},
+	// 	{
+	// 		id: 8,
+	// 		name: 'ICA',
+	// 		logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/edff3703-0ac5-4af5-bfa4-216750cc2b2c/teams_671gl7tdzuhsoqytfztbp.jpg'
+	// 	}
+	// ];
 </script>
 
 <svelte:head>
@@ -242,7 +241,7 @@
 		<div class="w-full p-5 border border-gray-700 rounded-b-lg rounded-e-lg backdrop-blur-lg">
 			{#if current_button == 'Play-offs'}
 				<div class="flex">
-					<Bracket {bracket} />
+					<DoubleBracket />
 				</div>
 			{:else if current_button == 'Inscriptions'}
 				<SvelteMarkdown source={current_body} {renderers} />

@@ -3,6 +3,7 @@
 	export let logo = [];
 
 	export let match = {};
+	export let showTime = true;
 
 	let score = [];
 	if (match.winner) {
@@ -32,9 +33,11 @@
 			<p>{score[1] || ' '}</p>
 		</div>
 	</div>
-	<div class="flex h-full pl-3 ml-3 border-l-2 border-gray-700">
-		<h1 class="self-center text-xl align-middle">
-			{match.date ? new Date(match.date).toLocaleString().split(' ')[1].slice(0, -3) : ' '}
-		</h1>
-	</div>
+	{#if showTime}
+		<div class="flex h-full pl-3 ml-3 border-l-2 border-gray-700">
+			<h1 class="self-center text-xl align-middle">
+				{match.date ? new Date(match.date).toLocaleString().split(' ')[1].slice(0, -3) : ' '}
+			</h1>
+		</div>
+	{/if}
 </div>
