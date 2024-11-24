@@ -165,7 +165,7 @@
 				const { error } = await supabase
 					.from('tournaments_info')
 					.update({ body: full_body, description: description })
-					.eq('slug', selectedTournament.slug.slug);
+					.eq('slug', slug);
 				if (error) {
 					console.error(error);
 				} else {
