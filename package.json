@@ -41,6 +41,7 @@
 		"@popperjs/core": "^2.11.8",
 		"@supabase/supabase-js": "^2.45.0",
 		"@types/marked": "^6.0.0",
+		"@xyflow/svelte": "^0.1.24",
 		"autoprefixer": "^10.4.20",
 		"carta-md": "^4.5.0",
 		"crypto-js": "^4.2.0",

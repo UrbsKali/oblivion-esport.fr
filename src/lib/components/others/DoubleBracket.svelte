@@ -1,5 +1,11 @@
 <script>
-	import MatchCard from './MatchCard.svelte';
+	import { writable } from 'svelte/store';
+	import { SvelteFlow } from '@xyflow/svelte';
+
+	// 👇 this is important! You need to import the styles for Svelte Flow to work
+	import '@xyflow/svelte/dist/style.css';
+	import MatchNode from '$lib/components/flowNodes/MatchNode.svelte';
+	import HeaderNode from '../flowNodes/HeaderNode.svelte';
 
 	export let bracket = [
 		{
@@ -13,7 +19,7 @@
 						logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/97e6631d-cef9-4614-9b3c-27f6674a59b5/teams_3bsy4jg8cn2wvvi1549gu.png'
 					},
 					{
-						name: 'TMP',
+						name: 'SKY',
 						score: ' ',
 						logo: 'https://idlcqblimgotmibuednf.supabase.co/storage/v1/object/public/avatars/97e6631d-cef9-4614-9b3c-27f6674a59b5/teams_3bsy4jg8cn2wvvi1549gu.png'
 					}
@@ -203,47 +209,133 @@
 			]
 		}
 	];
+	const customNodes = {
+		match: MatchNode,
+		title: HeaderNode
+	};
+
+	let nodes = writable([]);
+	let edges = writable([]);
+
+	function parseBraket(bracket) {
+		let nodes_ = [];
+		let edges_ = [];
+
+		let middle = (bracket[0].winner.length * 150) / 2;
+		bracket.forEach((el, i) => {
+			nodes_.push({
+				id: `${i}-TitleWinner`,
+				position: { x: 300 * (i + 1), y: -50 },
+				type: 'title',
+				data: {
+					text: el.title
+				}
+			});
+			nodes_.push({
+				id: `${i}-TitleLoser`,
+				position: { x: 300 * (i + 1), y: 625 },
+				type: 'title',
+				data: {
+					text: el.loserTitle
+				}
+			});
+			el.winner.forEach((win_el, j) => {
+				let y = 150 * (j + 0);
+				if (i != 0) y += middle - (el.winner.length * 150) / 2;
+				nodes_ = [
+					...nodes_,
+					{
+						id: `${i}-${j}`,
+						position: { x: 300 * (i + 1), y },
+						type: 'match',
+						data: {
+							name: [win_el[0].name, win_el[1].name],
+							logo: [win_el[0].logo, win_el[1].logo],
+							match: {
+								score: `${win_el[0].score}-${win_el[0].score}`
+							}
+						}
+					}
+				];
+			});
+			el.loser.forEach((los_el, j) => {
+				nodes_ = [
+					...nodes_,
+					{
+						id: `${i}-${j}-loser`,
+						position: { x: 300 * (i + 1), y: 150 * (j + 0) + 700 },
+						type: 'match',
+						data: {
+							name: [los_el[0].name, los_el[1].name],
+							logo: [los_el[0].logo, los_el[1].logo],
+							match: {
+								score: `${los_el[0].score}-${los_el[0].score}`
+							}
+						}
+					}
+				];
+			});
+		});
+
+		for (let i in nodes_) {
+			const el = nodes_[i];
+			if (el.id.split('-')[0] == bracket.length - 1) continue;
+			edges_ = [
+				...edges_,
+				{
+					id: `${el.id}-edge`,
+					type: 'smoothstep',
+					source: el.id,
+					target: `${parseInt(el.id.split('-')[0]) + 1}-${Math.floor(el.id.split('-')[1] / 2)}${el.id.split('-')[2] ? '-loser' : ''}`
+				}
+			];
+		}
+
+		nodes.set(nodes_);
+		edges.set(edges_);
+	}
+
+	$: parseBraket(bracket);
 </script>
 
-<div class="grid w-full h-full grid-flow-col grid-cols-4 grid-rows-2 gap-5 min-w-[600px]">
-	{#each bracket as round, index}
-		<div class="grid h-full text-center">
-			<h2>{round.title}</h2>
-			<div class="flex flex-col gap-5">
-				{#each round.winner as matchRaw, i}
-					{@const match = {
-						team_one: { tag: matchRaw[0]?.name, score: matchRaw[0]?.score },
-						team_two: { tag: matchRaw[1]?.name, score: matchRaw[1]?.score },
-						winner: matchRaw[0]?.score > matchRaw[1]?.score ? matchRaw[0]?.name : matchRaw[1]?.name,
-						score: `${matchRaw[0]?.score} - ${matchRaw[1]?.score}`
-					}}
-					{@const name = [matchRaw[0]?.name, matchRaw[1]?.name]}
-					{@const logo = [matchRaw[0]?.logo, matchRaw[1]?.logo]}
-					{#if index != 0}
-						<div class="flex flex-col justify-center h-[250px]">
-							<MatchCard {match} {name} {logo} showTime={false} />
-						</div>
-					{:else}
-						<MatchCard {match} {name} {logo} showTime={false} />
-					{/if}
-				{/each}
-			</div>
-		</div>
-		<div class="flex flex-col h-full gap-5 text-center">
-			<h2>{round.loserTitle}</h2>
-			<div class="flex flex-col gap-5">
-				{#each round.loser as matchRaw, i}
-					{@const match = {
-						team_one: { tag: matchRaw[0]?.name, score: matchRaw[0]?.score },
-						team_two: { tag: matchRaw[1]?.name, score: matchRaw[1]?.score },
-						winner: matchRaw[0]?.score > matchRaw[1]?.score ? matchRaw[0]?.name : matchRaw[1]?.name,
-						score: `${matchRaw[0]?.score} - ${matchRaw[1]?.score}`
-					}}
-					{@const name = [matchRaw[0]?.name, matchRaw[1]?.name]}
-					{@const logo = [matchRaw[0]?.logo, matchRaw[1]?.logo]}
-					<MatchCard {match} {name} {logo} showTime={false} />
-				{/each}
-			</div>
-		</div>
-	{/each}
-</div>
+<SvelteFlow
+	{nodes}
+	{edges}
+	initialViewport={{ x: -275, y: 50, zoom: 1 }}
+	nodeTypes={customNodes}
+	colorMode="dark"
+	nodesDraggable={false}
+	elementsSelectable={false}
+	nodesConnectable={false}
+	zoomOnScroll={false}
+	zoomOnPinch={false}
+	zoomOnDoubleClick={false}
+	preventScrolling={false}
+	panOnScroll={true}
+	translateExtent={[
+		[250, -50],
+		[1500, 1500]
+	]}
+	style="background-color: rgba(0,0,0,0)"
+	on:nodeclick={(event) => console.log('on node click', event.detail.node)}
+></SvelteFlow>
+
+<style>
+	:global(.svelte-flow .svelte-flow__handle) {
+		width: 0px;
+		height: 0px;
+		z-index: -1;
+	}
+
+	:global(.svelte-flow .svelte-flow__handle-left) {
+		transform: translateX(1px);
+		background-color: #00000000;
+	}
+	:global(.svelte-flow .svelte-flow__handle-right) {
+		transform: translateX(-1px);
+		background-color: #00000000;
+	}
+	:global(.svelte-flow__attribution) {
+		display: none;
+	}
+</style>

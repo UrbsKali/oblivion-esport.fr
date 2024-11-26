@@ -240,7 +240,7 @@
 		</div>
 		<div class="w-full p-5 border border-gray-700 rounded-b-lg rounded-e-lg backdrop-blur-lg">
 			{#if current_button == 'Play-offs'}
-				<div class="flex">
+				<div class="flex h-[1050px]">
 					<DoubleBracket bracket={current_body} />
 				</div>
 			{:else if current_button == 'Inscriptions'}
