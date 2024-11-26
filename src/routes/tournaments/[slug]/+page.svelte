@@ -211,7 +211,7 @@
 		</div>
 		<div class="items-start w-full">
 			<!-- tab system for the glassmorphism card below -->
-			<div class="flex justify-start">
+			<div class="flex flex-wrap justify-start">
 				{#each buttons as button, index}
 					<button
 						class="px-4 py-2 text-white transition-all border border-gray-700 {index == 0
