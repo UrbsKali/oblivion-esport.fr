@@ -35,7 +35,7 @@
 </script>
 
 <!-- Tailwind CSS table with dark mode and glassmorphism effect -->
-<div class="rounded-lg overflow-clip w-fit">
+<div class="rounded-lg overflow-clip w-fit h-fit">
 	<table
 		class="bg-gray-800 bg-opacity-0 divide-y divide-gray-700 rounded-lg shadow-lg backdrop-filter backdrop-blur-lg"
 	>
