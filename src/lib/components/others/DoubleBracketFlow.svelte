@@ -255,6 +255,7 @@
 			});
 			el.winner.forEach((win_el, j) => {
 				let y = 150 * (j + 0);
+				console.log(win_el[0].date);
 				if (i != 0) y += middle - (el.winner.length * 150) / 2;
 				nodes_ = [
 					...nodes_,
@@ -269,8 +270,10 @@
 							name: [win_el[0].name, win_el[1].name],
 							logo: [win_el[0].logo, win_el[1].logo],
 							match: {
-								score: `${win_el[0].score}-${win_el[0].score}`
+								score: `${win_el[0].score}-${win_el[0].score}`,
+								date: win_el[0].date
 							},
+							showTime: win_el[0].date ? true : false,
 							nb: currentId++
 						}
 					}
@@ -290,8 +293,11 @@
 							name: [los_el[0].name, los_el[1].name],
 							logo: [los_el[0].logo, los_el[1].logo],
 							match: {
-								score: `${los_el[0].score}-${los_el[0].score}`
+								score: `${los_el[0].score}-${los_el[0].score}`,
+								date: los_el[0].date
 							},
+							showTime: los_el[0].date ? true : false,
+
 							nb: currentId++
 						}
 					}
@@ -300,6 +306,7 @@
 		});
 
 		for (let i in nodes_) {
+			console.log(nodes_[i]);
 			const el = nodes_[i];
 			let edge = {
 				id: `${el.id}-edge`,
@@ -324,7 +331,6 @@
 		isMobile = window.innerWidth < 1500;
 		console.log($viewport);
 		if (!isMobile) {
-			console.log('fit');
 			fitView();
 			setTimeout(() => {
 				fitView();

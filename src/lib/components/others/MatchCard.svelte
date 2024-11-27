@@ -15,7 +15,7 @@
 </script>
 
 <div
-	class="flex items-center justify-between p-5 bg-gray-800 border border-gray-700 rounded-lg shadow-lg bg-opacity-40 backdrop-filter backdrop-blur-lg"
+	class="flex items-center justify-between h-32 p-5 bg-gray-800 border border-gray-700 rounded-lg shadow-lg bg-opacity-40 backdrop-filter backdrop-blur-lg"
 >
 	<div class="flex justify-between w-full">
 		<div class="flex flex-col gap-5">
@@ -34,9 +34,10 @@
 		</div>
 	</div>
 	{#if showTime}
+		{@const time = new Date(match.date)}
 		<div class="flex h-full pl-3 ml-3 border-l-2 border-gray-700">
 			<h1 class="self-center text-xl align-middle">
-				{match.date ? new Date(match.date).toLocaleString().split(' ')[1].slice(0, -3) : ' '}
+				{match.date ? time.toLocaleString().split(' ')[1].slice(0, -3) : ' '}
 			</h1>
 		</div>
 	{/if}
