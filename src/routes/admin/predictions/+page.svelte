@@ -78,7 +78,7 @@
 			.from('Matchs')
 			.select(`id, team_one(name, id), team_two(name, id), tournament_id(title)`)
 			.gte('date', new Date().toISOString())
-			.lte('date', new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString())
+			//.lte('date', new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString())
 			.order('date');
 
 		data?.forEach((element) => {
