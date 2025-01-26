@@ -23,3 +23,7 @@ vite.config.ts.timestamp-*
 
 # debug routes
 /src/routes/debug
+
+
+# lock
+package-lock.json
