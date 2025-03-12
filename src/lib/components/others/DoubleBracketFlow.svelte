@@ -242,17 +242,6 @@
 					text: el.title
 				}
 			});
-			nodes_.push({
-				id: `${i}-TitleLoser`,
-				position: { x: 300 * (i + 1), y: 625 },
-				type: 'title',
-				draggable: false,
-				dragHandle: false,
-				selectable: false,
-				data: {
-					text: el.loserTitle
-				}
-			});
 			el.winner.forEach((win_el, j) => {
 				let y = 150 * (j + 0);
 				console.log(win_el[0].date);
@@ -279,30 +268,44 @@
 					}
 				];
 			});
-			el.loser.forEach((los_el, j) => {
-				nodes_ = [
-					...nodes_,
-					{
-						id: `${i}-${j}-loser${los_el[0].connectOne ? '@' : ''}`,
-						position: { x: 300 * (i + 1), y: 150 * (j + 0) + 700 },
-						type: 'match',
-						draggable: false,
-						dragHandle: false,
-						selectable: false,
-						data: {
-							name: [los_el[0].name, los_el[1].name],
-							logo: [los_el[0].logo, los_el[1].logo],
-							match: {
-								score: `${los_el[0].score}-${los_el[0].score}`,
-								date: los_el[0].date
-							},
-							showTime: los_el[0].date ? true : false,
 
-							nb: currentId++
-						}
+			if (bracket[0].loser) {
+				nodes_.push({
+					id: `${i}-TitleLoser`,
+					position: { x: 300 * (i + 1), y: 625 },
+					type: 'title',
+					draggable: false,
+					dragHandle: false,
+					selectable: false,
+					data: {
+						text: el.loserTitle
 					}
-				];
-			});
+				});
+				el.loser.forEach((los_el, j) => {
+					nodes_ = [
+						...nodes_,
+						{
+							id: `${i}-${j}-loser${los_el[0].connectOne ? '@' : ''}`,
+							position: { x: 300 * (i + 1), y: 150 * (j + 0) + 700 },
+							type: 'match',
+							draggable: false,
+							dragHandle: false,
+							selectable: false,
+							data: {
+								name: [los_el[0].name, los_el[1].name],
+								logo: [los_el[0].logo, los_el[1].logo],
+								match: {
+									score: `${los_el[0].score}-${los_el[0].score}`,
+									date: los_el[0].date
+								},
+								showTime: los_el[0].date ? true : false,
+
+								nb: currentId++
+							}
+						}
+					];
+				});
+			}
 		});
 
 		for (let i in nodes_) {

@@ -114,7 +114,8 @@
 			value: 'part_of.tournament_id.id',
 			options: [
 				{ name: 'TWC 5', value: 8 },
-				{ name: 'EWC 1', value: 13 }
+				{ name: 'EWC 1', value: 13 },
+				{ name: 'TI 2', value: 21 }
 			]
 		},
 		{
