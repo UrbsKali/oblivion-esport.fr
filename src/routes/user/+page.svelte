@@ -1,7 +1,8 @@
 <script>
 	import { supabase } from '$lib/supabaseClient';
 	import { userdata } from '$lib/store';
-	import { createOauthUrl } from '$lib/auth/epic';
+	import { createOauthUrl as createEpicOauthUrl } from '$lib/auth/epic';
+	import { createOauthUrl as createRiotOauthUrl } from '$lib/auth/riot';
 
 	let user;
 	let loading = false;
@@ -11,6 +12,7 @@
 
 	let discord;
 	let epic;
+	let riot;
 	let tracker = '';
 
 	userdata.subscribe(async (value) => {
@@ -42,6 +44,10 @@
 			if (user.providers?.find((el) => el.provider === 'epic')) {
 				const provider = user.providers.find((el) => el.provider === 'epic');
 				epic = provider.display_name;
+			}
+			if (user.providers?.find((el) => el.provider === 'riot')) {
+				const provider = user.providers.find((el) => el.provider === 'riot');
+				riot = provider.display_name;
 			}
 		}
 	});
@@ -94,8 +100,37 @@
 		}
 	}
 
+	async function handleRiot() {
+		if (riot) {
+			await unlinkRiot();
+		} else {
+			await linkRiot();
+		}
+	}
+
+	async function linkRiot() {
+		const url = createRiotOauthUrl();
+		window.location.href = url;
+	}
+	async function unlinkRiot() {
+		// delete the record in the database
+		const { data, error } = await supabase
+			.from('other_providers')
+			.delete()
+			.eq('user_id', user.id)
+			.eq('provider', 'riot');
+
+		if (error) {
+			console.error(error);
+			alert('Une erreur est survenue lors de la suppression de la liaison de votre compte Riot');
+		}
+
+		riot = '';
+		window.location.reload();
+	}
+
 	async function linkEpic() {
-		const url = createOauthUrl();
+		const url = createEpicOauthUrl();
 		window.location.href = url;
 	}
 	async function unlinkEpic() {
@@ -310,6 +345,24 @@
 									</g></svg
 								>
 								<p>{epic || 'Epic'}</p>
+							</button>
+							<button
+								class="min-w-28 text-white flex align-middle items-center justify-start bg-[#ba0021] focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-3 space-x-2 py-2.5 text-center {epic
+									? 'hover-x'
+									: ''}"
+								on:click={handleRiot}
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 140 140"
+									fill="#fff"
+									width="32px"
+									><path
+										d="M83.998.28 0 39.18l20.93 79.651 15.928-1.956-4.38-50.082 5.23-2.33 9.032 51.196 27.223-3.342-4.84-55.279 5.18-2.304 9.933 56.324 27.537-3.385-5.298-60.593 5.238-2.33 10.86 61.597 27.223-3.343V16.762Zm1.973 120.805 1.386 7.84 62.44 10.41v-26.091"
+										fill="#fff"
+									/></svg
+								>
+								<p>{riot || 'Riot'}</p>
 							</button>
 						</div>
 					</div>
