@@ -1,17 +1,18 @@
 import { jwtDecode } from "jwt-decode";
 
-export const ClientID = "xyza7891RMFYAPCpkI4fX4GKL5U7j1jC";
-export const DeploymentID = "c4ccbce82d1443b99bd31b25c0385dac";
+export const ClientID = "3ba9b93b-8c9e-4e5d-a164-95c8fadf2a99";
 
-const secret = "oF8Hz9pNp9fDQoaYarAe";
 
-export function createOauthUrl(redirect_to = "https://oblivion-esport.fr/login/epic") {
-    return `https://www.epicgames.com/id/authorize?client_id=${ClientID}&redirect_uri=${redirect_to}&response_type=code&scope=basic_profile `;
+export function createOauthUrl(redirect_to = "https://oblivion-esport.fr/login/riot") {
+    // https://auth.riotgames.com/authorize?client_id={your-client-id}&redirect_uri={your-redirect-uri}&response_type=code&scope=openid+offline_access.
+    return `https://auth.riotgames.com/authorize?client_id=${ClientID}&redirect_uri=${redirect_to}&response_type=code&scope=openid+offline_access`;
 }
 
 export async function getAccessToken(code) {
-    const response = await fetch(`https://oblivion-esport.fr/api/epic.php?authorization_code=${code}&secret=${secret}`);
-    return response.json();
+    const { data, error } = await supabase.functions.invoke('auth-epic', {
+        body: { authorization_code: code },
+    })
+    return data;
 }
 
 export function getName(accessToken) {

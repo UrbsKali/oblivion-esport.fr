@@ -20,7 +20,7 @@
 		for (const [key, value] of data.entries()) {
 			payload[key] = value;
 		}
-		payload['name_id'] = payload['title'].toLowerCase().replaceAll(' ', '');
+		payload['slug'] = payload['title'].toLowerCase().replaceAll(' ', '');
 		const { error } = await supabase.from('Tournaments').insert([payload]);
 		if (error) {
 			console.error(error);
@@ -31,6 +31,28 @@
 			window.location.reload();
 		}
 	}
+
+	const fields = [
+		{
+			name: 'Nom',
+			type: 'text',
+			id: 'title',
+			wide: true,
+			required: true
+		},
+		{
+			name: 'Début',
+			type: 'date',
+			id: 'start',
+			required: true
+		},
+		{
+			name: 'Fin',
+			type: 'date',
+			id: 'end',
+			required: true
+		}
+	];
 
 	function addNew() {
 		new CrudForm({

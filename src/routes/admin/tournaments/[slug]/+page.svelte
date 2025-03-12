@@ -52,9 +52,9 @@
 		if (error) {
 			console.error(error);
 		} else {
-			full_body = data.slug.body;
+			full_body = data.slug?.body || {};
 			value = full_body[Object.keys(full_body)[0]];
-			description = data.slug.description;
+			description = data.slug?.description || '';
 			tournament = data;
 			currentTab = Object.keys(full_body)[0];
 		}
@@ -88,12 +88,12 @@
 			class="flex items-center justify-center w-10 h-10 text-gray-200 bg-gray-800 border border-gray-700 rounded-full shadow hover:bg-opacity-10"
 			on:click={async (e) => {
 				// delete team
-				const confirmation = prompt('Voulez-vous vraiment supprimer cette équipe ? (oui/non)');
+				const confirmation = prompt('Voulez-vous vraiment supprimer ce tournoi ? (oui/non)');
 				if (confirmation !== 'oui') return;
 				const { data, error } = await supabase.from('Tournaments').delete().eq('slug', slug);
 				if (error) {
 					console.error(error);
-					alert("Une erreur est survenue lors de la suppression de l'équipe");
+					alert('Une erreur est survenue lors de la suppression du tournoi');
 					return;
 				}
 				goto('/admin/tournaments', { replaceState: true });
@@ -160,12 +160,22 @@
 		<button
 			class="p-2 mt-4 text-white rounded-md bg-primary-500"
 			on:click={async () => {
-				// update the body of the selected tournament
+				// update the body of the selected tournament, create row if not exist upsert
 				full_body[currentTab] = value;
-				const { error } = await supabase
-					.from('tournaments_info')
-					.update({ body: full_body, description: description })
-					.eq('slug', slug);
+				// const { error } = await supabase
+				// 	.from('tournaments_info')
+				// 	.update({ body: full_body, description: description })
+				// 	.eq('slug', slug);
+
+				const { error } = await supabase.from('tournaments_info').upsert(
+					{
+						slug: slug,
+						body: full_body,
+						description: description
+					},
+					{ onConflict: 'slug' }
+				);
+
 				if (error) {
 					console.error(error);
 				} else {
