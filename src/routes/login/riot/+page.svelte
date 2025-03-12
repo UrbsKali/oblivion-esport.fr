@@ -35,14 +35,11 @@
 		}
 		console.log(token);
 		if (token) {
-			const display_name = await getName(token.access_token);
-			console.log(display_name);
-
 			const info = {
 				user_id: user.id,
 				provider: 'riot',
 				info: token,
-				display_name: display_name
+				display_name: token.display_name
 			};
 
 			// insert into other_providers
