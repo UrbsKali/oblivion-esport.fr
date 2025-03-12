@@ -190,6 +190,7 @@
 						id: 'role',
 						required: true,
 						options: [
+							// { value: 'captain', text: 'Capitaine' },
 							{ value: 'player', text: 'Joueur' },
 							{ value: 'substitute', text: 'Remplaçant' }
 						],

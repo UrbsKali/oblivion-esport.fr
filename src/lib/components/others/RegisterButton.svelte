@@ -162,7 +162,7 @@
 							target: document.body,
 							props: {
 								message:
-									"Votre équipe ne remplit pas les critères pour s'inscrire à ce tournoi. Il faut que chacun de vos membres (au moins 3) ait rempli son profil.",
+									"Votre équipe ne remplit pas les critères pour s'inscrire à ce tournoi. Il faut que chacun de vos membres (au moins 5) ait rempli son profil.",
 								type: 'error',
 								onClose: () => {},
 								action: [

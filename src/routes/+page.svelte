@@ -213,14 +213,14 @@
 			<div class="flex flex-col items-center justify-center">
 				<div class="flex flex-col items-center justify-center w-9/12 h-full">
 					<div class="text-center">
-						<h1 class="text-4xl font-bold text-gray-300 w-max">ELEON WORLD CUP</h1>
-						<p class="text-lg text-gray-300">300 € de cashprize, en êtes-vous digne ?</p>
+						<h1 class="text-4xl font-bold text-gray-300 w-max">Trankil Invitational 2</h1>
+						<p class="text-lg text-gray-300">Description trop cool</p>
 						<div>
 							<a
 								class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
-								href="/tournaments/eleon-world-cup">En savoir +</a
+								href="/tournaments/trankil-invitational-2">En savoir +</a
 							>
-							<RegisterButton tournament_id={13} />
+							<RegisterButton tournament_id={21} />
 						</div>
 					</div>
 				</div>
