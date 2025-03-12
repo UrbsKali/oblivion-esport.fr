@@ -39,10 +39,17 @@
 	const FPS = 30;
 	let rotation = 0;
 
+	let isMobile = false;
+
 	let cups_positions = [];
 
 	onMount(async () => {
+		isMobile = window.innerWidth < 1024;
 		await loadTournaments();
+
+		if (isMobile) {
+			return;
+		}
 
 		oblivion = document.getElementById('oblivion');
 		let middle = window.innerWidth / 2;
@@ -147,7 +154,7 @@
 		<div class="relative h-full p-10 overflow-hidden wrap">
 			<div class="absolute h-full border-gray-700 md:border border-2-2" id="timeline"></div>
 			{#each items as item, index}
-				{#if index % 2 === 0}
+				{#if index % 2 === 0 || isMobile}
 					<div
 						class="flex flex-col items-center justify-center m-2 bg-cover md:flex-row cup"
 						style="background-image: linear-gradient(
@@ -161,9 +168,9 @@
 			url('{item.slug.image}');"
 					>
 						<div
-							class="flex flex-col items-center justify-center p-5 bg-gray-900 bg-opacity-25 border border-gray-700 rounded-lg lg:p-10 backdrop-blur-lg"
+							class="flex flex-col items-center justify-center w-full p-5 bg-gray-900 bg-opacity-25 border border-gray-700 rounded-lg md:w-auto lg:p-10 backdrop-blur-lg"
 						>
-							<div class="flex flex-col items-center justify-center w-9/12 h-full">
+							<div class="flex flex-col items-center justify-center w-full h-full md:w-9/12">
 								<div class="">
 									<h1 class="text-4xl font-bold text-gray-300 w-max">{item.title}</h1>
 									<span class="text-lg text-left text-gray-500">// {item.start}</span>
@@ -189,7 +196,7 @@
 					</div>
 				{:else}
 					<div
-						class="flex flex-col items-center justify-center m-2 bg-cover md:flex-row cup"
+						class="flex flex-col items-center justify-center w-full m-2 bg-cover md:flex-row cup"
 						style="background-image: linear-gradient(
 		70deg,
 		rgb(14, 19, 31, 1) 10%,
@@ -202,9 +209,9 @@
 					>
 						<div class="hidden w-6/12 md:block aspect-square min-w-96" id="rl"></div>
 						<div
-							class="flex flex-col items-center justify-center p-5 bg-gray-900 bg-opacity-25 border border-gray-700 rounded-lg lg:p-10 backdrop-blur-lg"
+							class="flex flex-col items-center justify-center w-full p-5 bg-gray-900 bg-opacity-25 border border-gray-700 rounded-lg md:w-auto lg:p-10 backdrop-blur-lg"
 						>
-							<div class="flex flex-col items-center justify-center w-9/12 h-full">
+							<div class="flex flex-col items-center justify-center w-full h-full md:w-9/12">
 								<div class="text-right">
 									<h1 class="text-4xl font-bold text-gray-300 w-max">{item.title}</h1>
 									<span class="text-lg text-left text-gray-500">{item.start} //</span>
