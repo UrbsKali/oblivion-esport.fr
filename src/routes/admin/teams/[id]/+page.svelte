@@ -39,10 +39,10 @@
 
 	const dbInfo = {
 		table: 'member_of',
-		key: 'uid(id, username, avatar_url), team_id!inner(id), role'
+		key: 'uid(id, username, avatar_url), team_id!inner(id), role, player_data'
 	};
 
-	const headers = ['Nom', 'Role', 'Profil', 'Actions'];
+	const headers = ['Nom', 'Role', 'Profil', 'Type', 'Actions'];
 
 	let actions = [
 		{
@@ -54,7 +54,7 @@
 				const { data, error } = await supabase
 					.from('member_of')
 					.select(
-						'uid(id, username, avatar_url, tracker, other_providers(display_name, provider)), team_id, role'
+						'uid(id, username, avatar_url, tracker, other_providers(display_name, provider)), team_id, role, player_data'
 					)
 					.eq('uid', p_id)
 					.eq('team_id', id)
@@ -74,6 +74,10 @@
 							value: data.role || ''
 						},
 						{
+							label: 'Type',
+							value: data.player_data?.type || 'Aucun type défini'
+						},
+						{
 							label: 'Compte Discord',
 							value:
 								data.uid.other_providers?.find((el) => el.provider == 'discord')?.display_name ||
@@ -87,6 +91,12 @@
 							href:
 								data.uid.tracker ||
 								`https://rocketleague.tracker.network/rocket-league/profile/epic/${data.uid.other_providers?.find((el) => el.provider == 'epic')?.display_name}/overview`
+						},
+						{
+							label: 'Compte Riot',
+							value:
+								data.uid.other_providers?.find((el) => el.provider == 'riot')?.display_name ||
+								'Pas de compte lié'
 						}
 					]
 				};
@@ -133,7 +143,8 @@
 			let el_ = [
 				{ value: el.uid.username, data: el.uid.id, avatar: avatar },
 				{ value: el.role },
-				{ value: is_valid ? 'Valide' : 'Informations manquantes' }
+				{ value: is_valid ? 'Valide' : 'Informations manquantes' },
+				{ value: el.player_data?.type || 'Non défini' }
 			];
 			items.push(el_);
 		}
@@ -190,6 +201,21 @@
 							{ value: 'substitute', text: 'Remplaçant' }
 						],
 						wide: true
+					},
+					{
+						name: 'Type',
+						type: 'select',
+						id: 'type',
+						required: true,
+						options: [
+							// { value: 'captain', text: 'Capitaine' },
+							{ value: 'ADC', text: 'ADC' },
+							{ value: 'TopLaner', text: 'TopLaner' },
+							{ value: 'MidLaner', text: 'MidLaner' },
+							{ value: 'BotLaner', text: 'BotLaner' },
+							{ value: 'Support', text: 'Support' }
+						],
+						wide: true
 					}
 				],
 				type_accord: 'un',
@@ -211,11 +237,18 @@
 						}
 					}
 
+					let player_data = {
+						type: data.type
+					};
+
 					// add user to team
 					console.log(data.member);
-					const { data: data___, error: error__ } = await supabase
-						.from('member_of')
-						.insert({ team_id: id, uid: data.member.uid, role: data.member.role });
+					const { data: data___, error: error__ } = await supabase.from('member_of').insert({
+						team_id: id,
+						uid: data.member.uid,
+						role: data.member.role,
+						player_data: player_data
+					});
 					if (error__) {
 						console.error(error__);
 						alert("Une erreur est survenue lors de l'ajout du membre à l'équipe");

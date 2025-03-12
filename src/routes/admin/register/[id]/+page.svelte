@@ -51,7 +51,7 @@
 				const { data, error } = await supabase
 					.from('member_of')
 					.select(
-						'uid(id, username, avatar_url, tracker, other_providers(display_name, provider)), team_id, role'
+						'uid(id, username, avatar_url, tracker, other_providers(display_name, provider)), team_id, role, player_data'
 					)
 					.eq('uid', p_id)
 					.eq('team_id', id)
@@ -71,6 +71,10 @@
 							value: data.role || ''
 						},
 						{
+							label: 'Type',
+							value: data.player_data?.type || 'Aucun type défini'
+						},
+						{
 							label: 'Compte Discord',
 							value:
 								data.uid.other_providers?.find((el) => el.provider == 'discord')?.display_name ||
@@ -84,6 +88,12 @@
 							href:
 								data.uid.tracker ||
 								`https://rocketleague.tracker.network/rocket-league/profile/epic/${data.uid.other_providers?.find((el) => el.provider == 'epic')?.display_name}/overview`
+						},
+						{
+							label: 'Compte Riot',
+							value:
+								data.uid.other_providers?.find((el) => el.provider == 'riot')?.display_name ||
+								'Pas de compte lié'
 						}
 					]
 				};
