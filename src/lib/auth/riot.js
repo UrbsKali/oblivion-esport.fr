@@ -1,4 +1,3 @@
-import { jwtDecode } from "jwt-decode";
 import { supabase } from "$lib/supabaseClient";
 
 export const ClientID = "3ba9b93b-8c9e-4e5d-a164-95c8fadf2a99";
@@ -17,10 +16,14 @@ export async function getAccessToken(code) {
     return data;
 }
 
-export function getName(accessToken) {
-    // get user display name directly from the JWT token
-    const decodedToken = jwtDecode(accessToken);
-    console.log(decodedToken);
-    const displayName = decodedToken.dn;
-    return displayName;
+export async function getName(accessToken) {
+    // get display name from the /userinfo endpoint
+    const url = "https://auth.riotgames.com/userinfo";
+    const headers = {
+        Authorization: `Bearer ${accessToken}`,
+    };
+    const response = fetch(url, { headers });
+    const data = await response.json();
+    console.log(data);
+    return data.sub;
 }

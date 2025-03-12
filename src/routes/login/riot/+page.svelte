@@ -35,7 +35,7 @@
 		}
 		console.log(token);
 		if (token) {
-			const display_name = getName(token.access_token);
+			const display_name = await getName(token.access_token);
 			console.log(display_name);
 
 			const info = {
