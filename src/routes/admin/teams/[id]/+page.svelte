@@ -208,8 +208,7 @@
 						id: 'type',
 						required: true,
 						options: [
-							// { value: 'captain', text: 'Capitaine' },
-							{ value: 'ADC', text: 'ADC' },
+							{ value: 'Jungle', text: 'Jungle' },
 							{ value: 'TopLaner', text: 'TopLaner' },
 							{ value: 'MidLaner', text: 'MidLaner' },
 							{ value: 'BotLaner', text: 'BotLaner' },

@@ -39,7 +39,7 @@
 		key: 'uid(id, username, avatar_url), team_id!inner(id), role'
 	};
 
-	const headers = ['Nom', 'Role', 'Profil', 'Actions'];
+	const headers = ['Nom', 'Role', 'Profil', 'Type', 'Actions'];
 
 	let actions = [
 		{
@@ -128,7 +128,8 @@
 			let el_ = [
 				{ value: el.uid.username, data: el.uid.id, avatar: avatar },
 				{ value: el.role },
-				{ value: is_valid ? 'Valide' : 'Informations manquantes' }
+				{ value: is_valid ? 'Valide' : 'Informations manquantes' },
+				{ value: el.player_data?.type || 'Non défini' }
 			];
 			items.push(el_);
 		}
