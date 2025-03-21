@@ -127,7 +127,23 @@
 		mounted = true;
 
 		let tmp = loadSettings(hash);
+		// check if the settings are up to date with keys and not values
 		if (tmp.length > 0) {
+			can_update_settings = true;
+			filters.forEach((el) => {
+				let tmp_el = tmp.find((el_) => el_.value == el.value);
+				if (tmp_el) {
+					el.options.forEach((option) => {
+						let tmp_option = tmp_el.options.find((option_) => option_.value == option.value);
+						if (!tmp_option) {
+							can_update_settings = false;
+						}
+					});
+				}
+			});
+		}
+		if (can_update_settings) {
+			console.log('Settings are up to date');
 			filters = tmp;
 		}
 		items = await loadPage(0, getFiltersString(filters));

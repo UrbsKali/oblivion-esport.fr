@@ -147,6 +147,7 @@
 						}
 					}
 					console.log(data);
+					console.log(tournament_id);
 
 					// check if team can be registered, with rpc
 					const { data: rpc_data, error: rpc_error } = await supabase.rpc('check_team_criteria', {

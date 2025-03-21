@@ -36,7 +36,7 @@
 
 	const dbInfo = {
 		table: 'member_of',
-		key: 'uid(id, username, avatar_url), team_id!inner(id), role'
+		key: 'uid(id, username, avatar_url), team_id!inner(id), role, player_data'
 	};
 
 	const headers = ['Nom', 'Role', 'Profil', 'Type', 'Actions'];
