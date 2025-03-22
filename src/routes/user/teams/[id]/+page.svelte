@@ -83,11 +83,21 @@
 						{
 							label: 'Role',
 							value: data.role || ''
+						},
+						{
+							label: 'Type',
+							value: data.player_data?.type || 'Non défini'
 						}
 					]
 				};
 
-				let actions = [];
+				let actions = [
+					{
+						type: 'edit',
+						title: 'Modifer le rôle',
+						handler: handleEditPlayer
+					}
+				];
 
 				if ((user.id === data.uid.id || user.team.role === 'owner') && data.role !== 'owner') {
 					actions.push({
@@ -120,6 +130,90 @@
 			return;
 		}
 		document.getElementById('popup-readModal_' + id).remove();
+	}
+
+	async function handleEditPlayer(e) {
+		e.preventDefault();
+		const uid = e.target.closest('.modal').id.split('_')[1];
+
+		console.log(uid);
+
+		let role_options = [
+			{ value: 'player', text: 'Joueur' },
+			{ value: 'substitute', text: 'Remplaçant' }
+		];
+
+		if (uid === user.id) {
+			role_options = [{ value: 'owner', text: 'Owner', selected: true }];
+		}
+
+		new CrudForm({
+			target: document.body,
+			props: {
+				fields: [
+					{
+						type: 'info',
+						text: 'Modifier le rôle du joueur',
+						wide: true
+					},
+					{
+						name: 'Rôle',
+						type: 'select',
+						id: 'role',
+						required: true,
+						options: role_options,
+						wide: true
+					},
+					{
+						name: 'Type',
+						type: 'select',
+						id: 'type',
+						required: true,
+						options: [
+							{ value: 'Jungle', text: 'Jungle' },
+							{ value: 'TopLaner', text: 'TopLaner' },
+							{ value: 'MidLaner', text: 'MidLaner' },
+							{ value: 'BotLaner', text: 'BotLaner' },
+							{ value: 'Support', text: 'Support' }
+						],
+						wide: true
+					}
+				],
+				type_accord: 'un',
+				type: 'joueur',
+				onSubmit: async (e) => {
+					// get forms data
+					e.preventDefault();
+					const form_data = new FormData(e.target.closest('form'));
+					let data = {};
+					for (let [key, value] of form_data.entries()) {
+						data[key.toLowerCase()] = value;
+					}
+
+					let player_data = {
+						type: data.type
+					};
+
+					// update user role
+					const { data: data_, error: error_ } = await supabase
+						.from('member_of')
+						.update({ role: data.role, player_data: player_data })
+						.eq('uid', uid)
+						.eq('team_id', id);
+					if (error_) {
+						console.error(error_);
+						alert('Une erreur est survenue lors de la modification du rôle du joueur');
+						return;
+					}
+					new SucessModal({
+						target: document.body,
+						props: {
+							message: 'Le rôle du joueur a bien été modifié'
+						}
+					});
+				}
+			}
+		});
 	}
 
 	async function parseItems(data) {
@@ -294,40 +388,75 @@
 			</svg>
 		</button>
 		<h2 class="text-2xl font-bold text-center text-gray-200" id="teamName">{team.name}</h2>
-		{#if user?.team?.role === 'owner'}
-			<button
-				class="flex items-center justify-center w-10 h-10 text-gray-200 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-full shadow hover:bg-opacity-10"
-				on:click={async (e) => {
-					// delete team
-					const { data, error } = await supabase.from('Teams').delete().eq('id', id);
-					if (error) {
-						console.error(error);
-						alert("Une erreur est survenue lors de la suppression de l'équipe");
-						return;
-					}
-					goto('/user/teams', { replaceState: true });
-				}}
-			>
-				<!--Trash icon-->
-				<svg
-					class="w-5 h-5 text-white hover:text-red-500"
-					aria-hidden="true"
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					fill="none"
-					viewBox="0 0 24 24"
+		<div class="flex items-center justify-center gap-2">
+			{#if user?.team?.role === 'owner'}
+				<button
+					class="flex items-center justify-center w-10 h-10 text-gray-200 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-full shadow hover:bg-opacity-10"
+					on:click={async (e) => {
+						// update team name
+						const name = prompt('Nouveau nom');
+						const { data, error } = await supabase
+							.from('Teams')
+							.update({ name: name })
+							.eq('id', id);
+						if (error) {
+							console.error(error);
+							alert("Une erreur est survenue lors de la modification du nom de l'équipe");
+							return;
+						}
+						team.name = name;
+					}}
 				>
-					<path
-						stroke="currentColor"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
-					/>
-				</svg>
-			</button>
-		{/if}
+					<!--Edit icon-->
+					<svg
+						class="w-5 h-5 text-white hover:text-red-500"
+						aria-hidden="true"
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						fill="white"
+						viewBox="0 0 24 24"
+					>
+						<path
+							xmlns="http://www.w3.org/2000/svg"
+							d="m18.5,2H5.5C2.467,2,0,4.468,0,7.5v9c0,3.032,2.467,5.5,5.5,5.5h13c3.032,0,5.5-2.468,5.5-5.5V7.5c0-3.032-2.468-5.5-5.5-5.5Zm2.5,14.5c0,1.379-1.121,2.5-2.5,2.5H5.5c-1.378,0-2.5-1.121-2.5-2.5V7.5c0-1.379,1.122-2.5,2.5-2.5h13c1.379,0,2.5,1.121,2.5,2.5v9Zm-10.684-7.843c-.226-.995-1.064-1.665-2.085-1.665s-1.859.67-2.085,1.665l-1.621,7.121c-.123.538.215,1.074.753,1.196.537.129,1.074-.214,1.197-.753l.278-1.222h2.955l.278,1.222c.105.464.518.778.974.778.074,0,.148-.008.223-.025.539-.122.876-.658.753-1.196l-1.621-7.121Zm-3.108,4.343l.887-3.899c.01-.046.024-.108.135-.108s.125.062.135.108l.887,3.899h-2.045Z"
+						/>
+					</svg>
+				</button>
+				<button
+					class="flex items-center justify-center w-10 h-10 text-gray-200 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-full shadow hover:bg-opacity-10"
+					on:click={async (e) => {
+						// delete team
+						const { data, error } = await supabase.from('Teams').delete().eq('id', id);
+						if (error) {
+							console.error(error);
+							alert("Une erreur est survenue lors de la suppression de l'équipe");
+							return;
+						}
+						goto('/user/teams', { replaceState: true });
+					}}
+				>
+					<!--Trash icon-->
+					<svg
+						class="w-5 h-5 text-white hover:text-red-500"
+						aria-hidden="true"
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						fill="none"
+						viewBox="0 0 24 24"
+					>
+						<path
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+						/>
+					</svg>
+				</button>
+			{/if}
+		</div>
 	</div>
 	<div
 		class="w-full mt-0 bg-gray-900 bg-opacity-0 border border-gray-700 rounded-lg shadow sm:w-9/12 backdrop-blur-sm md:w-6/12"
