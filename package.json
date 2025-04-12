@@ -53,8 +53,5 @@
 		"svelte-markdown": "~0.4.1",
 		"tailwind-merge": "~2.4.0",
 		"three": "~0.169.0"
-	},
-	"resolutions": {
-		"marked": "^4.3.0"
 	}
 }
