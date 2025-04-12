@@ -52,6 +52,7 @@
 		"postcss": "~8.4.40",
 		"svelte-markdown": "~0.4.1",
 		"tailwind-merge": "~2.4.0",
-		"three": "~0.169.0"
+		"three": "~0.169.0",
+		"marked": "~5.1.0"
 	}
 }
