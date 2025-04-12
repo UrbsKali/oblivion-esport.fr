@@ -15,9 +15,10 @@
 			alert('Please fill all fields');
 			return;
 		}
+		const info = { user: { name: username, tag: tag }, tournament_code: tournamentCode };
 
 		const { data, error } = await supabase.functions.invoke('fetch-match-id', {
-			body: { user: { name: username, tag: tag }, tournament_code: tournamentCode }
+			body: { type: 'byTournamentCode', info: info }
 		});
 
 		if (data.info.tournamentCode == tournamentCode) {
