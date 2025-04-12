@@ -16,7 +16,7 @@
 			return;
 		}
 
-		const { data, error } = await supabase.functions.invoke('find-match-id', {
+		const { data, error } = await supabase.functions.invoke('fetch-match-id', {
 			body: { user: { name: username, tag: tag }, tournament_code: tournamentCode }
 		});
 
