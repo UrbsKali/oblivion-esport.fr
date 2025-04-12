@@ -1,6 +1,7 @@
 <script>
 	// @ts-nocheck
 	import { onMount } from 'svelte';
+	import { supabase } from '$lib/supabaseClient';
 
 	let username = '';
 	let tag = '';
@@ -8,22 +9,17 @@
 	let MatchID = '';
 
 	async function onSubmit() {
-		let resp = await fetch(
-			`https://oblivion-esport.fr/api/riot.php?endpoint=/riot/account/v1/accounts/by-riot-id/${username}/${tag}&secret=oF8Hz9pNp9fDQoaYarAe`
-		);
-		let data = await resp.json();
-		const puuid = data.puuid;
-		resp = await fetch(
-			`https://oblivion-esport.fr/api/riot.php?endpoint=/lol/match/v5/matches/by-puuid/${puuid}/ids&secret=oF8Hz9pNp9fDQoaYarAe`
-		);
-		data = await resp.json();
-		console.log(data);
-		const match_id = data[0];
-		resp = await fetch(
-			`https://oblivion-esport.fr/api/riot.php?endpoint=/lol/match/v5/matches/${match_id}&secret=oF8Hz9pNp9fDQoaYarAe`
-		);
-		data = await resp.json();
-		console.log(data);
+		// use function to get the match id from riot api
+
+		if (username == '' || tag == '' || tournamentCode == '') {
+			alert('Please fill all fields');
+			return;
+		}
+
+		const { data, error } = await supabase.functions.invoke('find-match-id', {
+			body: { user: { name: username, tag: tag }, tournament_code: tournamentCode }
+		});
+
 		if (data.info.tournamentCode == tournamentCode) {
 			MatchID = match_id;
 			console.log(MatchID);
