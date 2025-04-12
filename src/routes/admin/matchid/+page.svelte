@@ -8,7 +8,8 @@
 	let tournamentCode = '';
 	let MatchID = '';
 
-	async function onSubmit() {
+	async function onSubmit(e) {
+		e.preventDefault();
 		// use function to get the match id from riot api
 
 		if (username == '' || tag == '' || tournamentCode == '') {
@@ -20,9 +21,14 @@
 		const { data, error } = await supabase.functions.invoke('fetch-match-id', {
 			body: { type: 'byTournamentCode', info: info }
 		});
-
-		if (data.info.tournamentCode == tournamentCode) {
-			MatchID = match_id;
+		console.log(data);
+		if (error) {
+			console.error('Error fetching match ID:', error);
+			alert('Error fetching match ID. Please try again.');
+			return;
+		}
+		if (data) {
+			MatchID = data;
 			console.log(MatchID);
 		} else {
 			MatchID = 'No Match Found';
