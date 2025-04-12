@@ -2,11 +2,13 @@
 	// get url slug from router
 	import { page } from '$app/stores';
 	import { supabase } from '$lib/supabaseClient';
+	import { onMount } from 'svelte';
 
 	import { userdata } from '$lib/store';
 
 	import SvelteMarkdown from 'svelte-markdown';
 	import { renderers } from '$lib/renderers';
+
 	import RegisterButton from '$lib/components/others/RegisterButton.svelte';
 	import Footer from '$lib/components/share/Footer.svelte';
 	import DoubleBracket from '$lib/components/others/DoubleBracket.svelte';
@@ -16,6 +18,7 @@
 	let slug = '';
 	let tournament = {};
 	let user;
+	let isMounted = false;
 
 	let matchs = [];
 	let match_by_day = {};
@@ -26,6 +29,11 @@
 	let buttons = ['Infos', 'Inscriptions', 'Règlement'];
 	let current_button = 'Infos';
 
+	onMount(async () => {
+		isMounted = true;
+		await loadPage();
+	});
+
 	userdata.subscribe((value) => {
 		if (value) {
 			user = value;
@@ -34,6 +42,7 @@
 
 	page.subscribe(async (value) => {
 		slug = value.params.slug;
+		if (!isMounted) return;
 		await loadPage();
 	});
 
