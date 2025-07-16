@@ -220,7 +220,7 @@
 								class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
 								href="/tournaments/trankilworldcuplastedition">En savoir +</a
 							>
-							<RegisterButton tournament_id={21} />
+							<RegisterButton tournament_id={22} />
 						</div>
 					</div>
 				</div>
