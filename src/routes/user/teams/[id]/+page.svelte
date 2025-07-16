@@ -140,7 +140,8 @@
 
 		let role_options = [
 			{ value: 'player', text: 'Joueur' },
-			{ value: 'substitute', text: 'Remplaçant' }
+			{ value: 'substitute', text: 'Remplaçant' },
+			{ value: 'coach', text: 'Entraîneur' }
 		];
 
 		if (uid === user.id) {
@@ -287,7 +288,8 @@
 						options: [
 							// { value: 'captain', text: 'Capitaine' },
 							{ value: 'player', text: 'Joueur' },
-							{ value: 'substitute', text: 'Remplaçant' }
+							{ value: 'substitute', text: 'Remplaçant' },
+							{ value: 'coach', text: 'Entraîneur' }
 						],
 						wide: true
 					},
@@ -395,6 +397,10 @@
 					on:click={async (e) => {
 						// update team name
 						const name = prompt('Nouveau nom');
+						if (!name || name.trim() === '') {
+							alert("Le nom de l'équipe ne peut pas être vide");
+							return;
+						}
 						const { data, error } = await supabase
 							.from('Teams')
 							.update({ name: name })
