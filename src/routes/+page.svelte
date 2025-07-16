@@ -213,12 +213,12 @@
 			<div class="flex flex-col items-center justify-center">
 				<div class="flex flex-col items-center justify-center w-9/12 h-full">
 					<div class="text-center">
-						<h1 class="text-4xl font-bold text-gray-300 w-max">Trankil Invitational 2</h1>
-						<p class="text-lg text-gray-300">Description trop cool</p>
+						<h1 class="text-4xl font-bold text-gray-300 w-max">Trankil World Cup - LAST EDITION</h1>
+						<p class="text-lg text-gray-300">Votre dernière chance de participer !</p>
 						<div>
 							<a
 								class="px-4 py-2 mt-5 text-white border rounded-md border-primary-500"
-								href="/tournaments/trankil-invitational-2">En savoir +</a
+								href="/tournaments/trankilworldcuplastedition">En savoir +</a
 							>
 							<RegisterButton tournament_id={21} />
 						</div>
