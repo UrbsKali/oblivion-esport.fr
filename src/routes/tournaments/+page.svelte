@@ -21,7 +21,7 @@
 	async function loadTournaments() {
 		const { data, error } = await supabase
 			.from('Tournaments')
-			.select('start, title, slug(slug, description, image), can_register')
+			.select('start, title, slug(slug, description, image), can_register, id')
 			.order('start', { ascending: false });
 		if (error) {
 			console.error('error', error);
@@ -181,7 +181,7 @@
 											href="/tournaments/{item.slug.slug}">En savoir +</a
 										>
 										{#if item.can_register}
-											<RegisterButton tournament_id={21} />
+											<RegisterButton tournament_id={item.id || 22} />
 										{:else}
 											<a
 												class="px-4 py-2 mt-5 text-white rounded-md bg-primary-500"

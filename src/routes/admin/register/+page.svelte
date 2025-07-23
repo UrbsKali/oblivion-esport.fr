@@ -115,7 +115,8 @@
 			options: [
 				{ name: 'TWC 5', value: 8 },
 				{ name: 'EWC 1', value: 13 },
-				{ name: 'TI 2', value: 21 }
+				{ name: 'TI 2', value: 21 },
+				{ name: 'TWC 6', value: 22 }
 			]
 		},
 		{
