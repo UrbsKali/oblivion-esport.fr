@@ -24,10 +24,142 @@
 	let match_by_day = {};
 
 	let pools = [];
+	let play_offs = [];
 
 	let current_body = '';
 	let buttons = ['Infos', 'Inscriptions', 'Règlement'];
 	let current_button = 'Infos';
+
+	// Bracket builder helpers
+	const NA_LOGO = '/assets/oblivion.png';
+	function placeholderTeam(date = null) {
+		return { name: 'N/A', score: ' ', logo: NA_LOGO, date };
+	}
+	function parsePhaseKey(phase) {
+		// accept both 'bracket' and common typo 'backet'
+		if (!phase) return null;
+		const m = String(phase).match(/^(?:bracket|backet)-(w|l)-p(\d+)-g(\d+)$/i);
+		if (!m) return null;
+		return { side: m[1].toLowerCase(), p: Number(m[2]), g: Number(m[3]) };
+	}
+	function extractScores(scoreText) {
+		// scoreText like "2-1"
+		const m = String(scoreText || '').match(/^(\d+)\s*-\s*(\d+)$/);
+		if (!m) return { a: ' ', b: ' ' };
+		return { a: m[1], b: m[2] };
+	}
+	function buildBracketFromMatches(matches) {
+		// Group by phase number p and side (w/l)
+		const byPhase = new Map(); // p -> { w: [], l: [] }
+		let hasLoser = false;
+		for (const m of matches) {
+			const meta = parsePhaseKey(m.phase);
+			if (!meta) continue;
+			if (!byPhase.has(meta.p)) byPhase.set(meta.p, { w: [], l: [] });
+			byPhase.get(meta.p)[meta.side].push({ ...m, __meta: meta });
+			if (meta.side === 'l') hasLoser = true;
+		}
+
+		const phaseNumbers = [...byPhase.keys()].sort((a, b) => a - b);
+		const totalRounds = phaseNumbers.length;
+		const rounds = [];
+		for (let i = 0; i < phaseNumbers.length; i++) {
+			const p = phaseNumbers[i];
+			const bucket = byPhase.get(p);
+			// sort by group index
+			bucket.w.sort((a, b) => a.__meta.g - b.__meta.g);
+			bucket.l.sort((a, b) => a.__meta.g - b.__meta.g);
+
+			const winner = bucket.w.map((mm) => {
+				const { a, b } = extractScores(mm.score);
+				const wtag = mm?.winner?.tag;
+				let s1 = a;
+				let s2 = b;
+				if (wtag && mm?.team_one?.tag && mm?.team_two?.tag) {
+					if (wtag === mm.team_one.tag) {
+						// a->one, b->two
+					} else if (wtag === mm.team_two.tag) {
+						[s1, s2] = [b, a];
+					}
+				}
+				const baseMatch = {
+					score: `${s1}-${s2}`,
+					date: mm.date,
+					winner: wtag ? { tag: wtag } : null,
+					team_one: mm?.team_one?.tag ? { tag: mm.team_one.tag } : null,
+					team_two: mm?.team_two?.tag ? { tag: mm.team_two.tag } : null
+				};
+				const t1 = mm.team_one
+					? {
+							name: mm.team_one.tag || mm.team_one.name,
+							score: s1,
+							logo: mm.team_one.logo_url || NA_LOGO,
+							date: mm.date,
+							match: baseMatch
+						}
+					: placeholderTeam(mm.date);
+				const t2 = mm.team_two
+					? {
+							name: mm.team_two.tag || mm.team_two.name,
+							score: s2,
+							logo: mm.team_two.logo_url || NA_LOGO,
+							date: mm.date,
+							match: baseMatch
+						}
+					: placeholderTeam(mm.date);
+				return [t1, t2];
+			});
+
+			const loserArr = bucket.l.map((mm) => {
+				const { a, b } = extractScores(mm.score);
+				const wtag = mm?.winner?.tag;
+				let s1 = a;
+				let s2 = b;
+				if (wtag && mm?.team_one?.tag && mm?.team_two?.tag) {
+					if (wtag === mm.team_one.tag) {
+						// a->one, b->two
+					} else if (wtag === mm.team_two.tag) {
+						[s1, s2] = [b, a];
+					}
+				}
+				const baseMatch = {
+					score: `${s1}-${s2}`,
+					date: mm.date,
+					winner: wtag ? { tag: wtag } : null,
+					team_one: mm?.team_one?.tag ? { tag: mm.team_one.tag } : null,
+					team_two: mm?.team_two?.tag ? { tag: mm.team_two.tag } : null
+				};
+				const t1 = mm.team_one
+					? {
+							name: mm.team_one.tag || mm.team_one.name,
+							score: s1,
+							logo: mm.team_one.logo_url || NA_LOGO,
+							date: mm.date,
+							match: baseMatch
+						}
+					: placeholderTeam(mm.date);
+				const t2 = mm.team_two
+					? {
+							name: mm.team_two.tag || mm.team_two.name,
+							score: s2,
+							logo: mm.team_two.logo_url || NA_LOGO,
+							date: mm.date,
+							match: baseMatch
+						}
+					: placeholderTeam(mm.date);
+				return [t1, t2];
+			});
+
+			const title =
+				i === totalRounds - 1 ? 'Finale' : i === totalRounds - 2 ? 'Demie finale' : `Tour ${i + 1}`;
+			const loserTitle = `Manche des perdants ${i + 1}`;
+
+			const roundObj = hasLoser ? { title, loserTitle, winner, loser: loserArr } : { title, loserTitle, winner };
+
+			rounds.push(roundObj);
+		}
+		return rounds;
+	}
 
 	onMount(async () => {
 		isMounted = true;
@@ -61,7 +193,8 @@
 			buttons = Object.keys(tournament?.slug?.body).map((key) => {
 				return key;
 			});
-			// buttons = [...buttons, 'Play-offs'];
+			// Ensure Play-offs tab exists (auto from DB)
+			if (!buttons.includes('Play-offs')) buttons = [...buttons, 'Play-offs'];
 			current_body = tournament?.slug?.body[buttons[0]] || '';
 			current_button = buttons[0];
 		}
@@ -133,6 +266,26 @@
 
 			pools = current_body;
 		}
+	}
+
+	async function loadBracket() {
+		if (!tournament?.id) return;
+		const { data, error } = await supabase
+			.from('Matchs')
+			.select(
+				'id, team_one(logo_url, name, tag), team_two(logo_url, name, tag), date, score, phase, winner(tag)'
+			)
+			.eq('tournament_id', tournament?.id)
+			.or('phase.ilike.bracket-%,phase.ilike.backet-%')
+			.order('phase', { ascending: true });
+
+		if (error) {
+			console.error('error', error);
+			play_offs = [];
+			return;
+		}
+		play_offs = buildBracketFromMatches(data || []);
+		console.log('Bracket loaded:', play_offs);
 	}
 
 	// let bracket = [
@@ -240,6 +393,10 @@
 								pools = [];
 								loadPool();
 							}
+							if (button == 'Play-offs') {
+								play_offs = [];
+								loadBracket();
+							}
 						}}
 					>
 						{button}
@@ -250,7 +407,12 @@
 		<div class="w-full p-5 border border-gray-700 rounded-b-lg rounded-e-lg backdrop-blur-lg">
 			{#if current_button == 'Play-offs'}
 				<div class="flex h-[1050px]">
-					<DoubleBracket bracket={current_body} />
+					<!-- Make the render wait until play_offs is loaded -->
+					{#if play_offs.length === 0}
+						<p class="text-gray-500">Chargement des phases finales...</p>
+					{:else}
+						<DoubleBracket bracket={play_offs} />
+					{/if}
 				</div>
 			{:else if current_button == 'Inscriptions'}
 				<SvelteMarkdown source={current_body} {renderers} />

@@ -6,12 +6,18 @@
 	export let showTime = true;
 
 	let score = [];
-	if (match.winner) {
-		score =
-			match.winner.tag === match.team_one.tag
-				? match.score.split('-')
-				: match.score.split('-').reverse();
-	}
+	$: score = (() => {
+		const s = (match?.score || '').toString();
+		if (!s.includes('-')) return [' ', ' '];
+		const parts = s.split('-').map((x) => x.trim());
+		if (parts.length < 2) return [' ', ' '];
+		// If DB provides winner and team tags, orient by winner
+		if (match?.winner?.tag && match?.team_one?.tag && match?.team_two?.tag) {
+			return match.winner.tag === match.team_one.tag ? parts : parts.slice().reverse();
+		}
+		// Otherwise assume provided order matches the team display order
+		return parts;
+	})();
 </script>
 
 <div

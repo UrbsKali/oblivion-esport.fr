@@ -238,13 +238,10 @@
 				draggable: false,
 				dragHandle: false,
 				selectable: false,
-				data: {
-					text: el.title
-				}
+				data: { text: el.title }
 			});
 			el.winner.forEach((win_el, j) => {
 				let y = 150 * (j + 0);
-				console.log(win_el[0].date);
 				if (i != 0) y += middle - (el.winner.length * 150) / 2;
 				nodes_ = [
 					...nodes_,
@@ -258,10 +255,11 @@
 						data: {
 							name: [win_el[0].name, win_el[1].name],
 							logo: [win_el[0].logo, win_el[1].logo],
-							match: {
-								score: `${win_el[0].score}-${win_el[0].score}`,
-								date: win_el[0].date
-							},
+							match:
+								win_el[0].match || {
+									score: `${win_el[0].score}-${win_el[1].score}`,
+									date: win_el[0].date
+								},
 							showTime: win_el[0].date ? true : false,
 							nb: currentId++
 						}
@@ -277,9 +275,7 @@
 					draggable: false,
 					dragHandle: false,
 					selectable: false,
-					data: {
-						text: el.loserTitle
-					}
+					data: { text: el.loserTitle }
 				});
 				el.loser.forEach((los_el, j) => {
 					nodes_ = [
@@ -294,12 +290,12 @@
 							data: {
 								name: [los_el[0].name, los_el[1].name],
 								logo: [los_el[0].logo, los_el[1].logo],
-								match: {
-									score: `${los_el[0].score}-${los_el[0].score}`,
-									date: los_el[0].date
-								},
+								match:
+									los_el[0].match || {
+										score: `${los_el[0].score}-${los_el[1].score}`,
+										date: los_el[0].date
+									},
 								showTime: los_el[0].date ? true : false,
-
 								nb: currentId++
 							}
 						}
@@ -309,7 +305,6 @@
 		});
 
 		for (let i in nodes_) {
-			console.log(nodes_[i]);
 			const el = nodes_[i];
 			let edge = {
 				id: `${el.id}-edge`,
