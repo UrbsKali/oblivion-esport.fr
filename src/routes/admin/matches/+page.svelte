@@ -16,12 +16,14 @@
 
 	const type = 'Match';
 
+	const PHASE_RE = /^(?:bracket|backet)-(w|l)-p(\d+)-g(\d+)$/i;
+
 	let editLoad = async (e) => {
 		const id = e.target.closest('.modal').id.split('-')[1];
 		const { data, error } = await supabase
 			.from('Matchs')
 			.select(
-				'id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score'
+				'id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score, phase'
 			)
 			.eq('id', id)
 			.single();
@@ -58,6 +60,20 @@
 			fields[5].value = data.winner?.id;
 			fields[6].value = data.score;
 
+			// Phase parsing for bracket form fields
+			let side = 'none';
+			let p = '';
+			let g = '';
+			const m = data?.phase ? String(data.phase).match(PHASE_RE) : null;
+			if (m) {
+				side = m[1].toLowerCase();
+				p = m[2];
+				g = m[3];
+			}
+			fields[7].value = side; // bracket_side
+			fields[8].value = p; // phase_no
+			fields[9].value = g; // group_no
+
 			new CrudForm({
 				target: document.body,
 				props: {
@@ -90,6 +106,19 @@
 			score = score.sort((a, b) => b - a);
 			payload.score = `${score[0]}-${score[1]}`;
 		}
+		// construct phase from bracket-side/phase/group
+		const side = payload.bracket_side;
+		const p = payload.phase_no;
+		const g = payload.group_no;
+		if (side && side !== 'none' && p && g) {
+			payload.phase = `bracket-${side}-p${p}-g${g}`;
+		} else {
+			payload.phase = 'group';
+		}
+		delete payload.bracket_side;
+		delete payload.phase_no;
+		delete payload.group_no;
+
 		const { ret, error } = await supabase.from('Matchs').insert([payload]);
 		if (error) {
 			console.error(error);
@@ -126,6 +155,18 @@
 		}
 		payload.date += ` ${payload.time}+01`;
 		delete payload.time;
+		// update phase
+		const side = payload.bracket_side;
+		const p = payload.phase_no;
+		const g = payload.group_no;
+		if (side && side !== 'none' && p && g) {
+			payload.phase = `bracket-${side}-p${p}-g${g}`;
+		} else {
+			payload.phase = 'group';
+		}
+		delete payload.bracket_side;
+		delete payload.phase_no;
+		delete payload.group_no;
 		console.log(payload);
 		const { ret, error } = await supabase.from('Matchs').update([payload]).eq('id', id);
 		if (error) {
@@ -185,7 +226,7 @@
 				const { data, error } = await supabase
 					.from('Matchs')
 					.select(
-						'id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score'
+						'id, team_one(name, id), team_two(name, id), tournament_id(title, id), winner(name, id), date, score, phase'
 					)
 					.eq('id', id)
 					.single();
@@ -278,6 +319,34 @@
 			type: 'text',
 			required: false,
 			placeholder: '0-0'
+		},
+		// New bracket fields
+		{
+			name: 'Type de phase',
+			id: 'bracket_side',
+			type: 'select',
+			required: false,
+			options: [
+				{ text: 'Phase de groupe', value: 'none' },
+				{ text: 'Winner bracket', value: 'w' },
+				{ text: 'Loser bracket', value: 'l' }
+			]
+		},
+		{
+			name: 'Numéro de phase (p)',
+			id: 'phase_no',
+			type: 'number',
+			required: false,
+			placeholder: '1',
+			min: 1
+		},
+		{
+			name: 'Numéro de match (g)',
+			id: 'group_no',
+			type: 'number',
+			required: false,
+			placeholder: '1',
+			min: 1
 		}
 	];
 
@@ -287,7 +356,8 @@
 			value: 'tournament_id.id',
 			options: [
 				{ name: 'TWC 5', value: 8 },
-				{ name: 'EWC 1', value: 13 }
+				{ name: 'EWC 1', value: 13 },
+				{ name: 'TWC 6', value: 22 }
 			]
 		}
 	];

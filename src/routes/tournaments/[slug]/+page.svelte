@@ -77,9 +77,9 @@
 				let s2 = b;
 				if (wtag && mm?.team_one?.tag && mm?.team_two?.tag) {
 					if (wtag === mm.team_one.tag) {
-						// a->one, b->two
-					} else if (wtag === mm.team_two.tag) {
 						[s1, s2] = [b, a];
+					} else if (wtag === mm.team_two.tag) {
+						// a->one, b->two
 					}
 				}
 				const baseMatch = {
@@ -110,16 +110,24 @@
 				return [t1, t2];
 			});
 
+			// Determine connectOne for loser bracket: same number of matches in next phase
+			const nextBucket = i + 1 < phaseNumbers.length ? byPhase.get(phaseNumbers[i + 1]) : null;
+			const connectOneFlag = !!(
+				nextBucket &&
+				bucket.l.length > 0 &&
+				nextBucket.l.length === bucket.l.length
+			);
+
 			const loserArr = bucket.l.map((mm) => {
 				const { a, b } = extractScores(mm.score);
 				const wtag = mm?.winner?.tag;
 				let s1 = a;
 				let s2 = b;
 				if (wtag && mm?.team_one?.tag && mm?.team_two?.tag) {
-					if (wtag === mm.team_one.tag) {
-						// a->one, b->two
-					} else if (wtag === mm.team_two.tag) {
+					if (wtag === mm.team_two.tag) {
 						[s1, s2] = [b, a];
+					} else if (wtag === mm.team_two.tag) {
+						// a->one, b->two
 					}
 				}
 				const baseMatch = {
@@ -127,7 +135,8 @@
 					date: mm.date,
 					winner: wtag ? { tag: wtag } : null,
 					team_one: mm?.team_one?.tag ? { tag: mm.team_one.tag } : null,
-					team_two: mm?.team_two?.tag ? { tag: mm.team_two.tag } : null
+					team_two: mm?.team_two?.tag ? { tag: mm.team_two.tag } : null,
+					connectOne: connectOneFlag
 				};
 				const t1 = mm.team_one
 					? {
@@ -135,7 +144,8 @@
 							score: s1,
 							logo: mm.team_one.logo_url || NA_LOGO,
 							date: mm.date,
-							match: baseMatch
+							match: baseMatch,
+							connectOne: connectOneFlag
 						}
 					: placeholderTeam(mm.date);
 				const t2 = mm.team_two
@@ -154,7 +164,9 @@
 				i === totalRounds - 1 ? 'Finale' : i === totalRounds - 2 ? 'Demie finale' : `Tour ${i + 1}`;
 			const loserTitle = `Manche des perdants ${i + 1}`;
 
-			const roundObj = hasLoser ? { title, loserTitle, winner, loser: loserArr } : { title, loserTitle, winner };
+			const roundObj = hasLoser
+				? { title, loserTitle, winner, loser: loserArr }
+				: { title, loserTitle, winner };
 
 			rounds.push(roundObj);
 		}
@@ -237,34 +249,43 @@
 		} else {
 			// get teams win and nb matchs
 			let teams = {};
-			data.forEach((el) => {
-				if (!teams[el.team_one.tag]) {
-					teams[el.team_one.tag] = {
-						win: 0,
-						match: 0
-					};
-				}
-				if (!teams[el.team_two.tag]) {
-					teams[el.team_two.tag] = {
-						win: 0,
-						match: 0
-					};
-				}
+			for (const el of data || [] /** @type {any[]} */) {
+				const t1 = /** @type {any} */ (el).team_one;
+				const t2 = /** @type {any} */ (el).team_two;
+				const win = /** @type {any} */ (el).winner;
+				const t1tag = t1?.tag;
+				const t2tag = t2?.tag;
+				const wtag = win?.tag;
 
-				teams[el.team_one.tag].match++;
-				teams[el.team_two.tag].match++;
+				if (t1tag && !teams[t1tag]) teams[t1tag] = { win: 0, match: 0 };
+				if (t2tag && !teams[t2tag]) teams[t2tag] = { win: 0, match: 0 };
 
-				teams[el.winner.tag].win++;
+				if (t1tag) teams[t1tag].match++;
+				if (t2tag) teams[t2tag].match++;
+				if (wtag)
+					teams[wtag] = {
+						...(teams[wtag] || { win: 0, match: 0 }),
+						win: (teams[wtag]?.win || 0) + 1,
+						match: teams[wtag]?.match || 0
+					};
+			}
+
+			// Safely read pools definition from tournament body (Phase de groupe)
+			const poolsDef = Array.isArray(tournament?.slug?.body?.['Phase de groupe'])
+				? /** @type {any[]} */ (tournament.slug.body['Phase de groupe'])
+				: [];
+
+			// Merge stats into pools definition
+			const merged = poolsDef.map((pool) => {
+				const teamsWithStats = (pool?.teams || []).map((team) => ({
+					...team,
+					win: teams[team.name]?.win || 0,
+					match: teams[team.name]?.match || 0
+				}));
+				return { ...pool, teams: teamsWithStats };
 			});
 
-			current_body.forEach((el) => {
-				el.teams.map((team) => {
-					team.win = teams[team.name]?.win || 0;
-					team.match = teams[team.name]?.match || 0;
-				});
-			});
-
-			pools = current_body;
+			pools = merged;
 		}
 	}
 

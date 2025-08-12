@@ -255,11 +255,10 @@
 						data: {
 							name: [win_el[0].name, win_el[1].name],
 							logo: [win_el[0].logo, win_el[1].logo],
-							match:
-								win_el[0].match || {
-									score: `${win_el[0].score}-${win_el[1].score}`,
-									date: win_el[0].date
-								},
+							match: win_el[0].match || {
+								score: `${win_el[0].score}-${win_el[1].score}`,
+								date: win_el[0].date
+							},
 							showTime: win_el[0].date ? true : false,
 							nb: currentId++
 						}
@@ -290,11 +289,10 @@
 							data: {
 								name: [los_el[0].name, los_el[1].name],
 								logo: [los_el[0].logo, los_el[1].logo],
-								match:
-									los_el[0].match || {
-										score: `${los_el[0].score}-${los_el[1].score}`,
-										date: los_el[0].date
-									},
+								match: los_el[0].match || {
+									score: `${los_el[0].score}-${los_el[1].score}`,
+									date: los_el[0].date
+								},
 								showTime: los_el[0].date ? true : false,
 								nb: currentId++
 							}
