@@ -22,7 +22,9 @@
         .carta-input,
         .carta-renderer {
             min-height: 120px;
-            // max-height: 160px;
+            // Cap height dynamically based on available viewport space
+            // The value is provided via a CSS variable set by the page logic
+            max-height: var(--editor-max-height, calc(100vh - 350px));
             overflow: auto;
         }
 

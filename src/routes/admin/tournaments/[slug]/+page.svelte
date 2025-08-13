@@ -1,7 +1,9 @@
 <script>
+	// @ts-nocheck
 	import { supabase } from '$lib/supabaseClient';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import { onMount, onDestroy } from 'svelte';
 
 	import { Carta, MarkdownEditor } from 'carta-md';
 	import { attachment } from '@cartamd/plugin-attachment';
@@ -20,29 +22,61 @@
 	let full_body = {};
 	let currentTab = '';
 
-	page.subscribe(async (value) => {
-		if (value) {
-			slug = value.params.slug;
-			await loadPage();
-		}
+	let carta;
+	let cartaEditor;
+
+	function updateEditorMaxHeight() {
+		cartaEditor = document.querySelector('.carta-editor');
+		if (!cartaEditor) return;
+		const rect = cartaEditor.getBoundingClientRect();
+		const viewportH = window.innerHeight;
+		// Page padding 16px, Page sticky header 53px, Editor bottom margin 8px
+		const available = Math.floor(viewportH - rect.y - 53 - 16 - 8);
+		console.log('Updating editor max height to:', available);
+		cartaEditor.style.setProperty('--editor-max-height', available + 'px');
+	}
+
+	let unsubscribePage;
+	let lastSlug;
+
+	onMount(() => {
+		// Initialize Carta once
+		carta = new Carta({
+			sanitizer: false,
+			theme: 'github-dark',
+			extensions: [
+				attachment({
+					async upload() {
+						return 'some-url-from-server.xyz';
+					}
+				}),
+				emoji(),
+				slash(),
+				code()
+			]
+		});
+
+		// Subscribe to page store but only reload when slug changes (ignore hash/query changes)
+		unsubscribePage = page.subscribe(async ($page) => {
+			const nextSlug = $page?.params?.slug;
+			if (!nextSlug) return;
+			if (nextSlug !== lastSlug) {
+				lastSlug = slug = nextSlug;
+				await loadPage();
+			}
+		});
+
+		updateEditorMaxHeight();
+		window.addEventListener('resize', updateEditorMaxHeight);
 	});
 
-	const carta = new Carta({
-		sanitizer: false,
-		theme: 'github-dark',
-		extensions: [
-			attachment({
-				async upload() {
-					return 'some-url-from-server.xyz';
-				}
-			}),
-			emoji(),
-			slash(),
-			code()
-		]
+	onDestroy(() => {
+		if (typeof unsubscribePage === 'function') unsubscribePage();
+		// Best-effort cleanup if Carta exposes a destroy method
 	});
 
 	async function loadPage() {
+		console.log('Loading tournament page for slug:', slug);
 		const { data, error } = await supabase
 			.from('Tournaments')
 			.select('slug(slug, body, description, image), can_register, title, start, end')
@@ -53,10 +87,12 @@
 			console.error(error);
 		} else {
 			full_body = data.slug?.body || {};
-			value = full_body[Object.keys(full_body)[0]];
+			const keys = Object.keys(full_body);
+			currentTab = keys[0] || '';
+			value = currentTab ? (full_body[currentTab] ?? '') : '';
 			description = data.slug?.description || '';
 			tournament = data;
-			currentTab = Object.keys(full_body)[0];
+			updateEditorMaxHeight();
 		}
 	}
 </script>
@@ -71,7 +107,7 @@
 				class="w-5 h-5"
 				aria-hidden="true"
 				fill="currentColor"
-				viewbox="0 0 20 20"
+				viewBox="0 0 20 20"
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				<path
@@ -129,38 +165,56 @@
 		<!-- Tab for select the right body part -->
 		<ul class="flex justify-center my-2">
 			{#each Object.keys(full_body) as key}
-				<li
-					class="p-2 mx-2 text-white rounded-md cursor-pointer bg-primary-500"
-					on:click={() => {
-						full_body[currentTab] = value;
-						value = full_body[key];
-						currentTab = key;
-					}}
-				>
-					{key}
+				<li class="mx-2">
+					<button
+						type="button"
+						class="p-2 text-white rounded-md bg-primary-500"
+						on:click={() => {
+							full_body[currentTab] = value;
+							value = full_body[key];
+							currentTab = key;
+						}}
+					>
+						{key}
+					</button>
 				</li>
 			{/each}
-			<li
-				class="p-2 mx-2 text-white rounded-md cursor-pointer bg-primary-500"
-				on:click={() => {
-					let name = prompt('Nom du nouvel onglet');
-					const newTab = name.replace(/\s/g, '_').toLowerCase();
-					full_body[newTab] = '';
-					value = '';
-					currentTab = newTab;
-				}}
-			>
-				+
+			<li class="mx-2">
+				<button
+					type="button"
+					class="p-2 text-white rounded-md bg-primary-500"
+					on:click={() => {
+						let name = prompt('Nom du nouvel onglet');
+						if (!name) return;
+						const newTab = name.replace(/\s/g, '_').toLowerCase();
+						full_body[newTab] = '';
+						value = '';
+						currentTab = newTab;
+					}}
+				>
+					+
+				</button>
 			</li>
 		</ul>
 		<!--Markdown editor-->
-		<MarkdownEditor mode="tabs" theme="github" {carta} bind:value />
-
+		{#if typeof window !== 'undefined'}
+			{#await import('carta-md') then m}
+				<svelte:component
+					this={m.MarkdownEditor}
+					mode="tabs"
+					theme="github"
+					{carta}
+					bind:value
+					scroll="sync"
+				/>
+			{/await}
+		{/if}
 		<!--Save button-->
 		<button
 			class="p-2 mt-4 text-white rounded-md bg-primary-500"
 			on:click={async () => {
 				// update the body of the selected tournament, create row if not exist upsert
+
 				full_body[currentTab] = value;
 				// const { error } = await supabase
 				// 	.from('tournaments_info')
