@@ -390,8 +390,11 @@
 			alert('Une erreur est survenue lors de la récupération des données');
 			return;
 		}
-		teams_options = data.map((el) => {
-			return { text: el.name, value: el.id, data: el.part_of[0].tournament_id };
+		// if multiple part_of, add all to teams_options as separate entries
+		teams_options = data.flatMap((el) => {
+			return el.part_of.map((part) => {
+				return { text: el.name, value: el.id, data: part.tournament_id };
+			});
 		});
 		console.log(teams_options);
 		const { data: tournaments, error: error_t } = await supabase
