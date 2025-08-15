@@ -101,7 +101,7 @@
 />
 <LinkButton href="" text="" target="" onClick={async (e) => await fetchinfo(dateOfXDay(1))} />
 <h2>{date.toLocaleDateString()}</h2>
-<div class="flex flex-row justify-between w-full">
+<div class="flex flex-row justify-between w-full min-h-screen">
 	<div class="flex flex-row w-full horizontal-scroll-except-first-column">
 		<div class="hideout"></div>
 
@@ -124,7 +124,7 @@
 			<tbody>
 				{#each matchs as match, i}
 					<tr>
-						<td class=" w-96">
+						<td class="w-96">
 							<div
 								class="flex flex-row items-center justify-center p-2 text-gray-300 bg-gray-700 rounded-t-md"
 							>
@@ -183,6 +183,8 @@
 												(el) => el.made_by.username == cast.username && el.match == match.id
 											).score}
 										</div>
+									{:else}
+										<div class="h-12"></div>
 									{/if}
 								{:else}
 									-
