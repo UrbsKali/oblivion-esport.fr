@@ -97,7 +97,16 @@
 			if (key == 'winner' && value == 'NULL') continue;
 			payload[key] = value;
 		}
-		payload.date += ` ${payload.time}+01`;
+		// Append local timezone offset based on the user's computer
+		{
+			const offsetMin = -new Date().getTimezoneOffset(); // e.g., CET = +60 -> +01:00
+			const sign = offsetMin >= 0 ? '+' : '-';
+			const abs = Math.abs(offsetMin);
+			const hh = String(Math.floor(abs / 60)).padStart(2, '0');
+			const mm = String(abs % 60).padStart(2, '0');
+			const tz = `${sign}${hh}:${mm}`;
+			payload.date += ` ${payload.time}${tz}`;
+		}
 		delete payload.time;
 		// parse score to always be in the form of '0-0' and the bigger number is the first
 		if (payload.score) {
