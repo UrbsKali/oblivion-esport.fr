@@ -285,6 +285,22 @@
 				return { ...pool, teams: teamsWithStats };
 			});
 
+			// sort teams in each pool: by wins desc, then losses asc (losses = match - win)
+			for (const pool of merged) {
+				const teams = (pool?.teams ?? []).map((t) => {
+					const win = t?.win ?? 0;
+					const match = t?.match ?? 0;
+					return { ...t, win, match, lose: Math.max(0, match - win) };
+				});
+
+				teams.sort((a, b) => {
+					if ((b.win ?? 0) !== (a.win ?? 0)) return (b.win ?? 0) - (a.win ?? 0);
+					return (a.lose ?? 0) - (b.lose ?? 0);
+				});
+
+				pool.teams = teams;
+			}
+
 			pools = merged;
 		}
 	}
