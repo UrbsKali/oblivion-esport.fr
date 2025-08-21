@@ -478,8 +478,11 @@
 						<div class="grid grid-cols-1 gap-5 lg:grid-cols-3 md:grid-cols-2">
 							{#each matchs as m}
 								<MatchCard
-									name={[m.team_one.name, m.team_two.name]}
-									logo={[m.team_one.logo_url, m.team_two.logo_url]}
+									name={[m.team_one?.name || 'N/A', m.team_two?.name || 'N/A']}
+									logo={[
+										m.team_one?.logo_url || '/assets/oblivion.png',
+										m.team_two?.logo_url || '/assets/oblivion.png'
+									]}
 									match={m}
 								/>
 							{/each}

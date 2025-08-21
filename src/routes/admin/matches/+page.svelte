@@ -38,20 +38,20 @@
 				{ text: data.tournament_id.title, value: data.tournament_id.id, autoselect: true }
 			];
 			await handleSelectUpdate({ target: { id: 'tournament_id', value: data.tournament_id.id } });
-			fields[1].value = data.team_one.id;
-			fields[2].value = data.team_two.id;
+			fields[1].value = data.team_one?.id;
+			fields[2].value = data.team_two?.id;
 			await handleSelectUpdate({
 				target: {
 					id: 'team_one',
-					value: data.team_one.id,
-					selectedOptions: [{ innerText: data.team_one.name }]
+					value: data.team_one?.id,
+					selectedOptions: [{ innerText: data.team_one?.name }]
 				}
 			});
 			await handleSelectUpdate({
 				target: {
 					id: 'team_two',
-					value: data.team_two.id,
-					selectedOptions: [{ innerText: data.team_two.name }]
+					value: data.team_two?.id,
+					selectedOptions: [{ innerText: data.team_two?.name }]
 				}
 			});
 			let local_date = new Date(data.date).toLocaleString();
@@ -258,8 +258,8 @@
 						id,
 						values: {
 							header: {
-								title: `${data.team_one.name} vs ${data.team_two.name}`,
-								sub: data.date.split('T')[0] + ' ' + data.date.split('T')[1].split('+')[0]
+								title: `${data.team_one?.name || 'N/A'} vs ${data.team_two?.name || 'N/A'}`,
+								sub: new Date(data.date).toLocaleString()
 							},
 							body: [
 								{ label: 'Tournoi', value: data.tournament_id.title },
@@ -382,7 +382,10 @@
 		let items = [];
 		data?.forEach((element) => {
 			let el = [
-				{ value: `${element.team_one.name} vs ${element.team_two.name}`, data: element.id },
+				{
+					value: `${element.team_one?.name || 'N/A'} vs ${element.team_two?.name || 'N/A'}`,
+					data: element.id
+				},
 				{ value: element.tournament_id.title, data: element.tournament_id.id },
 				{ value: element.winner?.name || '-', data: element.winner?.id || '' },
 				{ value: element.score || '-' }
