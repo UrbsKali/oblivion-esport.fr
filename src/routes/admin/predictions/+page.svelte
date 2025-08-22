@@ -83,9 +83,9 @@
 
 		data?.forEach((element) => {
 			let el = {
-				text: `${element.team_one.name} vs ${element.team_two.name} - ${element.tournament_id.title}`,
+				text: `${element.team_one?.name || 'N/A'} vs ${element.team_two?.name || 'N/A'} - ${element.tournament_id.title}`,
 				value: element.id,
-				data: `${element.team_one.id}#${element.team_two.id}`
+				data: `${element.team_one?.id}#${element.team_two?.id}`
 			};
 			fields[0].options = [...fields[0].options, el];
 		});
@@ -151,7 +151,8 @@
 			value: 'match.tournament_id.id',
 			options: [
 				{ name: 'TWC 5', value: 8 },
-				{ name: 'EWC 1', value: 13 }
+				{ name: 'EWC 1', value: 13 },
+				{ name: 'TWC 6', value: 22 }
 			]
 		},
 		{
@@ -186,7 +187,7 @@
 					body: [
 						{
 							label: 'Match',
-							value: `${data.match.team_one.name} vs ${data.match.team_two.name}, ${data.match.tournament_id.title}`
+							value: `${data.match.team_one?.name || 'N/A'} vs ${data.match.team_two?.name || 'N/A'}, ${data.match.tournament_id.title}`
 						},
 						{
 							label: 'Prédictions',
@@ -222,7 +223,7 @@
 		data?.forEach((element) => {
 			let el = [
 				{
-					value: `${element.match.team_one.name} vs ${element.match.team_two.name}`,
+					value: `${element.match.team_one?.name || 'N/A'} vs ${element.match.team_two?.name || 'N/A'}`,
 					data: element.id
 				},
 				{ value: element.match.tournament_id.title, data: element.match.tournament_id.id },
